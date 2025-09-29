@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import DTO.Prueba;
 
 import java.io.IOException;
 
@@ -20,6 +21,10 @@ public class App extends Application {
         scene = new Scene(loadFXML("Dashboard"), 900, 600);
         stage.setScene(scene);
         stage.show();
+
+        Prueba pepe = new Prueba("Pepe");
+
+        System.out.println(pepe.getName());
     }
 
     static void setRoot(String fxml) throws IOException {

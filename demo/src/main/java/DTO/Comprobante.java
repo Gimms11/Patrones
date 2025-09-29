@@ -7,7 +7,6 @@ public class Comprobante {
     private Long idComprobante;
     private LocalDate fechaEmision;
     private String serie;
-    private String numero;
     private BigDecimal totalFinal;      // Total con impuestos (ya calculado)
     private BigDecimal devengado;       // Subtotal sin impuestos (ya calculado)
     private String direccionEnvio;
@@ -20,13 +19,12 @@ public class Comprobante {
     public Comprobante() {}
 
     // Constructor completo (útil para pruebas o creación manual)
-    public Comprobante(Long idComprobante, LocalDate fechaEmision, String serie, String numero,
+    public Comprobante(Long idComprobante, LocalDate fechaEmision, String serie,
                        BigDecimal devengado, BigDecimal totalFinal, String direccionEnvio,
                        Long idTipoComprobante, Long idMedioPago, Long idCliente, Long idUsuario) {
         this.idComprobante = idComprobante;
         this.fechaEmision = fechaEmision;
-        this.serie = serie;
-        this.numero = numero;
+        this.serie = serie; 
         this.devengado = devengado;
         this.totalFinal = totalFinal;
         this.direccionEnvio = direccionEnvio;
@@ -39,8 +37,7 @@ public class Comprobante {
     // Getters
     public Long getIdComprobante() { return idComprobante; }
     public LocalDate getFechaEmision() { return fechaEmision; }
-    public String getSerie() { return serie; }
-    public String getNumero() { return numero; }
+    public String getSerie() { return serie; } 
     public BigDecimal getTotalFinal() { return totalFinal; }
     public BigDecimal getDevengado() { return devengado; }
     public String getDireccionEnvio() { return direccionEnvio; }
@@ -52,8 +49,7 @@ public class Comprobante {
     // Setters
     public void setIdComprobante(Long idComprobante) { this.idComprobante = idComprobante; }
     public void setFechaEmision(LocalDate fechaEmision) { this.fechaEmision = fechaEmision; }
-    public void setSerie(String serie) { this.serie = serie; }
-    public void setNumero(String numero) { this.numero = numero; }
+    public void setSerie(String serie) { this.serie = serie; } 
     public void setTotalFinal(BigDecimal totalFinal) { this.totalFinal = totalFinal; }
     public void setDevengado(BigDecimal devengado) { this.devengado = devengado; }
     public void setDireccionEnvio(String direccionEnvio) { this.direccionEnvio = direccionEnvio; }

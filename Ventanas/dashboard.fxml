@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" styleClass="parent" stylesheets="@styleDash.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <left>
+      <AnchorPane prefHeight="200.0" prefWidth="50.0" styleClass="sidebar" BorderPane.alignment="CENTER">
+         <children>
+            <FontAwesomeIconView glyphName="BARS" layoutX="17.0" layoutY="29.0" size="1.5em" AnchorPane.leftAnchor="17.0" AnchorPane.rightAnchor="17.971428298950194" AnchorPane.topAnchor="13.571428298950195" />
+            <Pane layoutY="42.0" prefHeight="362.0" prefWidth="50.0">
+               <children>
+                  <FontAwesomeIconView glyphName="USER" layoutX="17.0" layoutY="98.0" size="1.5em" />
+                  <FontAwesomeIconView glyphName="AREA_CHART" layoutX="17.0" layoutY="58.0" size="1.5em" />
+                  <FontAwesomeIconView glyphName="MONEY" layoutX="17.0" layoutY="138.0" size="1.5em" />
+                  <FontAwesomeIconView glyphName="HISTORY" layoutX="17.0" layoutY="218.0" size="1.5em" />
+                  <FontAwesomeIconView glyphName="WPFORMS" layoutX="17.0" layoutY="178.0" size="1.5em" />
+                  <FontAwesomeIconView glyphName="COG" layoutX="17.0" layoutY="258.0" size="1.5em" />
+                  <FontAwesomeIconView glyphName="SIGN_OUT" layoutX="17.0" layoutY="345.0" size="1.5em" />
+               </children>
+            </Pane>
+         </children>
+      </AnchorPane>
+   </left>
+   <center>
+      <FontIcon iconLiteral="fa-sign-out-alt" BorderPane.alignment="CENTER" />
+   </center>
+</BorderPane>

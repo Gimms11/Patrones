@@ -8,7 +8,7 @@ public class Producto {
     private BigDecimal precio;
     private Integer stock;
     private String descripcion;
-    private String categoria;
+    private long idCategoria;
     private String unidadMedida;       // Ej: "UND", "KG", "LTR"
     private Long idTipoAfectacion;     // FK → AfectacionProductos (ej: 1 = Gravado, 2 = Exonerado, etc)
 
@@ -24,14 +24,13 @@ public class Producto {
 
     // Constructor completo
     public Producto(Long idProducto, String nombre, BigDecimal precio, Integer stock,
-                    String descripcion, String categoria, String unidadMedida,
-                    Long idTipoAfectacion) {
+                    String descripcion,String unidadMedida, Long idTipoAfectacion,long idCategoria) {
         this.idProducto = idProducto;
         this.nombre = nombre;
         this.precio = precio;
         this.stock = stock;
         this.descripcion = descripcion;
-        this.categoria = categoria;
+        this.idCategoria = idCategoria;
         this.unidadMedida = unidadMedida;
         this.idTipoAfectacion = idTipoAfectacion;
     }
@@ -42,7 +41,7 @@ public class Producto {
     public BigDecimal getPrecio() { return precio; }
     public Integer getStock() { return stock; }
     public String getDescripcion() { return descripcion; }
-    public String getCategoria() { return categoria; }
+    public long getIdCategoria() { return idCategoria; }
     public String getUnidadMedida() { return unidadMedida; }
     public Long getIdTipoAfectacion() { return idTipoAfectacion; }
 
@@ -52,7 +51,7 @@ public class Producto {
     public void setPrecio(BigDecimal precio) { this.precio = precio; }
     public void setStock(Integer stock) { this.stock = stock; }
     public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
-    public void setCategoria(String categoria) { this.categoria = categoria; }
+    public void setIdCategoria(long idCategoria) { this.idCategoria = idCategoria; }
     public void setUnidadMedida(String unidadMedida) { this.unidadMedida = unidadMedida; }
     public void setIdTipoAfectacion(Long idTipoAfectacion) { this.idTipoAfectacion = idTipoAfectacion; }
 }

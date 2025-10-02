@@ -12,7 +12,7 @@ public class Cliente {
     private Long idDistrito;         // FK → Distrito
 
     // Constructor vacío (requerido por JPA, frameworks, etc.)
-    public Cliente() {}
+    public Cliente(long l, String string, String string2, String string3, String string4, String string5, String string6, long m, long n) {}
 
     // Constructor con los campos esenciales
     public Cliente(String nombre, String apellidos, String numeroDocumento, String correo) {
@@ -24,17 +24,17 @@ public class Cliente {
 
     // Constructor completo
     public Cliente(Long idCliente, String nombre, String apellidos, String telefono,
-                   String correo, Long idDocumento, String numeroDocumento,
-                   String direccion, Long idDistrito) {
+                    String correo,String direccion, String numeroDocumento,
+                    Long idDistrito,Long idDocumento) {
         this.idCliente = idCliente;
         this.nombre = nombre;
         this.apellidos = apellidos;
         this.telefono = telefono;
         this.correo = correo;
-        this.idDocumento = idDocumento;
-        this.numeroDocumento = numeroDocumento;
         this.direccion = direccion;
+        this.numeroDocumento = numeroDocumento;
         this.idDistrito = idDistrito;
+        this.idDocumento = idDocumento;
     }
 
     // Getters

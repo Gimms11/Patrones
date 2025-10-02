@@ -20,8 +20,8 @@ public class Comprobante {
 
     // Constructor completo (útil para pruebas o creación manual)
     public Comprobante(Long idComprobante, LocalDate fechaEmision, String serie,
-                       BigDecimal devengado, BigDecimal totalFinal, String direccionEnvio,
-                       Long idTipoComprobante, Long idMedioPago, Long idCliente, Long idUsuario) {
+                    BigDecimal totalFinal,String direccionEnvio,BigDecimal devengado, 
+                    Long idTipoComprobante, Long idMedioPago, Long idCliente, Long idUsuario) {
         this.idComprobante = idComprobante;
         this.fechaEmision = fechaEmision;
         this.serie = serie; 

@@ -19,9 +19,9 @@
                   <FontIcon iconLiteral="fas-chart-area" iconSize="20" onMouseClicked="#goToDashboard" styleClass="icon" />
                   <FontIcon iconLiteral="fas-user" iconSize="20" onMouseClicked="#goToClients" styleClass="icon" />
                   <FontIcon iconLiteral="fas-paperclip" iconSize="20" onMouseClicked="#goToGenFactures" styleClass="icon" />
-                  <FontIcon iconLiteral="fas-shopping-cart" iconSize="20" onMouseClicked="#goToHistory" styleClass="icon" />
-                  <FontIcon iconLiteral="fas-history" iconSize="20" onMouseClicked="#goToConfigurations" styleClass="icon" />
-                  <FontIcon iconLiteral="fas-cog" iconSize="20" onMouseClicked="#goToHistory" styleClass="icon" />
+                  <FontIcon iconLiteral="fas-shopping-cart" iconSize="20" onMouseClicked="#gotoGenProducts" styleClass="icon" />
+                  <FontIcon iconLiteral="fas-history" iconSize="20" onMouseClicked="#goToHistory" styleClass="icon" />
+                  <FontIcon iconLiteral="fas-cog" iconSize="20" onMouseClicked="#goToConfigurations" styleClass="icon" />
                </children>
             </VBox>
 

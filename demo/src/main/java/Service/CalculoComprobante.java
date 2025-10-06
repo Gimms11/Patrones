@@ -1,4 +1,4 @@
-package Service;
+package service;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -12,6 +12,7 @@ public class CalculoComprobante {
      * 
      * @param comprobante Objeto donde se almacenan los resultados
      * @param detalles Lista de DetalleComprobante asociados
+     * 
      */
     public static void calcularTotales(Comprobante comprobante, List<DetalleComprobante> detalles) {
         BigDecimal subtotalGeneral = BigDecimal.ZERO;
@@ -42,4 +43,5 @@ public class CalculoComprobante {
         comprobante.setDevengado(subtotalGeneral); // suma sin impuestos
         comprobante.setTotalFinal(totalFinal);     // suma total con impuestos
     }
+
 }

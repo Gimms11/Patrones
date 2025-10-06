@@ -49,6 +49,13 @@
         <version>12.4.0</version>
     </dependency>
 
+    <!-- Conección Postgresql -->
+    <dependency>
+    <groupId>org.postgresql</groupId>
+    <artifactId>postgresql</artifactId>
+    <version>42.7.3</version> <!-- Usa la última versión -->
+    </dependency>
+
   </dependencies>
 
   <build>

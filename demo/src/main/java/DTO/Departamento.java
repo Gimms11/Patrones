@@ -17,4 +17,9 @@ public class Departamento {
 
     public String getNombreDepartamento() { return nombreDepartamento; }
     public void setNombreDepartamento(String nombreDepartamento) { this.nombreDepartamento = nombreDepartamento; }
+
+    @Override
+    public String toString() {
+        return nombreDepartamento;
+    }
 }

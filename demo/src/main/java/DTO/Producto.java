@@ -10,7 +10,7 @@ public class Producto {
     private String descripcion;
     private long idCategoria;
     private String unidadMedida;       // Ej: "UND", "KG", "LTR"
-    private Long idTipoAfectacion;     // FK → AfectacionProductos (ej: 1 = Gravado, 2 = Exonerado, etc)
+    private Long idTipoAfectacion;     // FK → AfectacionProductos (ej: 1 = Gravado, 2 = Exonerado, etc )
 
     // Constructor vacío
     public Producto() {}

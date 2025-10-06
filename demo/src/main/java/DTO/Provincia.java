@@ -22,4 +22,9 @@ public class Provincia {
 
     public Long getIdDepartamento() { return idDepartamento; }
     public void setIdDepartamento(Long idDepartamento) { this.idDepartamento = idDepartamento; }
+
+    @Override
+    public String toString() {
+        return nombreProvincia;
+    }
 }

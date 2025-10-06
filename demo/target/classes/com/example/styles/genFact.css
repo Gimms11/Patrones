@@ -1,0 +1,22 @@
+.addPane{
+    -fx-background-color: rgb(255, 0, 0);
+}
+
+.detailsPane{
+    -fx-background-color: rgb(0, 255, 0);
+}
+
+.containerPane{
+    -fx-pref-height: 100%;
+    -fx-background-color: rgb(0, 0, 255);
+}
+
+.addPane .combo-box {
+    -fx-pref-width: 200px;
+    -fx-font-size: 14px;
+}
+
+.addPane .label {
+    -fx-font-size: 14px;
+    -fx-text-fill: #333;
+}

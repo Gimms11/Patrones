@@ -22,4 +22,9 @@ public class Distrito {
 
     public Long getIdProvincia() { return idProvincia; }
     public void setIdProvincia(Long idProvincia) { this.idProvincia = idProvincia; }
+
+    @Override
+    public String toString() {
+        return nombreDistrito;
+    }
 }

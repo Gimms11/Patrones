@@ -97,12 +97,12 @@ public class DAOClienteImpl implements DAOCliente{
     }
 
     @Override
-    public Cliente buscarCliente(Object key) {
+    public Cliente buscarCliente(Cliente clnt) {
         Cliente c=null;
         try{
             Connection conn=ConexionBD.getInstance().getConnection();
             PreparedStatement ps= conn.prepareStatement(SQLbuscar);
-            ps.setLong(1, Long.parseLong(key.toString()));;
+            ps.setLong(1, clnt.getIdCliente());
             ResultSet res=ps.executeQuery();
             if (res.next()) {
                 c = new Cliente(

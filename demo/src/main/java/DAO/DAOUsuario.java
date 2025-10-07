@@ -7,5 +7,5 @@ public interface DAOUsuario {
     public void actualizarProducto(Usuario usu);
     public void eliminarProducto(Usuario usu);
     public List<Usuario> listarProducto();
-    public Usuario buscarProducto(Object key);
+    public Usuario buscarProducto(Usuario usu);
 }

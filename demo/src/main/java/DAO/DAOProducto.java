@@ -7,5 +7,5 @@ public interface DAOProducto {
     public void actualizarProducto(Producto produc);
     public void eliminarProducto(Producto produc);
     public List<Producto> listarProducto();
-    public Producto buscarProducto(Object key);
+    public Producto buscarProducto(Producto produc);
 }

@@ -6,5 +6,5 @@ public interface DAOComprobante {
     public void registarComprobante(Comprobante comp);
     public void eliminarComprobante(Comprobante comp);
     public List<Comprobante> listarComprobante();
-    public Comprobante buscarComprobante(Object key);
+    public Comprobante buscarComprobante(Comprobante comp);
 }

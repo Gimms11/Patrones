@@ -96,12 +96,12 @@ public class DAOProductoImpl implements DAOProducto{
     }
 
     @Override
-    public Producto buscarProducto(Object key) {
+    public Producto buscarProducto(Producto produc) {
         Producto p=null;
         try{
             Connection conn=ConexionBD.getInstance().getConnection();
             PreparedStatement ps= conn.prepareStatement(SQLbuscar);
-            ps.setLong(1, Long.parseLong(key.toString()));;
+            ps.setLong(1, produc.getIdProducto());;
             ResultSet res=ps.executeQuery();
             if (res.next()) {
                 p = new Producto(

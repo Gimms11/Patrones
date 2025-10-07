@@ -14,7 +14,7 @@ import DTO.Comprobante;
 
 public class DAOComprobanteImpl implements DAOComprobante{
 
-    private static final String SQLregistrar="Insert into Comprobante (numSerie, totalFinal, direccionEnvio, devengado, idImpuesto, idMedioPago, idCliente) " +
+    private static final String SQLregistrar="Insert into Comprobante (numSerie, totalFinal, direccionEnvio, devengado, idImpuesto, idMedioPago, idCliente,idUsuario) " +
                                                 "values (?, ?, ?, ?, ?, ?, ?)";
     private static final String SQLeliminar="Delete from Comprobante where idComprobante = ?";
     private static final String SQLbuscar="Select * from Comprobante where idComprobante = ?";
@@ -31,6 +31,7 @@ public class DAOComprobanteImpl implements DAOComprobante{
             ps.setLong(5, comp.getIdTipoComprobante());
             ps.setLong(6, comp.getIdMedioPago());
             ps.setLong(7, comp.getIdCliente());
+            ps.setLong(8, comp.getIdUsuario());
             ps.executeUpdate();
         }catch (SQLException e){
             e.printStackTrace();
@@ -77,12 +78,12 @@ public class DAOComprobanteImpl implements DAOComprobante{
     }
 
     @Override
-    public Comprobante buscarComprobante(Object key) {
+    public Comprobante buscarComprobante(Comprobante comp) {
         Comprobante co=null;
         try{
             Connection conn=ConexionBD.getInstance().getConnection();
             PreparedStatement ps= conn.prepareStatement(SQLbuscar);
-            ps.setLong(1, Long.parseLong(key.toString()));;
+            ps.setLong(1,comp.getIdComprobante());;
             ResultSet res=ps.executeQuery();
             if (res.next()) {
                 co = new Comprobante(

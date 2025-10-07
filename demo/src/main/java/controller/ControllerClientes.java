@@ -4,10 +4,10 @@ import DTO.Departamento;
 import DTO.Provincia;
 import DTO.TipoDocumento;
 import DTO.Distrito;
-import repository.TipoDocumentoRepository;
-import repository.TipoDocumentoRepositoryImpl;
-import repository.UbigeoRepository;
-import repository.UbigeoRepositoryImpl;
+import DAO.DAOTipoDocumento;
+import DAO.DAOUbigeo;
+import DAOImpl.DAOTipoDocumentoImpl;
+import DAOImpl.DAOUbigeoImpl;
 import service.TipoDocumentoService;
 import service.UbigeoService;
 import javafx.collections.FXCollections;
@@ -38,7 +38,7 @@ public class ControllerClientes {
     @FXML
     public void initialize() {
         // Inyección manual del repositorio
-        UbigeoRepository repo = new UbigeoRepositoryImpl();
+        DAOUbigeo repo = new DAOUbigeoImpl();
         this.ubigeoService = new UbigeoService(repo);
 
         // Configuramos ambos grupos de ComboBox
@@ -46,7 +46,7 @@ public class ControllerClientes {
         configurarUbigeo(listDepartamento1, listProvincia1, listDistrito1);
 
         // Inyección manual (repository + service)
-        TipoDocumentoRepository repoDoc = new TipoDocumentoRepositoryImpl();
+        DAOTipoDocumento repoDoc = new DAOTipoDocumentoImpl();
         this.tipoDocumentoService = new TipoDocumentoService(repoDoc);
 
         // Configuramos ambos comboBox

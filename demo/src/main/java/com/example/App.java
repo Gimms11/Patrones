@@ -27,7 +27,7 @@ public class App extends Application {
     public void start(Stage stage) throws IOException {
         scene = new Scene(loadFXML("GenClientes"), 809, 600);
         //Asignar titulo a la ventana
-        stage.setTitle("Generar Factura");
+        stage.setTitle("Sistema de Facturación");
         stage.setScene(scene);
         stage.show();
     }

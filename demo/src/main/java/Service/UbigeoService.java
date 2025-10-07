@@ -3,13 +3,15 @@ package service;
 import DTO.Departamento;
 import DTO.Provincia;
 import DTO.Distrito;
-import repository.UbigeoRepository;
+
 import java.util.List;
 
-public class UbigeoService {
-    private final UbigeoRepository repository;
+import DAO.DAOUbigeo;
 
-    public UbigeoService(UbigeoRepository repository) {
+public class UbigeoService {
+    private final DAOUbigeo repository;
+
+    public UbigeoService(DAOUbigeo repository) {
         this.repository = repository;
     }
 

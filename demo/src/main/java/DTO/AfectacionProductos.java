@@ -22,4 +22,9 @@ public class AfectacionProductos {
     public void setIdAfectacion(Long idAfectacion) { this.idAfectacion = idAfectacion; }
     public void setNombreAfectacion(String nombreAfectacion) { this.nombreAfectacion = nombreAfectacion; }
     public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
+
+    @Override
+    public String toString() {
+        return nombreAfectacion;
+    }
 }

@@ -3,6 +3,7 @@ package DAOImpl;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,25 +12,29 @@ import DAO.DAOTipoDocumento;
 import DTO.TipoDocumento;
 
 public class DAOTipoDocumentoImpl implements DAOTipoDocumento{
-    private static final String SQLlista="Select * from tipoDoumento";
+
     @Override
-    public List<TipoDocumento> listaTipoDocu() {
-        List<TipoDocumento> listaTipoDocumento=new ArrayList<>();
-        try {
-            Connection conn=ConexionBD.getInstance().getConnection();
-            PreparedStatement ps= conn.prepareStatement(SQLlista);
-            ResultSet res=ps.executeQuery();  
-            while (res.next()) {
-                TipoDocumento td = new TipoDocumento(
-                res.getLong("idDocumento"),
-                res.getString("nombre"),
-                res.getString("descripcion"));
-                listaTipoDocumento.add(td);
+    public List<TipoDocumento> obtenerTodos() {
+        List<TipoDocumento> documentos = new ArrayList<>();
+        String sql = "SELECT iddocumento, nombre, descripcion FROM tipodocumento ORDER BY nombre";
+
+        try (Connection conn = ConexionBD.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                TipoDocumento td = new TipoDocumento();
+                td.setIdDocumento(rs.getLong("iddocumento"));
+                td.setNombreDocumento(rs.getString("nombre"));
+                td.setDescripcion(rs.getString("descripcion"));
+                documentos.add(td);
             }
-            
-        } catch (Exception e) {
+
+        } catch (SQLException e) {
             e.printStackTrace();
+            throw new RuntimeException("Error al cargar los tipos de documento", e);
         }
-        return listaTipoDocu();
+
+        return documentos;
     }
 }

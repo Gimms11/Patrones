@@ -1,13 +1,13 @@
 package service;
 
 import DTO.TipoDocumento;
-import repository.TipoDocumentoRepository;
+import DAO.DAOTipoDocumento;
 import java.util.List;
 
 public class TipoDocumentoService {
-    private final TipoDocumentoRepository repository;
+    private final DAOTipoDocumento repository;
 
-    public TipoDocumentoService(TipoDocumentoRepository repository) {
+    public TipoDocumentoService(DAOTipoDocumento repository) {
         this.repository = repository;
     }
 

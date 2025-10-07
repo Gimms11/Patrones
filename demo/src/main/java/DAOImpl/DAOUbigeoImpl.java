@@ -1,6 +1,7 @@
-package repository;
+package DAOImpl;
 
 import DAO.ConexionBD;
+import DAO.DAOUbigeo;
 import DTO.Departamento;
 import DTO.Provincia;
 import DTO.Distrito;
@@ -8,7 +9,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UbigeoRepositoryImpl implements UbigeoRepository {
+public class DAOUbigeoImpl implements DAOUbigeo {
 
     @Override
     public List<Departamento> obtenerTodosDepartamentos() {

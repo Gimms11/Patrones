@@ -12,7 +12,7 @@ public class ControllerMenu {
     }
     @FXML
     private void goToClients() throws IOException {
-        App.setRoot("Clients");
+        App.setRoot("GenClientes");
     }
     @FXML
     private void goToGenFactures() throws IOException {

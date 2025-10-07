@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.scene.text.Font;
 
 import java.io.IOException;
 
@@ -16,8 +17,15 @@ public class App extends Application {
     private static Scene scene;
 
     @Override
+    public void init() {
+        Font.loadFont(App.class.getResourceAsStream("/fonts/Roboto-Thin .ttf"), 10);
+        Font.loadFont(App.class.getResourceAsStream("/fonts/Roboto-Regular.ttf"), 10);
+        Font.loadFont(App.class.getResourceAsStream("/fonts/Roboto-Bold.ttf"), 10);
+    }
+
+    @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("GenFactures"), 900, 600);
+        scene = new Scene(loadFXML("GenClientes"), 809, 600);
         //Asignar titulo a la ventana
         stage.setTitle("Generar Factura");
         stage.setScene(scene);

@@ -22,4 +22,9 @@ public class MedioPago {
     public void setIdMedioPago(Long idMedioPago) { this.idMedioPago = idMedioPago; }
     public void setNombreMedioPago(String nombreMedioPago) { this.nombreMedioPago = nombreMedioPago; }
     public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
+
+    @Override
+    public String toString() {
+        return nombreMedioPago;
+    }
 }

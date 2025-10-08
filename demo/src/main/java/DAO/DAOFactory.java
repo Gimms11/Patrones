@@ -16,4 +16,5 @@ public abstract class DAOFactory {
     public abstract DAOProducto getProductoDAO();
     public abstract DAOCliente getClienteDAO();
     public abstract DAOComprobante getComprobanteDAO();
+    public abstract DAOMedioPago getMedioPagoDAO();
 }

@@ -14,12 +14,14 @@ public class ControllerFacturas {
     // === ELEMENTOS DE LA VISTA ===
     @FXML private ComboBox<Producto> listProductos;
     @FXML private ComboBox<TipoDocumento> listTipoDoc;
+    @FXML private ComboBox<MedioPago> listMediosPago;
 
     @FXML private TextField prodPrecio;
     @FXML private TextField prodStock;
     @FXML private TextField prodCat;
     @FXML private TextField prodAfec;
     @FXML private TextField prodUnidad;
+    @FXML private TextField prodImp;
 
     @FXML private TextField numDocumento;
     @FXML private TextField nomApeCliente;
@@ -30,6 +32,7 @@ public class ControllerFacturas {
     private CategoriaService categoriaService;
     private ClienteService clienteService;
     private TipoDocumentoService tipoDocumentoService;
+    private MedioPagoService medioPagoService;
 
     private List<AfectacionProductos> listAfectacionProductos;
     private List<CategoriaProductos> listCategoriaProductos;
@@ -47,6 +50,7 @@ public class ControllerFacturas {
             this.categoriaService = new CategoriaService();
             this.tipoDocumentoService = new TipoDocumentoService();
             this.clienteService = new ClienteService();
+            this.medioPagoService = new MedioPagoService();
 
             // Cargar datos base
             this.listAfectacionProductos = afectacionService.listarAfectaciones();
@@ -56,6 +60,7 @@ public class ControllerFacturas {
             // Configurar combos
             configurarComboProd(listProductos);
             configurarComboDoc(listTipoDoc);
+            configurarComboMedioPago(listMediosPago);
 
             // Listener para el producto seleccionado
             listProductos.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
@@ -86,6 +91,13 @@ public class ControllerFacturas {
         combo.setPromptText("Seleccione tipo de documento");
     }
 
+    /** Configura el ComboBox de medios de Pago del servicio */
+    private void configurarComboMedioPago(ComboBox<MedioPago> combo) {
+        var tipos = medioPagoService.listarMedioPagos();
+        combo.setItems(FXCollections.observableArrayList(tipos));
+        combo.setPromptText("Seleccione Medio De Pago");
+    }
+
     // =============================================================
     // EVENTOS DE INTERFAZ
     // =============================================================
@@ -109,6 +121,7 @@ public class ControllerFacturas {
 
         prodAfec.setText(nombreAfectacion);
         prodCat.setText(nombreCategoria);
+        prodImp.setText(producto.getIdTipoAfectacion() == 1? "IGV" : "Ninguno");
     }
 
     /** Busca un cliente por número de documento */
@@ -157,6 +170,10 @@ public class ControllerFacturas {
     /** Devuelve el producto seleccionado */
     public Producto obtenerProductoSeleccionado() {
         return listProductos.getSelectionModel().getSelectedItem();
+    }
+
+    public MedioPago obtenerMedioPagoSeleccionado() {
+        return listMediosPago.getSelectionModel().getSelectedItem();
     }
 
     /** Muestra una alerta de tipo JavaFX */

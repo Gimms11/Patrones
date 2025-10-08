@@ -38,4 +38,9 @@ public class PostgresDAOFactory extends DAOFactory {
     public DAOTipoAfectacion getAfectacionDAO() {
         return new DAOTipoAfectacionImpl();
     }
+
+    @Override
+    public DAOMedioPago getMedioPagoDAO() {
+        return new DAOMedioPagoImpl();
+    }
 }

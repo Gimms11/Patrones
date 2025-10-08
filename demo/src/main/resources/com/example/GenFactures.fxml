@@ -101,7 +101,7 @@
                            <children>
                               <BorderPane GridPane.rowIndex="1">
                                  <right>
-                                    <Button mnemonicParsing="false" styleClass="buttonIn" text="Agregar" BorderPane.alignment="CENTER">
+                                    <Button fx:id="btnAgregarProd" mnemonicParsing="false" styleClass="buttonIn" text="Agregar" BorderPane.alignment="CENTER">
                                        <BorderPane.margin>
                                           <Insets top="5.0" />
                                        </BorderPane.margin></Button>
@@ -192,7 +192,7 @@
                               <Label text="Filtro" />
                               <HBox alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT">
                                  <children>
-                                    <VBox minWidth="150.0" prefHeight="200.0" prefWidth="150.0">
+                                    <VBox prefHeight="200.0" prefWidth="150.0">
                                        <children>
                                           <HBox alignment="CENTER" prefHeight="100.0" prefWidth="134.0">
                                              <children>
@@ -209,7 +209,7 @@
                                           <Insets right="50.0" />
                                        </HBox.margin>
                                     </VBox>
-                                    <VBox alignment="CENTER" minWidth="150.0" prefHeight="200.0" prefWidth="150.0">
+                                    <VBox alignment="CENTER" prefHeight="200.0" prefWidth="150.0">
                                        <children>
                                           <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                                              <children>
@@ -218,7 +218,7 @@
                                           </HBox>
                                           <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
                                              <children>
-                                                <Button mnemonicParsing="false" onAction="#buscarCliente" styleClass="buttonIn" text="Buscar" />
+                                                <Button fx:id="btnBuscar" mnemonicParsing="false" onAction="#buscarCliente" styleClass="buttonIn" text="Buscar" />
                                              </children></HBox>
                                        </children>
                                        <HBox.margin>
@@ -239,12 +239,12 @@
                                           </HBox>
                                           <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                                              <children>
-                                                <TextField editable="false" promptText="N° Serie" styleClass="textIn" />
+                                                <TextField fx:id="txtNumSerie" editable="false" promptText="N° Serie" styleClass="textIn" />
                                              </children>
                                           </HBox>
                                           <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                                              <children>
-                                                <TextField editable="false" promptText="Fecha Emisión" styleClass="textIn" />
+                                                <TextField fx:id="txtFechaEmision" editable="false" promptText="Fecha Emisión" styleClass="textIn" />
                                              </children>
                                           </HBox>
                                        </children>
@@ -252,12 +252,26 @@
                                           <Insets right="50.0" />
                                        </HBox.margin>
                                     </VBox>
-                                    <VBox alignment="TOP_RIGHT" minWidth="60.0" prefWidth="100.0">
+                                    <VBox alignment="CENTER" minWidth="100.0" prefHeight="200.0" prefWidth="150.0">
                                        <children>
-                                          <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" />
+                                          <HBox alignment="CENTER" prefHeight="18.0" prefWidth="142.0" />
                                           <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                                              <children>
-                                                <Button mnemonicParsing="false" styleClass="buttonIn" text="Generar" />
+                                                <ComboBox fx:id="listMediosPago" prefWidth="150.0" promptText="Medio de Pago" styleClass="boxIn" />
+                                             </children>
+                                          </HBox>
+                                          <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                                             <children>
+                                                <TextField fx:id="prodImp" editable="false" promptText="Tipo De Impuesto" styleClass="textIn" />
+                                             </children>
+                                          </HBox>
+                                       </children>
+                                    </VBox>
+                                    <VBox alignment="TOP_RIGHT" minWidth="100.0" prefWidth="100.0">
+                                       <children>
+                                          <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                                             <children>
+                                                <Button fx:id="btnComprobante" mnemonicParsing="false" styleClass="buttonIn" text="Generar" />
                                              </children>
                                           </HBox>
                                        </children>
@@ -274,7 +288,7 @@
                         </VBox>
                         <BorderPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
                            <center>
-                              <TableView prefHeight="200.0" prefWidth="706.0" styleClass="tableOut" BorderPane.alignment="CENTER">
+                              <TableView fx:id="listDetalles" prefHeight="200.0" prefWidth="706.0" styleClass="tableOut" BorderPane.alignment="CENTER">
                                 <columns>
                                   <TableColumn prefWidth="75.0" text="C1" />
                                   <TableColumn prefWidth="75.0" text="C2" />

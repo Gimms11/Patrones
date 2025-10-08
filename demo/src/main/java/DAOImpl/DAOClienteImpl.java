@@ -1,125 +1,140 @@
 package DAOImpl;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+
 import DAO.ConexionBD;
 import DAO.DAOCliente;
 import DTO.Cliente;
 
-public class DAOClienteImpl implements DAOCliente{
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
-    private static final String SQLregistrar="Insert into cliente (nombres, apellidos, telefono,correo, direccion, numDocumento,idDistrito,idDocumento) "+
-                                                "values(?,?,?,?,?,?,?,?)";
-    private static final String SQLeliminar="Delete from cliente where idCliente = ?";
-    private static final String SQLactualizar="Update cliente set nombres = ?, apellidos = ?, telefono = ?, correo = ?, direccion = ?, numDocumento = ?,idDistrito = ?, idDocumento = ?  "+
-                                            "where idCliente = ?";
-    private static final String SQLbuscar="Select * from cliente where idCliente = ?";
-    private static final String SQLlista="Select * from cliente";
-    
+public class DAOClienteImpl implements DAOCliente {
+
+    private static final String SQL_INSERT = 
+        "INSERT INTO cliente (nombres, apellidos, telefono, correo, direccion, numdocumento, iddistrito, iddocumento) " +
+        "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+    private static final String SQL_UPDATE = 
+        "UPDATE cliente SET nombres = ?, apellidos = ?, telefono = ?, correo = ?, direccion = ?, " +
+        "numdocumento = ?, iddistrito = ?, iddocumento = ? WHERE idcliente = ?";
+
+    private static final String SQL_DELETE = 
+        "DELETE FROM cliente WHERE idcliente = ?";
+
+    private static final String SQL_SELECT_BY_ID = 
+        "SELECT * FROM cliente WHERE idcliente = ?";
+
+    private static final String SQL_SELECT_ALL = 
+        "SELECT * FROM cliente";
+
     @Override
-    public void registarCliente(Cliente clnt) {
-        try{
-            Connection conn=ConexionBD.getInstance().getConnection();
-            PreparedStatement ps= conn.prepareStatement(SQLregistrar);
-            ps.setString(1, clnt.getNombre());
-            ps.setString(2, clnt.getApellidos());
-            ps.setString(3, clnt.getTelefono());
-            ps.setString(4, clnt.getCorreo());
-            ps.setString(5, clnt.getDireccion());
-            ps.setString(6, clnt.getNumeroDocumento());
-            ps.setLong(7, clnt.getIdDistrito());
-            ps.setLong(8, clnt.getIdDocumento());
+    public void registrarCliente(Cliente cliente) {
+        try (Connection conn = ConexionBD.getInstance().getConnection();
+             PreparedStatement ps = conn.prepareStatement(SQL_INSERT)) {
+
+            ps.setString(1, cliente.getNombres());
+            ps.setString(2, cliente.getApellidos());
+            ps.setString(3, cliente.getTelefono());
+            ps.setString(4, cliente.getCorreo());
+            ps.setString(5, cliente.getDireccion());
+            ps.setString(6, cliente.getNumDocumento());
+            ps.setLong(7, cliente.getIdDistrito());
+            ps.setLong(8, cliente.getIdDocumento());
             ps.executeUpdate();
-        }catch (SQLException e){
-            e.printStackTrace();
+
+        } catch (SQLException e) {
+            System.err.println("Error al registrar cliente: " + e.getMessage());
         }
     }
 
     @Override
-    public void actualizarCliente(Cliente clnt) {
-        try{
-            Connection conn=ConexionBD.getInstance().getConnection();
-            PreparedStatement ps= conn.prepareStatement(SQLactualizar);
-            ps.setString(1, clnt.getNombre());
-            ps.setString(2, clnt.getApellidos());
-            ps.setString(3, clnt.getTelefono());
-            ps.setString(4, clnt.getCorreo());
-            ps.setString(5, clnt.getDireccion());
-            ps.setString(6, clnt.getNumeroDocumento());
-            ps.setLong(7, clnt.getIdDistrito());
-            ps.setLong(8, clnt.getIdDocumento());
-            ps.setLong(9, clnt.getIdCliente());
+    public void actualizarCliente(Cliente cliente) {
+        try (Connection conn = ConexionBD.getInstance().getConnection();
+             PreparedStatement ps = conn.prepareStatement(SQL_UPDATE)) {
+
+            ps.setString(1, cliente.getNombres());
+            ps.setString(2, cliente.getApellidos());
+            ps.setString(3, cliente.getTelefono());
+            ps.setString(4, cliente.getCorreo());
+            ps.setString(5, cliente.getDireccion());
+            ps.setString(6, cliente.getNumDocumento());
+            ps.setLong(7, cliente.getIdDistrito());
+            ps.setLong(8, cliente.getIdDocumento());
+            ps.setLong(9, cliente.getIdCliente());
             ps.executeUpdate();
-        }catch (SQLException e){
-            e.printStackTrace();
+
+        } catch (SQLException e) {
+            System.err.println("Error al actualizar cliente: " + e.getMessage());
         }
     }
 
     @Override
-    public void eliminarCliente(Cliente clnt) {
-        try{
-            Connection conn=ConexionBD.getInstance().getConnection();
-            PreparedStatement ps= conn.prepareStatement(SQLeliminar);
-            ps.setLong(1, clnt.getIdCliente());
+    public void eliminarCliente(Cliente cliente) {
+        try (Connection conn = ConexionBD.getInstance().getConnection();
+             PreparedStatement ps = conn.prepareStatement(SQL_DELETE)) {
+
+            ps.setLong(1, cliente.getIdCliente());
             ps.executeUpdate();
-        }catch (SQLException e){
-            e.printStackTrace();
+
+        } catch (SQLException e) {
+            System.err.println("Error al eliminar cliente: " + e.getMessage());
         }
     }
 
     @Override
-    public List<Cliente> listarCliente() {
-        List<Cliente> listaCliente=new ArrayList<>();
-        try{     
-            Connection conn=ConexionBD.getInstance().getConnection();
-            PreparedStatement ps= conn.prepareStatement(SQLlista);
-            ResultSet res=ps.executeQuery();            
-            while (res.next()) {
-                Cliente c = new Cliente(
-                res.getLong("idCliente"),
-                res.getString("nombres"),
-                res.getString("apellidos"),
-                res.getString("telefono"),
-                res.getString("correo"),
-                res.getString("direccion"),
-                res.getString("numDocumento"),
-                res.getLong("idDistrito"),
-                res.getLong("idDocumento"));
-                listaCliente.add(c);
+    public Cliente buscarCliente(Long idCliente) {
+        Cliente cliente = null;
+        try (Connection conn = ConexionBD.getInstance().getConnection();
+             PreparedStatement ps = conn.prepareStatement(SQL_SELECT_BY_ID)) {
+
+            ps.setLong(1, idCliente);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    cliente = new Cliente(
+                        rs.getLong("idcliente"),
+                        rs.getString("nombres"),
+                        rs.getString("apellidos"),
+                        rs.getString("telefono"),
+                        rs.getString("correo"),
+                        rs.getString("direccion"),
+                        rs.getString("numdocumento"),
+                        rs.getLong("iddistrito"),
+                        rs.getLong("iddocumento")
+                    );
+                }
             }
-        }catch (SQLException e){
-            e.printStackTrace();
+
+        } catch (SQLException e) {
+            System.err.println("Error al buscar cliente: " + e.getMessage());
         }
-        return listaCliente;
+        return cliente;
     }
 
     @Override
-    public Cliente buscarCliente(Cliente clnt) {
-        Cliente c=null;
-        try{
-            Connection conn=ConexionBD.getInstance().getConnection();
-            PreparedStatement ps= conn.prepareStatement(SQLbuscar);
-            ps.setLong(1, clnt.getIdCliente());
-            ResultSet res=ps.executeQuery();
-            if (res.next()) {
-                c = new Cliente(
-                res.getLong("idCliente"),
-                res.getString("nombres"),
-                res.getString("apellidos"),
-                res.getString("telefono"),
-                res.getString("correo"),
-                res.getString("direccion"),
-                res.getString("numDocumento"),
-                res.getLong("idDistrito"),
-                res.getLong("idDocumento"));
+    public List<Cliente> listarClientes() {
+        List<Cliente> lista = new ArrayList<>();
+        try (Connection conn = ConexionBD.getInstance().getConnection();
+             PreparedStatement ps = conn.prepareStatement(SQL_SELECT_ALL);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                Cliente cliente = new Cliente(
+                    rs.getLong("idcliente"),
+                    rs.getString("nombres"),
+                    rs.getString("apellidos"),
+                    rs.getString("telefono"),
+                    rs.getString("correo"),
+                    rs.getString("direccion"),
+                    rs.getString("numdocumento"),
+                    rs.getLong("iddistrito"),
+                    rs.getLong("iddocumento")
+                );
+                lista.add(cliente);
             }
-        }catch (SQLException e){
-            e.printStackTrace();
+
+        } catch (SQLException e) {
+            System.err.println("Error al listar clientes: " + e.getMessage());
         }
-        return c;
+        return lista;
     }
-    
 }

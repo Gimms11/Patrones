@@ -2,94 +2,114 @@ package controller;
 
 import DTO.Departamento;
 import DTO.Provincia;
-import DTO.TipoDocumento;
 import DTO.Distrito;
-import DAO.DAOTipoDocumento;
-import DAO.DAOUbigeo;
-import DAOImpl.DAOTipoDocumentoImpl;
-import DAOImpl.DAOUbigeoImpl;
-import service.TipoDocumentoService;
+import DTO.TipoDocumento;
 import service.UbigeoService;
+import service.TipoDocumentoService;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Alert.AlertType;
 
 public class ControllerClientes {
 
-    // ComboBox del primer formulario
+    // --- ComboBox del primer formulario ---
     @FXML private ComboBox<TipoDocumento> comboTipoDocumento;
-    // ComboBox del segundo formulario
-    @FXML private ComboBox<TipoDocumento> comboTipoDocumento1;
-
-    private TipoDocumentoService tipoDocumentoService;
-
-    // Primer formulario
     @FXML private ComboBox<Departamento> listDepartamento;
     @FXML private ComboBox<Provincia> listProvincia;
     @FXML private ComboBox<Distrito> listDistrito;
 
-    // Segundo formulario
+    // --- ComboBox del segundo formulario ---
+    @FXML private ComboBox<TipoDocumento> comboTipoDocumento1;
     @FXML private ComboBox<Departamento> listDepartamento1;
     @FXML private ComboBox<Provincia> listProvincia1;
     @FXML private ComboBox<Distrito> listDistrito1;
 
+    // --- Servicios ---
     private UbigeoService ubigeoService;
+    private TipoDocumentoService tipoDocumentoService;
 
+    /**
+     * Método que se ejecuta automáticamente al cargar la ventana (FXML)
+     */
     @FXML
     public void initialize() {
-        // Inyección manual del repositorio
-        DAOUbigeo repo = new DAOUbigeoImpl();
-        this.ubigeoService = new UbigeoService(repo);
+        try {
+            // Inicializar servicios (inyección manual)
+            this.ubigeoService = new UbigeoService();
+            this.tipoDocumentoService = new TipoDocumentoService();
 
-        // Configuramos ambos grupos de ComboBox
-        configurarUbigeo(listDepartamento, listProvincia, listDistrito);
-        configurarUbigeo(listDepartamento1, listProvincia1, listDistrito1);
+            // Configurar ambos grupos de ComboBox
+            configurarUbigeo(listDepartamento, listProvincia, listDistrito);
+            configurarUbigeo(listDepartamento1, listProvincia1, listDistrito1);
 
-        // Inyección manual (repository + service)
-        DAOTipoDocumento repoDoc = new DAOTipoDocumentoImpl();
-        this.tipoDocumentoService = new TipoDocumentoService(repoDoc);
+            // Configurar ComboBox de tipos de documentos
+            configurarCombo(comboTipoDocumento);
+            configurarCombo(comboTipoDocumento1);
 
-        // Configuramos ambos comboBox
-        configurarCombo(comboTipoDocumento);
-        configurarCombo(comboTipoDocumento1);
+        } catch (Exception e) {
+            mostrarError("Error de inicialización", "No se pudieron cargar los datos iniciales.", e.getMessage());
+        }
     }
 
     /**
-     * Configura el comportamiento progresivo de un trío de ComboBox
+     * Configura el comportamiento progresivo de los ComboBox de ubicación
      */
     private void configurarUbigeo(
             ComboBox<Departamento> comboDep,
             ComboBox<Provincia> comboProv,
             ComboBox<Distrito> comboDist
     ) {
-        // Cargar departamentos
-        comboDep.setItems(FXCollections.observableArrayList(ubigeoService.cargarDepartamentos()));
-        
+        try {
+            // Cargar departamentos
+            var departamentos = ubigeoService.cargarDepartamentos();
+            comboDep.setItems(FXCollections.observableArrayList(departamentos));
+            comboDep.setPromptText("Seleccione un departamento");
 
-        // Al seleccionar departamento
-        comboDep.setOnAction(e -> {
-            Departamento dep = comboDep.getValue();
-            comboProv.getItems().clear();
-            comboDist.getItems().clear();
-            if (dep != null) {
-                var provincias = ubigeoService.cargarProvincias(dep.getIdDepartamento());
-                comboProv.setItems(FXCollections.observableArrayList(provincias));
-            }
-        });
+            // Al seleccionar departamento → cargar provincias
+            comboDep.setOnAction(e -> {
+                comboProv.getItems().clear();
+                comboDist.getItems().clear();
 
-        // Al seleccionar provincia
-        comboProv.setOnAction(e -> {
-            Provincia prov = comboProv.getValue();
-            comboDist.getItems().clear();
-            if (prov != null) {
-                var distritos = ubigeoService.cargarDistritos(prov.getIdProvincia());
-                comboDist.setItems(FXCollections.observableArrayList(distritos));
-            }
-        });
+                Departamento dep = comboDep.getValue();
+                if (dep != null) {
+                    var provincias = ubigeoService.cargarProvincias(dep.getIdDepartamento());
+                    comboProv.setItems(FXCollections.observableArrayList(provincias));
+                    comboProv.setPromptText("Seleccione una provincia");
+                }
+            });
+
+            // Al seleccionar provincia → cargar distritos
+            comboProv.setOnAction(e -> {
+                comboDist.getItems().clear();
+                Provincia prov = comboProv.getValue();
+                if (prov != null) {
+                    var distritos = ubigeoService.cargarDistritos(prov.getIdProvincia());
+                    comboDist.setItems(FXCollections.observableArrayList(distritos));
+                    comboDist.setPromptText("Seleccione un distrito");
+                }
+            });
+        } catch (Exception e) {
+            mostrarError("Error al cargar ubicaciones", "No se pudieron cargar los datos de ubicación.", e.getMessage());
+        }
     }
 
     /**
-     * Retorna el ID del distrito seleccionado del primer formulario.
+     * Configura un ComboBox de tipo de documento
+     */
+    private void configurarCombo(ComboBox<TipoDocumento> combo) {
+        try {
+            var documentos = tipoDocumentoService.cargarTipoDocumentos();
+            combo.setItems(FXCollections.observableArrayList(documentos));
+            combo.setPromptText("Seleccione un tipo de documento");
+        } catch (Exception e) {
+            mostrarError("Error al cargar documentos", "No se pudieron cargar los tipos de documento.", e.getMessage());
+        }
+    }
+
+    /**
+     * Obtiene el ID del distrito del primer formulario
      */
     public Long obtenerIdDistritoSeleccionado() {
         Distrito d = listDistrito.getValue();
@@ -97,25 +117,15 @@ public class ControllerClientes {
     }
 
     /**
-     * Retorna el ID del distrito seleccionado del segundo formulario.
+     * Obtiene el ID del distrito del segundo formulario
      */
     public Long obtenerIdDistritoSeleccionado1() {
         Distrito d = listDistrito1.getValue();
         return (d != null) ? d.getIdDistrito() : null;
     }
 
-
     /**
-     * Configura un ComboBox de tipo de documento (reutilizable)
-     */
-    private void configurarCombo(ComboBox<TipoDocumento> combo) {
-        var documentos = tipoDocumentoService.cargarTipoDocumentos();
-        combo.setItems(FXCollections.observableArrayList(documentos));
-        combo.setPromptText("Seleccione un tipo de documento");
-    }
-
-    /**
-     * Devuelve el ID del tipo de documento seleccionado del primer combo
+     * Obtiene el ID del tipo de documento del primer ComboBox
      */
     public Long obtenerIdTipoDocumentoSeleccionado() {
         TipoDocumento doc = comboTipoDocumento.getValue();
@@ -123,10 +133,63 @@ public class ControllerClientes {
     }
 
     /**
-     * Devuelve el ID del tipo de documento seleccionado del segundo combo
+     * Obtiene el ID del tipo de documento del segundo ComboBox
      */
     public Long obtenerIdTipoDocumentoSeleccionado1() {
         TipoDocumento doc = comboTipoDocumento1.getValue();
         return (doc != null) ? doc.getIdDocumento() : null;
+    }
+
+    /**
+     * Método de ejemplo: insertar cliente (a completar)
+     * Aquí puedes agregar validaciones antes de insertar a la BD.
+     */
+    @FXML
+    public void insertarCliente() {
+        if (comboTipoDocumento.getValue() == null) {
+            mostrarAdvertencia("Validación de datos", "Debe seleccionar un tipo de documento.");
+            return;
+        }
+        if (listDistrito.getValue() == null) {
+            mostrarAdvertencia("Validación de datos", "Debe seleccionar un distrito.");
+            return;
+        }
+
+        mostrarInfo("Registro exitoso", "Cliente registrado correctamente (demo).");
+    }
+
+    // --- MÉTODOS DE ALERTAS (ventanas emergentes) ---
+
+    /**
+     * Muestra una alerta de información
+     */
+    private void mostrarInfo(String titulo, String mensaje) {
+        Alert alert = new Alert(AlertType.INFORMATION);
+        alert.setTitle("Información");
+        alert.setHeaderText(titulo);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
+    }
+
+    /**
+     * Muestra una alerta de advertencia
+     */
+    private void mostrarAdvertencia(String titulo, String mensaje) {
+        Alert alert = new Alert(AlertType.WARNING);
+        alert.setTitle("Advertencia");
+        alert.setHeaderText(titulo);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
+    }
+
+    /**
+     * Muestra una alerta de error con detalles
+     */
+    private void mostrarError(String titulo, String mensaje, String detalles) {
+        Alert alert = new Alert(AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(titulo);
+        alert.setContentText(mensaje + "\n\nDetalles: " + detalles);
+        alert.showAndWait();
     }
 }

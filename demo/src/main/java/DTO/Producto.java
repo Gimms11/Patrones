@@ -41,7 +41,7 @@ public class Producto {
     public BigDecimal getPrecio() { return precio; }
     public Integer getStock() { return stock; }
     public String getDescripcion() { return descripcion; }
-    public long getIdCategoria() { return idCategoria; }
+    public Long getIdCategoria() { return idCategoria; }
     public String getUnidadMedida() { return unidadMedida; }
     public Long getIdTipoAfectacion() { return idTipoAfectacion; }
 
@@ -54,4 +54,9 @@ public class Producto {
     public void setIdCategoria(long idCategoria) { this.idCategoria = idCategoria; }
     public void setUnidadMedida(String unidadMedida) { this.unidadMedida = unidadMedida; }
     public void setIdTipoAfectacion(Long idTipoAfectacion) { this.idTipoAfectacion = idTipoAfectacion; }
+
+    @Override
+    public String toString() {
+        return nombre;
+    }
 }

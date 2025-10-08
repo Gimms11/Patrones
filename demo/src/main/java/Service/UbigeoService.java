@@ -6,13 +6,15 @@ import DTO.Distrito;
 
 import java.util.List;
 
+import DAO.DAOFactory;
 import DAO.DAOUbigeo;
 
 public class UbigeoService {
     private final DAOUbigeo repository;
 
-    public UbigeoService(DAOUbigeo repository) {
-        this.repository = repository;
+    public UbigeoService() {
+        DAOFactory factory = DAOFactory.getDAOFactory();
+        this.repository = factory.getUbigeoDAO();
     }
 
     public List<Departamento> cargarDepartamentos() {

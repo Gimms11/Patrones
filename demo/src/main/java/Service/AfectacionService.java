@@ -2,14 +2,16 @@ package service;
 
 import DTO.AfectacionProductos;
 import DAO.DAOTipoAfectacion;
+import DAO.DAOFactory;
 import java.util.List;
 
 public class AfectacionService {
 
     private final DAOTipoAfectacion repository;
 
-    public AfectacionService(DAOTipoAfectacion repository) {
-        this.repository = repository;
+    public AfectacionService() {
+        DAOFactory factory = DAOFactory.getDAOFactory();
+        this.repository = factory.getAfectacionDAO();
     }
 
     public List<AfectacionProductos> listarAfectaciones() {

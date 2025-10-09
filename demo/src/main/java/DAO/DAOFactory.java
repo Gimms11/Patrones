@@ -13,6 +13,7 @@ public abstract class DAOFactory {
     public abstract DAOCategoriaProducto getCategoriaProductoDAO();
     public abstract DAOTipoAfectacion getAfectacionDAO();
     public abstract DAOTipoDocumento getTipoDocumentoDAO();
+    public abstract DAOTipoComprobante getTipoComprobanteDAO();
     public abstract DAOProducto getProductoDAO();
     public abstract DAOCliente getClienteDAO();
     public abstract DAOComprobante getComprobanteDAO();

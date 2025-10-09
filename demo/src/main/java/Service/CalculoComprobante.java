@@ -23,20 +23,6 @@ public class CalculoComprobante {
             // 1️⃣ Calcular subtotal por producto
             BigDecimal subtotal = det.getPrecioUnitario().multiply(BigDecimal.valueOf(det.getCantidadProductos()));
             det.setSubtotal(subtotal);
-
-            // 2️⃣ Calcular monto del impuesto
-            // Si el impuesto es nulo (no aplica), se toma 0
-            BigDecimal montoImpuesto = det.getMontoImpuesto() != null ? det.getMontoImpuesto() : BigDecimal.ZERO;
-            det.setMontoImpuesto(montoImpuesto);
-
-            // 3️⃣ Total por línea = subtotal + impuesto
-            BigDecimal total = subtotal.add(montoImpuesto);
-            det.setTotal(total);
-
-            // 4️⃣ Sumar al total general
-            subtotalGeneral = subtotalGeneral.add(subtotal);
-            totalImpuestos = totalImpuestos.add(montoImpuesto);
-            totalFinal = totalFinal.add(total);
         }
 
         // ✅ Actualizar comprobante

@@ -43,4 +43,9 @@ public class PostgresDAOFactory extends DAOFactory {
     public DAOMedioPago getMedioPagoDAO() {
         return new DAOMedioPagoImpl();
     }
+
+    @Override
+    public DAOTipoComprobante getTipoComprobanteDAO() {
+        return new DAOTipoComprobanteImpl();
+    }
 }

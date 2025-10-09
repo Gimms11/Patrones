@@ -22,4 +22,9 @@ public class TipoComprobante {
     public void setIdTipoComprobante(Long idTipoComprobante) { this.idTipoComprobante = idTipoComprobante; }
     public void setNombreTipo(String nombreTipo) { this.nombreTipo = nombreTipo; }
     public void setDescripcion(String descripcion) { this.descripcion = descripcion; }
+
+    @Override
+    public String toString() {
+        return nombreTipo; // Mostrar solo el nombre en el ComboBox
+    }
 }

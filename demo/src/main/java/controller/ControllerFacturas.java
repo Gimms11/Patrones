@@ -394,8 +394,6 @@ public class ControllerFacturas {
     private void btnGenerarComprobante(){
         btnGuardarComprobante();
         System.out.println("DEBUG: Comprobante guardado, actualizando lista de comprobantes");
-        // Actualizar la lista de comprobantes antes de mostrar
-        this.listComprobantes = comprobanteService.listarComprobante();
         System.out.println("DEBUG: Lista de comprobantes actualizada, cantidad: " + (listComprobantes != null ? listComprobantes.size() : 0));
         mostrarComprobanteEnAlerta();
 
@@ -494,6 +492,7 @@ public class ControllerFacturas {
         try {
             // Primero guardamos el comprobante
             comprobanteService.subirComprobante(comprobante);
+            this.listComprobantes = comprobanteService.listarComprobante();
 
             // Luego guardamos cada detalle
             for (DetalleComprobante detalle : listaDetalle) {

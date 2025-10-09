@@ -43,6 +43,7 @@ public class ControllerFacturas {
     private MedioPagoService medioPagoService;
     private TipoComprService tipoComprobanteService;
     private ComprobanteService comprobanteService;
+    private DetalleComprobanteService detalleComprobanteService;
 
     private List<AfectacionProductos> listAfectacionProductos;
     private List<CategoriaProductos> listCategoriaProductos;
@@ -69,6 +70,7 @@ public class ControllerFacturas {
             this.medioPagoService = new MedioPagoService();
             this.tipoComprobanteService = new TipoComprService();
             this.comprobanteService = new ComprobanteService();
+            this.detalleComprobanteService = new DetalleComprobanteService();
 
             // Cargar datos base
             this.listAfectacionProductos = afectacionService.listarAfectaciones();
@@ -302,51 +304,72 @@ public class ControllerFacturas {
      * Realiza cálculos de subtotales y validaciones de stock.
      */
     private void agregarDetalle() {
-        DetalleComprobante detalle = new DetalleComprobante();
-        Producto producto = obtenerProductoSeleccionado();
-
-        // Validación del producto y su stock
-        if (producto == null) {
-            mostrarAlerta(AlertType.WARNING, "Error", "No se ha seleccionado ningún producto");
-            return;
-        }
-
-        int cantidad;
         try {
-            cantidad = Integer.parseInt(txtCantidad.getText().trim());
-        } catch (NumberFormatException e) {
-            mostrarAlerta(AlertType.WARNING, "Error", "La cantidad ingresada no es válida");
-            return;
+            // Obtener y validar producto
+            Producto producto = obtenerProductoSeleccionado();
+            if (producto == null) {
+                mostrarAlerta(AlertType.WARNING, "Error", "No se ha seleccionado ningún producto");
+                return;
+            }
+
+            // Validar cantidad
+            if (txtCantidad.getText() == null || txtCantidad.getText().trim().isEmpty()) {
+                mostrarAlerta(AlertType.WARNING, "Error", "Debe ingresar una cantidad");
+                return;
+            }
+
+            int cantidad;
+            try {
+                cantidad = Integer.parseInt(txtCantidad.getText().trim());
+                if (cantidad <= 0) {
+                    mostrarAlerta(AlertType.WARNING, "Error", "La cantidad debe ser mayor a 0");
+                    return;
+                }
+            } catch (NumberFormatException e) {
+                mostrarAlerta(AlertType.WARNING, "Error", "La cantidad ingresada no es válida");
+                return;
+            }
+
+            // Validar stock
+            if (producto.getStock() < cantidad) {
+                mostrarAlerta(AlertType.WARNING, "Stock insuficiente", 
+                    "Stock disponible: " + producto.getStock() + "\n" +
+                    "Cantidad solicitada: " + cantidad);
+                return;
+            }
+
+            // Crear y configurar el detalle
+            DetalleComprobante detalle = new DetalleComprobante();
+            detalle.setCantidadProductos(cantidad);
+            detalle.setIdProducto(producto.getIdProducto());
+            detalle.setPrecioUnitario(producto.getPrecio());
+
+            // Calcular subtotal
+            BigDecimal subtotal = producto.getPrecio().multiply(new BigDecimal(cantidad));
+            detalle.setSubtotal(subtotal);
+
+            // Calcular total con impuestos
+            double tasaImpuesto = (producto.getIdTipoAfectacion() == 2 ? 0.0 : 0.18);
+            BigDecimal total = subtotal.multiply(BigDecimal.ONE.add(new BigDecimal(tasaImpuesto)));
+            detalle.setTotal(total.setScale(2, RoundingMode.HALF_UP));
+
+            // Inicializar lista si es necesario
+            if (listaDetalle == null) {
+                listaDetalle = new ArrayList<>();
+            }
+
+            System.out.println("DEBUG: Agregando detalle - Producto: " + producto.getIdProducto() + 
+                             ", Cantidad: " + cantidad + 
+                             ", Subtotal: " + subtotal + 
+                             ", Total: " + total);
+
+            listaDetalle.add(detalle);
+            mostrarAlerta(AlertType.INFORMATION, "Éxito", "Producto agregado al comprobante");
+
+        } catch (Exception e) {
+            mostrarAlerta(AlertType.ERROR, "Error", "Error al agregar detalle: " + e.getMessage());
+            e.printStackTrace();
         }
-
-        if (producto.getStock() < cantidad) {
-            mostrarAlerta(AlertType.WARNING, "Stock insuficiente", 
-                "Stock disponible: " + producto.getStock() + "\n" +
-                "Cantidad solicitada: " + cantidad);
-            return;
-        }
-
-        detalle.setCantidadProductos(Integer.parseInt(txtCantidad.getText()));
-        detalle.setPrecioUnitario(producto.getPrecio());
-        detalle.setIdProducto(producto.getIdProducto());
-
-        //Seleccionar el idDetalle más alto y sumarle 1
-        Long idDetalle = listComprobantes.stream()
-                .mapToLong(Comprobante::getIdComprobante)
-                .max()
-                .orElse(0L) + 1;
-
-        detalle.setIdComprobante(idDetalle);
-        detalle.setIdImpuesto(producto.getIdTipoAfectacion()==1? 2L : 1L);
-
-
-        //Subtotal
-        detalle.setSubtotal(detalle.getPrecioUnitario().multiply(new java.math.BigDecimal(detalle.getCantidadProductos())));
-        //Total
-        double tasa = (producto.getIdTipoAfectacion()==2? 0.0 : 0.18) + 1.0;
-        detalle.setTotal(detalle.getSubtotal().multiply(new java.math.BigDecimal(tasa)));
-
-        listaDetalle.add(detalle);
     }
 
     public void mostrarDetallesEnAlerta(){
@@ -376,6 +399,36 @@ public class ControllerFacturas {
         System.out.println("DEBUG: Lista de comprobantes actualizada, cantidad: " + (listComprobantes != null ? listComprobantes.size() : 0));
         mostrarComprobanteEnAlerta();
 
+        configurarComboProd(listProductos);
+        limpiarCampos();;
+    }
+
+    /**
+     * Limpia todos los campos del formulario y reinicia las listas
+     */
+    private void limpiarCampos() {
+        // Limpiar campos de producto
+        listProductos.getSelectionModel().clearSelection();
+        prodPrecio.clear();
+        prodStock.clear();
+        prodCat.clear();
+        prodAfec.clear();
+        prodUnidad.clear();
+        prodImp.clear();
+        txtCantidad.clear();
+
+        // Limpiar campos de cliente
+        numDocumento.clear();
+        nomApeCliente.clear();
+
+        // Limpiar campos de comprobante
+        txtNumSerie.clear();
+        txtFechaEmision.clear();
+        listTipoDoc.getSelectionModel().clearSelection();
+        listMediosPago.getSelectionModel().clearSelection();
+        listTipoComp.getSelectionModel().clearSelection();
+
+        // Reiniciar lista de detalles
         listaDetalle = new ArrayList<>();
     }
 
@@ -438,7 +491,20 @@ public class ControllerFacturas {
         comprobante.setIdCliente(cliente.getIdCliente());
         comprobante.setIdUsuario(1L);
 
-        comprobanteService.subirComprobante(comprobante);
+        try {
+            // Primero guardamos el comprobante
+            comprobanteService.subirComprobante(comprobante);
+
+            // Luego guardamos cada detalle
+            for (DetalleComprobante detalle : listaDetalle) {
+                detalle.setIdComprobante(comprobante.getIdComprobante());
+                detalleComprobanteService.registrarDetalleComprobante(detalle);
+            }
+            
+            System.out.println("DEBUG: Comprobante y detalles guardados correctamente");
+        } catch (Exception e) {
+            throw new RuntimeException("Error al guardar comprobante y detalles: " + e.getMessage(), e);
+        }
     }
 
     //Mostrar Comprobantes en una alerta

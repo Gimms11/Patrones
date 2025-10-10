@@ -1,15 +1,19 @@
 package controller;
 
+import DTO.Cliente;
 import DTO.Departamento;
 import DTO.Provincia;
 import DTO.Distrito;
 import DTO.TipoDocumento;
 import service.UbigeoService;
+import service.ClienteService;
 import service.TipoDocumentoService;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
 
 public class ControllerClientes {
@@ -26,9 +30,19 @@ public class ControllerClientes {
     @FXML private ComboBox<Provincia> listProvincia1;
     @FXML private ComboBox<Distrito> listDistrito1;
 
+    // --- Datos de insercción del cliente ---
+
+    @FXML private TextField txtNombres;
+    @FXML private TextField txtApellidos;
+    @FXML private TextField txtTelefono;
+    @FXML private TextField txtCorreo;
+    @FXML private TextField txtNumDoc;
+    @FXML private TextArea txtDireccion;
+
     // --- Servicios ---
     private UbigeoService ubigeoService;
     private TipoDocumentoService tipoDocumentoService;
+    private ClienteService clienteService;
 
     /**
      * Método que se ejecuta automáticamente al cargar la ventana (FXML)
@@ -39,6 +53,7 @@ public class ControllerClientes {
             // Inicializar servicios (inyección manual)
             this.ubigeoService = new UbigeoService();
             this.tipoDocumentoService = new TipoDocumentoService();
+            this.clienteService = new ClienteService();
 
             // Configurar ambos grupos de ComboBox
             configurarUbigeo(listDepartamento, listProvincia, listDistrito);
@@ -146,16 +161,50 @@ public class ControllerClientes {
      */
     @FXML
     public void insertarCliente() {
-        if (comboTipoDocumento.getValue() == null) {
-            mostrarAdvertencia("Validación de datos", "Debe seleccionar un tipo de documento.");
-            return;
-        }
-        if (listDistrito.getValue() == null) {
-            mostrarAdvertencia("Validación de datos", "Debe seleccionar un distrito.");
+        
+        // Validaciones
+        String telefono = txtTelefono.getText();
+        if (telefono.length() > 9) {
+            mostrarAdvertencia("Datos incorrectos", "El teléfono no puede tener más de 9 caracteres.");
             return;
         }
 
-        mostrarInfo("Registro exitoso", "Cliente registrado correctamente (demo).");
+        String correo = txtCorreo.getText();
+        if (!correo.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+            mostrarAdvertencia("Datos incorrectos", "El formato del correo electrónico no es válido.");
+            return;
+        }
+
+        Long idDocumento = obtenerIdTipoDocumentoSeleccionado();
+        String numDoc = txtNumDoc.getText();
+
+        if (idDocumento == 1 && numDoc.length() != 8) {
+            mostrarAdvertencia("Datos incorrectos", "El DNI debe tener 8 caracteres.");
+            return;
+        }
+
+        if (idDocumento == 2 && numDoc.length() != 11) {
+            mostrarAdvertencia("Datos incorrectos", "El RUC debe tener 11 caracteres.");
+            return;
+        }
+
+        Cliente cliente = new Cliente();
+
+        cliente.setNombres(txtNombres.getText());
+        cliente.setApellidos(txtApellidos.getText());
+        cliente.setTelefono(telefono);
+        cliente.setCorreo(correo);
+        cliente.setDireccion(txtDireccion.getText());
+        cliente.setNumDocumento(numDoc);
+        cliente.setIdDistrito(obtenerIdDistritoSeleccionado());
+        cliente.setIdDocumento(idDocumento);
+        
+        try {
+            clienteService.insertarCliente(cliente);
+            mostrarInfo("Registro exitoso", "El cliente se ha registrado correctamente.");
+        } catch (Exception e) {
+            mostrarError("Error al registrar", "No se pudo registrar el cliente.", e.getMessage());
+        }
     }
 
     // --- MÉTODOS DE ALERTAS (ventanas emergentes) ---

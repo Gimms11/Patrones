@@ -16,7 +16,6 @@ public class ControllerFacturas {
 
     // === ELEMENTOS DE LA VISTA ===
     @FXML private ComboBox<Producto> listProductos;
-    @FXML private ComboBox<TipoDocumento> listTipoDoc;
     @FXML private ComboBox<MedioPago> listMediosPago;
     @FXML private ComboBox<TipoComprobante> listTipoComp;
 
@@ -28,7 +27,8 @@ public class ControllerFacturas {
     @FXML private TextField prodImp;
 
     @FXML private TextField numDocumento;
-    @FXML private TextField nomApeCliente;
+    @FXML private TextField nomCliente;
+    @FXML private TextField apeCliente;
 
     @FXML private TextField txtNumSerie;
     @FXML private TextField txtCantidad;
@@ -39,7 +39,6 @@ public class ControllerFacturas {
     private AfectacionService afectacionService;
     private CategoriaService categoriaService;
     private ClienteService clienteService;
-    private TipoDocumentoService tipoDocumentoService;
     private MedioPagoService medioPagoService;
     private TipoComprService tipoComprobanteService;
     private ComprobanteService comprobanteService;
@@ -65,7 +64,6 @@ public class ControllerFacturas {
             this.productoService = new ProductoService();
             this.afectacionService = new AfectacionService();
             this.categoriaService = new CategoriaService();
-            this.tipoDocumentoService = new TipoDocumentoService();
             this.clienteService = new ClienteService();
             this.medioPagoService = new MedioPagoService();
             this.tipoComprobanteService = new TipoComprService();
@@ -80,7 +78,6 @@ public class ControllerFacturas {
 
             // Configurar combos
             configurarComboProd(listProductos);
-            configurarComboDoc(listTipoDoc);
             configurarComboMedioPago(listMediosPago);
             configurarComboTipoComprobante(listTipoComp);
 
@@ -104,13 +101,6 @@ public class ControllerFacturas {
         var productos = productoService.obtenerTodos();
         combo.setItems(FXCollections.observableArrayList(productos));
         combo.setPromptText("Seleccione un producto");
-    }
-
-    /** Configura el ComboBox de tipo de documento con los datos del servicio */
-    private void configurarComboDoc(ComboBox<TipoDocumento> combo) {
-        var tipos = tipoDocumentoService.cargarTipoDocumentos();
-        combo.setItems(FXCollections.observableArrayList(tipos));
-        combo.setPromptText("Seleccione tipo de documento");
     }
 
     /** Configura el ComboBox de medios de Pago del servicio */
@@ -177,11 +167,12 @@ public class ControllerFacturas {
 
         // Mostrar resultado
         if (cliente != null) {
-            String nombreCompleto = cliente.getNombres() + " " + cliente.getApellidos();
-            nomApeCliente.setText(nombreCompleto);
-            mostrarAlerta(AlertType.INFORMATION, "Cliente encontrado", "Cliente: " + nombreCompleto);
+            nomCliente.setText(cliente.getNombres());
+            apeCliente.setText(cliente.getApellidos());
+            mostrarAlerta(AlertType.INFORMATION, "Cliente encontrado", "Cliente: " + nomCliente.getText() + " " + apeCliente.getText());
         } else {
-            nomApeCliente.setText("");
+            nomCliente.setText("");
+            apeCliente.setText("");
             mostrarAlerta(AlertType.WARNING, "No encontrado", "No se encontró un cliente con ese documento.");
         }
     }
@@ -254,7 +245,7 @@ public class ControllerFacturas {
         }
 
         // Validar que se haya seleccionado un cliente
-        if (nomApeCliente.getText() == null || nomApeCliente.getText().trim().isEmpty()) {
+        if (nomCliente.getText() == null || nomCliente.getText().trim().isEmpty()) {
             mostrarAlerta(AlertType.WARNING, "Validación", "Por favor seleccione un cliente");
             return;
         }
@@ -262,7 +253,6 @@ public class ControllerFacturas {
         // Proceder con la generación del comprobante
         generarSerie();
         agregarDetalle();
-        mostrarDetallesEnAlerta();
     }
 
     private void generarSerie() {
@@ -359,9 +349,9 @@ public class ControllerFacturas {
             }
 
             System.out.println("DEBUG: Agregando detalle - Producto: " + producto.getIdProducto() + 
-                             ", Cantidad: " + cantidad + 
-                             ", Subtotal: " + subtotal + 
-                             ", Total: " + total);
+                             "Cantidad: " + cantidad + 
+                             "Subtotal: " + subtotal + 
+                             "Total: " + total);
 
             listaDetalle.add(detalle);
             mostrarAlerta(AlertType.INFORMATION, "Éxito", "Producto agregado al comprobante");
@@ -372,23 +362,6 @@ public class ControllerFacturas {
         }
     }
 
-    public void mostrarDetallesEnAlerta(){
-        for (DetalleComprobante detalle : listaDetalle) {
-            StringBuilder detallesStr = new StringBuilder("Detalles del Comprobante:\n");
-            detallesStr.append("ID Producto: ").append(detalle.getIdProducto())
-                    .append("\n")
-                    .append(", Cantidad: ").append(detalle.getCantidadProductos())
-                    .append("\n")
-                    .append(", Precio Unitario: ").append(formatBigDecimal(detalle.getPrecioUnitario()))
-                    .append("\n")
-                    .append(", Subtotal: ").append(formatBigDecimal(detalle.getSubtotal()))
-                    .append("\n")
-                    .append(", Total: ").append(formatBigDecimal(detalle.getTotal()))
-                    .append("\n")
-                    .append("\n");
-            mostrarAlerta(AlertType.INFORMATION, "Detalle " + detalle.getIdProducto(), detallesStr.toString());
-        }
-    }   
 
     @FXML
     private void btnGenerarComprobante(){
@@ -417,12 +390,12 @@ public class ControllerFacturas {
 
         // Limpiar campos de cliente
         numDocumento.clear();
-        nomApeCliente.clear();
+        nomCliente.clear();
+        apeCliente.clear();
 
         // Limpiar campos de comprobante
         txtNumSerie.clear();
         txtFechaEmision.clear();
-        listTipoDoc.getSelectionModel().clearSelection();
         listMediosPago.getSelectionModel().clearSelection();
         listTipoComp.getSelectionModel().clearSelection();
 
@@ -508,19 +481,20 @@ public class ControllerFacturas {
 
     //Mostrar Comprobantes en una alerta
     private void mostrarComprobanteEnAlerta(){
-        for (Comprobante c : listComprobantes) {
+        if (listComprobantes != null && !listComprobantes.isEmpty()) {
+            Comprobante c = listComprobantes.get(listComprobantes.size() - 1);
             StringBuilder comprobanteStr = new StringBuilder("Comprobante Generado:\n");
             comprobanteStr.append("ID Comprobante: ").append(c.getIdComprobante())
                     .append("\n")
-                    .append(", Fecha Emisión: ").append(c.getFechaEmision())
+                    .append("Fecha Emisión: ").append(c.getFechaEmision())
                     .append("\n")
-                    .append(", Serie: ").append(c.getSerie())
+                    .append("Serie: ").append(c.getSerie())
                     .append("\n")
-                    .append(", Total Final: ").append(formatBigDecimal(c.getTotalFinal()))
+                    .append("Total Final: ").append(formatBigDecimal(c.getTotalFinal()))
                     .append("\n")
-                    .append(", Devengado: ").append(formatBigDecimal(c.getDevengado()))
+                    .append("Devengado: ").append(formatBigDecimal(c.getDevengado()))
                     .append("\n")
-                    .append(", Dirección Envío: ").append(c.getDireccionEnvio())
+                    .append("Dirección Envío: ").append(c.getDireccionEnvio())
                     .append("\n");
             mostrarAlerta(AlertType.INFORMATION, "Comprobante " + c.getIdComprobante(), comprobanteStr.toString());
         }

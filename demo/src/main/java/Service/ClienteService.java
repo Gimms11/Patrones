@@ -17,4 +17,8 @@ public class ClienteService {
     public List<Cliente> obtenerTodos() {
         return repository.listarClientes();
     }
+
+    public void insertarCliente(Cliente cliente){
+        repository.registrarCliente(cliente);
+    }
 }

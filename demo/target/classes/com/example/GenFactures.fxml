@@ -106,6 +106,9 @@
                                           <Insets top="5.0" />
                                        </BorderPane.margin></Button>
                                  </right>
+                                 <left>
+                                    <TextField fx:id="prodImp" editable="false" prefHeight="27.0" prefWidth="121.0" promptText="Tipo De Impuesto" styleClass="textIn" BorderPane.alignment="CENTER" />
+                                 </left>
                               </BorderPane>
                               <TextField fx:id="txtCantidad" promptText="Cantidad" styleClass="textIn" />
                            </children>
@@ -196,12 +199,12 @@
                                        <children>
                                           <HBox alignment="CENTER" prefHeight="100.0" prefWidth="134.0">
                                              <children>
-                                                <ComboBox fx:id="listTipoDoc" prefWidth="150.0" promptText="Tipo Documento" styleClass="boxIn" />
+                                                <TextField fx:id="numDocumento" promptText="N° Documento" styleClass="textIn" />
                                              </children>
                                           </HBox>
                                           <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                                              <children>
-                                                <TextField fx:id="numDocumento" promptText="N° Documento" styleClass="textIn" />
+                                                <TextField fx:id="nomCliente" editable="false" promptText="Nombres" styleClass="textIn" />
                                              </children>
                                           </HBox>
                                        </children>
@@ -213,12 +216,12 @@
                                        <children>
                                           <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                                              <children>
-                                                <TextField fx:id="nomApeCliente" promptText="Nombres y Apellidos" styleClass="textIn" />
+                                                <Button fx:id="btnBuscar" mnemonicParsing="false" onAction="#buscarCliente" styleClass="buttonIn" text="Buscar" />
                                              </children>
                                           </HBox>
                                           <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
                                              <children>
-                                                <Button fx:id="btnBuscar" mnemonicParsing="false" onAction="#buscarCliente" styleClass="buttonIn" text="Buscar" />
+                                                <TextField fx:id="apeCliente" editable="false" promptText="Apellidos" styleClass="textIn" />
                                              </children></HBox>
                                        </children>
                                        <HBox.margin>
@@ -258,18 +261,14 @@
                                           </HBox>
                                           <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                                              <children>
-                                                <TextField fx:id="prodImp" editable="false" promptText="Tipo De Impuesto" styleClass="textIn" />
+                                                <ComboBox fx:id="listTipoComp" prefWidth="150.0" promptText="TipoComprobante" styleClass="boxIn" />
                                              </children>
                                           </HBox>
                                        </children>
                                     </VBox>
                                     <VBox alignment="TOP_RIGHT" minWidth="100.0" prefWidth="100.0">
                                        <children>
-                                          <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-                                             <children>
-                                                <ComboBox fx:id="listTipoComp" prefWidth="150.0" promptText="TipoComprobante" styleClass="boxIn" />
-                                             </children>
-                                          </HBox>
+                                          <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" />
                                           <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                                              <children>
                                                 <Button fx:id="btnComprobante1" mnemonicParsing="false" onAction="#btnGenerarComprobante" styleClass="buttonIn" text="Generar" />

@@ -53,17 +53,17 @@
                            <children>
                               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                                  <children>
-                                    <TextField promptText="Nombres" styleClass="textIn" />
+                                    <TextField fx:id="txtNombres" promptText="Nombres" styleClass="textIn" />
                                  </children>
                               </HBox>
                               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                                  <children>
-                                    <TextField promptText="Apellidos" styleClass="textIn" />
+                                    <TextField fx:id="txtApellidos" promptText="Apellidos" styleClass="textIn" />
                                  </children>
                               </HBox>
                               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                                  <children>
-                                    <TextField promptText="Telefono" styleClass="textIn" />
+                                    <TextField fx:id="txtTelefono" promptText="Telefono" styleClass="textIn" />
                                  </children>
                               </HBox>
                            </children>
@@ -72,7 +72,7 @@
                            <children>
                               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="25.0">
                                  <children>
-                                    <TextField promptText="Correo Electronico" styleClass="textIn" />
+                                    <TextField fx:id="txtCorreo" promptText="Correo Electronico" styleClass="textIn" />
                                  </children>
                               </HBox>
                               <VBox>
@@ -86,7 +86,7 @@
                               </VBox>
                               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="25.0">
                                  <children>
-                                    <TextField promptText="N° Documento" styleClass="textIn" />
+                                    <TextField fx:id="txtNumDoc" promptText="N° Documento" styleClass="textIn" />
                                  </children>
                               </HBox>
                            </children>
@@ -119,10 +119,10 @@
                               <RowConstraints maxHeight="50.0" minHeight="10.0" percentHeight="40.0" prefHeight="104.80001220703124" vgrow="SOMETIMES" />
                            </rowConstraints>
                            <children>
-                              <TextArea prefHeight="200.0" prefWidth="200.0" promptText="Dirección" styleClass="textIn" />
+                              <TextArea fx:id="txtDireccion" prefHeight="200.0" prefWidth="200.0" promptText="Dirección" styleClass="textIn" />
                               <BorderPane GridPane.rowIndex="1">
                                  <right>
-                                    <Button mnemonicParsing="false" styleClass="buttonIn" text="Aceptar" BorderPane.alignment="CENTER">
+                                    <Button mnemonicParsing="false" onAction="#insertarCliente" styleClass="buttonIn" text="Aceptar" BorderPane.alignment="CENTER">
                                        <BorderPane.margin>
                                           <Insets top="5.0" />
                                        </BorderPane.margin></Button>

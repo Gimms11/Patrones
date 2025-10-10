@@ -14,7 +14,7 @@ import java.util.List;
 
 public class ControllerFacturas {
 
-    // === ELEMENTOS DE LA VISTA ===
+    // === ELEMENTOS DE LA VISTA vistosa ===
     @FXML private ComboBox<Producto> listProductos;
     @FXML private ComboBox<MedioPago> listMediosPago;
     @FXML private ComboBox<TipoComprobante> listTipoComp;

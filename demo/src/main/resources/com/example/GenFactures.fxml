@@ -290,8 +290,11 @@
                            <center>
                               <TableView fx:id="listDetalles" prefHeight="200.0" prefWidth="706.0" styleClass="tableOut" BorderPane.alignment="CENTER">
                                 <columns>
-                                  <TableColumn prefWidth="75.0" text="C1" />
-                                  <TableColumn prefWidth="75.0" text="C2" />
+                                  <TableColumn fx:id="colIdProducto" prefWidth="150.0" text="idProducto" />
+                                  <TableColumn fx:id="colCantidad" prefWidth="75.0" text="Cantidad" />
+                                  <TableColumn fx:id="colPrecioUnit" prefWidth="100.0" text="P. Unitario" />
+                                  <TableColumn fx:id="colSubtotal" prefWidth="100.0" text="Subtotal" />
+                                  <TableColumn fx:id="colTotal" prefWidth="100.0" text="Total" />
                                 </columns>
                                  <BorderPane.margin>
                                     <Insets bottom="10.0" left="10.0" right="10.0" top="5.0" />

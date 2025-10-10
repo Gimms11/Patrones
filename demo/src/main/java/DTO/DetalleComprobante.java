@@ -12,6 +12,8 @@ public class DetalleComprobante {
     private BigDecimal total;           // = subtotal + montoImpuesto (ya calculado)
     private Long idComprobante;         // FK → Comprobante
 
+    private String nombreProducto;      // Transient: for display purposes
+
     // Constructor vacío
     public DetalleComprobante() {}
 
@@ -38,6 +40,7 @@ public class DetalleComprobante {
     public Long getIdImpuesto() { return idImpuesto; }
     public BigDecimal getTotal() { return total; }
     public Long getIdComprobante() { return idComprobante; }
+    public String getNombreProducto() { return nombreProducto; }
 
     // Setters
     public void setIdDetalle(Long idDetalle) { this.idDetalle = idDetalle; }
@@ -48,4 +51,5 @@ public class DetalleComprobante {
     public void setIdImpuesto(Long idImpuesto) { this.idImpuesto = idImpuesto; }
     public void setTotal(BigDecimal total) { this.total = total; }
     public void setIdComprobante(Long idComprobante) { this.idComprobante = idComprobante; }
+    public void setNombreProducto(String nombreProducto) { this.nombreProducto = nombreProducto; }
 }

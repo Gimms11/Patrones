@@ -34,6 +34,14 @@ public class ControllerFacturas {
     @FXML private TextField txtCantidad;
     @FXML private TextField txtFechaEmision;
 
+    @FXML private TableView<DetalleComprobante> listDetalles;
+
+    @FXML private TableColumn<DetalleComprobante, Long> colIdProducto;
+    @FXML private TableColumn<DetalleComprobante, Integer> colCantidad;
+    @FXML private TableColumn<DetalleComprobante, BigDecimal> colPrecioUnit;
+    @FXML private TableColumn<DetalleComprobante, BigDecimal> colSubtotal;
+    @FXML private TableColumn<DetalleComprobante, BigDecimal> colTotal;
+
     // === SERVICIOS Y LISTAS ===
     private ProductoService productoService;
     private AfectacionService afectacionService;
@@ -80,6 +88,7 @@ public class ControllerFacturas {
             configurarComboProd(listProductos);
             configurarComboMedioPago(listMediosPago);
             configurarComboTipoComprobante(listTipoComp);
+            configurarTabla();
 
             // Listener para el producto seleccionado
             listProductos.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
@@ -96,25 +105,40 @@ public class ControllerFacturas {
     // MÉTODOS DE CONFIGURACIÓN
     // =============================================================
 
+    /** Configurar la tabla y las columnas de la tabla*/
+    private void configurarTabla() {
+        // Configurar columnas de la tabla
+        colIdProducto.setCellValueFactory(data -> new javafx.beans.property.SimpleLongProperty(
+                data.getValue().getIdProducto()).asObject());
+        colCantidad.setCellValueFactory(data -> new javafx.beans.property.SimpleIntegerProperty(
+                data.getValue().getCantidadProductos()).asObject());
+        colPrecioUnit.setCellValueFactory(data -> new javafx.beans.property.SimpleObjectProperty<>(
+                data.getValue().getPrecioUnitario()));
+        colSubtotal.setCellValueFactory(data -> new javafx.beans.property.SimpleObjectProperty<>(
+                data.getValue().getSubtotal()));
+        colTotal.setCellValueFactory(data -> new javafx.beans.property.SimpleObjectProperty<>(
+                data.getValue().getTotal()));
+
+        // ✅ Mantener lista observable viva
+        listDetalles.setItems(FXCollections.observableArrayList());
+    }
+
     /** Configura el ComboBox de productos con los datos del servicio */
     private void configurarComboProd(ComboBox<Producto> combo) {
         var productos = productoService.obtenerTodos();
         combo.setItems(FXCollections.observableArrayList(productos));
-        combo.setPromptText("Seleccione un producto");
     }
 
     /** Configura el ComboBox de medios de Pago del servicio */
     private void configurarComboMedioPago(ComboBox<MedioPago> combo) {
         var tipos = medioPagoService.listarMedioPagos();
         combo.setItems(FXCollections.observableArrayList(tipos));
-        combo.setPromptText("Seleccione Medio De Pago");
     }
 
     /** Configura el ComboBox de Tipos de Comprobantes */
     private void configurarComboTipoComprobante(ComboBox<TipoComprobante> combo) {
         var tipos = tipoComprobanteService.listarTipoComprobantes();
         combo.setItems(FXCollections.observableArrayList(tipos));
-        combo.setPromptText("Seleccione Tipo De Comprobante");
     }
 
     // =============================================================
@@ -253,6 +277,8 @@ public class ControllerFacturas {
         // Proceder con la generación del comprobante
         generarSerie();
         agregarDetalle();
+        // Actualizar tabla correctamente (sin perder el vínculo)
+        listDetalles.refresh();
     }
 
     private void generarSerie() {
@@ -354,6 +380,8 @@ public class ControllerFacturas {
                              "Total: " + total);
 
             listaDetalle.add(detalle);
+            listDetalles.getItems().add(detalle);
+            listDetalles.refresh();
             mostrarAlerta(AlertType.INFORMATION, "Éxito", "Producto agregado al comprobante");
 
         } catch (Exception e) {
@@ -401,6 +429,9 @@ public class ControllerFacturas {
 
         // Reiniciar lista de detalles
         listaDetalle = new ArrayList<>();
+
+        // Reiniciar Tabla de detalles
+        listDetalles.getItems().clear();
     }
 
     /**

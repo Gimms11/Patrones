@@ -46,51 +46,47 @@
          <children>
             <BorderPane styleClass="addPane" GridPane.rowIndex="1">
                <center>
-                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" styleClass="boxBorder" BorderPane.alignment="CENTER">
+                  <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="15.0" styleClass="boxBorder" BorderPane.alignment="CENTER">
                      <children>
-                        <VBox prefHeight="226.0" prefWidth="322.0">
+                        <VBox alignment="CENTER">
                            <children>
-                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                              <HBox alignment="CENTER" prefHeight="100.0">
                                  <children>
-                                    <ComboBox fx:id="listProductos" prefWidth="150.0" promptText="Producto" styleClass="boxIn" />
+                                    <ComboBox fx:id="listProductos" prefWidth="250.0" promptText="Producto" styleClass="boxIn" />
                                  </children>
                               </HBox>
-                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                              <HBox alignment="CENTER" prefHeight="100.0">
                                  <children>
-                                    <TextField fx:id="prodPrecio" editable="false" promptText="Precio" styleClass="textIn" />
+                                    <TextField fx:id="prodPrecio" editable="false" prefWidth="250.0" promptText="Precio" styleClass="textIn" />
                                  </children>
                               </HBox>
-                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                              <HBox alignment="CENTER" prefHeight="100.0">
                                  <children>
-                                    <TextField fx:id="prodStock" editable="false" promptText="Stock" styleClass="textIn" />
+                                    <TextField fx:id="prodStock" editable="false" prefWidth="250.0" promptText="Stock" styleClass="textIn" />
                                  </children>
                               </HBox>
                            </children>
                         </VBox>
-                        <VBox prefHeight="226.0" prefWidth="322.0">
+                        <VBox alignment="CENTER">
                            <children>
-                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="25.0">
+                              <HBox alignment="CENTER" prefHeight="100.0" spacing="25.0">
                                  <children>
-                                    <TextField fx:id="prodCat" editable="false" promptText="Categoria" styleClass="textIn" />
+                                    <TextField fx:id="prodCat" editable="false" prefWidth="250.0" promptText="Categoria" styleClass="textIn" />
                                  </children>
                               </HBox>
-                              <VBox>
+                              <HBox alignment="CENTER" prefHeight="100.0">
                                  <children>
-                                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="25.0">
-                                       <children>
-                                          <TextField fx:id="prodAfec" editable="false" promptText="Tipo Afectación" styleClass="textIn" />
-                                       </children>
-                                    </HBox>
+                                    <TextField fx:id="prodAfec" editable="false" prefWidth="250.0" promptText="Tipo Afectación" styleClass="textIn" />
                                  </children>
-                              </VBox>
-                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="25.0">
+                              </HBox>
+                              <HBox alignment="CENTER" prefHeight="100.0" spacing="25.0">
                                  <children>
-                                    <TextField fx:id="prodUnidad" editable="false" promptText="Unidad de Medida" styleClass="textIn" />
+                                    <TextField fx:id="prodUnidad" editable="false" prefWidth="250.0" promptText="Unidad de Medida" styleClass="textIn" />
                                  </children>
                               </HBox>
                            </children>
                         </VBox>
-                        <GridPane prefHeight="200.0" prefWidth="300.0">
+                        <GridPane minWidth="200.0" prefHeight="130.0" prefWidth="200.0">
                            <columnConstraints>
                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
                            </columnConstraints>
@@ -104,13 +100,14 @@
                                     <Button fx:id="btnAgregarProd" mnemonicParsing="false" onAction="#btnAgregar" styleClass="buttonIn" text="Agregar" BorderPane.alignment="CENTER">
                                        <BorderPane.margin>
                                           <Insets top="5.0" />
-                                       </BorderPane.margin></Button>
+                                       </BorderPane.margin>
+                                    </Button>
                                  </right>
                                  <left>
                                     <TextField fx:id="prodImp" editable="false" prefHeight="27.0" prefWidth="121.0" promptText="Tipo De Impuesto" styleClass="textIn" BorderPane.alignment="CENTER" />
                                  </left>
                               </BorderPane>
-                              <TextField fx:id="txtCantidad" promptText="Cantidad" styleClass="textIn" />
+                              <TextField fx:id="txtCantidad" prefWidth="250.0" promptText="Cantidad" styleClass="textIn" />
                            </children>
                            <HBox.margin>
                               <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
@@ -193,7 +190,7 @@
                         <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
                            <children>
                               <Label text="Filtro" />
-                              <HBox alignment="CENTER" spacing="10.0">
+                              <HBox alignment="CENTER" spacing="15.0">
                                  <children>
                                     <VBox prefHeight="200.0" prefWidth="150.0">
                                        <children>
@@ -253,7 +250,7 @@
                                     </VBox>
                                     <VBox alignment="CENTER" minWidth="100.0" prefHeight="200.0" prefWidth="150.0">
                                        <children>
-                                          <HBox alignment="CENTER" prefHeight="18.0" prefWidth="142.0">
+                                          <HBox alignment="CENTER" prefHeight="0.0" prefWidth="149.0">
                                              <children>
                                                 <Label />
                                              </children>

@@ -76,3 +76,46 @@
 .userBox Label {
   -fx-text-fill: white;
 }
+
+
+
+
+/* Estilo base para los botones de control */
+.minimizar,
+.salir {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-pref-width: 32px;
+    -fx-pref-height: 32px;
+    -fx-cursor: hand;
+    -fx-alignment: CENTER;
+}
+
+/* Iconos: color por defecto */
+.minimizar .icon,
+.salir .icon {
+    -fx-fill: white;
+    -fx-font-size: 14px;
+}
+
+/* Hover: minimizar */
+.minimizar:hover {
+    -fx-background-color: #34495e;
+}
+
+/* Hover: cerrar */
+.salir:hover {
+    -fx-background-color: #e74c3c;
+}
+
+/* Presionado */
+.minimizar:pressed,
+.salir:pressed {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 4, 0, 0, 1);
+}
+
+/* Opcional: transición suave */
+.minimizar,
+.salir {
+    -fx-transition: -fx-background-color 0.2s ease;
+}

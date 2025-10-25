@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.scene.text.Font;
 
 import java.io.IOException;
@@ -27,6 +28,8 @@ public class App extends Application {
     public void start(Stage stage) throws IOException {
         scene = new Scene(loadFXML("Dashboard"), 900, 700);
         //Asignar titulo a la ventana
+        stage.setResizable(false);
+        stage.initStyle(StageStyle.UNDECORATED);
         stage.setTitle("Sistema de Facturación");
         stage.setScene(scene);
         stage.show();

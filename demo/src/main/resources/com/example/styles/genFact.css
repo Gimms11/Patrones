@@ -51,10 +51,10 @@
 /* ========================= */
 .textIn, .text-area {
     -fx-background-color: #ffffff;
-    -fx-background-radius: 6;
+    -fx-background-radius: 0;
     -fx-border-color: transparent;
     -fx-border-width: 0;
-    -fx-padding: 12 10;  /* Reducido */
+    -fx-padding: 8 10;  /* Reducido */
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 5, 0.3, 0, 1);
     -fx-font-size: 12.5px;
     -fx-text-fill: #333;
@@ -71,10 +71,10 @@
 /* ========================= */
 .boxIn {
     -fx-background-color: #ffffff;
-    -fx-background-radius: 6;
+    -fx-background-radius: 0;
     -fx-border-color: transparent;
     -fx-min-width: 162.5px;
-    -fx-padding: 6 10;  /* Reducido */
+    -fx-padding: 4 10;  /* Reducido */
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.1), 5, 0.2, 0, 1);
     -fx-font-size: 12.5px;
     -fx-text-fill: #333;

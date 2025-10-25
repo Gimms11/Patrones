@@ -25,7 +25,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("Dashboard"), 809, 600);
+        scene = new Scene(loadFXML("Dashboard"), 900, 700);
         //Asignar titulo a la ventana
         stage.setTitle("Sistema de Facturación");
         stage.setScene(scene);

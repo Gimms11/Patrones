@@ -21,4 +21,15 @@ public class ClienteService {
     public void insertarCliente(Cliente cliente){
         repository.registrarCliente(cliente);
     }
+
+    public List<Cliente> filtrarClientes(String numDocumento, String nombres, String apellidos, Integer idDistrito,
+            Integer idDocumento) {
+        try {
+            List<Cliente> productos = repository.filtrarClientes(numDocumento, nombres, apellidos, idDistrito, idDocumento);
+            return productos != null ? productos : java.util.Collections.emptyList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error al obtener Clientes: " + e.getMessage());
+        }
+    }
 }

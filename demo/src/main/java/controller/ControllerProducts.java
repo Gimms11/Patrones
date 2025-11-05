@@ -50,6 +50,13 @@ public class ControllerProducts {
     @FXML private TextField txtUnidad;
     @FXML private TextArea txtDesc;
 
+    // --- Datos de Filtro de productos ---
+
+    @FXML private TextField txtFnombre;
+    @FXML private TextField txtFprecio;
+    @FXML private TextField txtFstock;
+    @FXML private TextField txtFunidad;
+
     // === SERVICIOS ===
     private AfectacionService afectacionService;
     private CategoriaService categoriaService;
@@ -94,14 +101,46 @@ public class ControllerProducts {
     private void configurarComboAfectacion(ComboBox<AfectacionProductos> combo) {
         var afectaciones = afectacionService.listarAfectaciones();
 
-        if (afectaciones == null || afectaciones.isEmpty()) {
-            mostrarAlerta(AlertType.WARNING, "Sin datos", 
-                    "No se encontraron tipos de afectación disponibles.");
-            return;
+        if (afectaciones == null) {
+            afectaciones = new ArrayList<>();
+        }
+
+        // Si es el ComboBox de filtrado (el que termina en 1), agregar opción "Ninguno"
+        if (combo == listAfectacion1) {
+            AfectacionProductos ninguno = new AfectacionProductos();
+            ninguno.setIdAfectacion(1L);
+            ninguno.setNombreAfectacion("Ninguno");
+            afectaciones.add(0, ninguno);
         }
 
         combo.setItems(FXCollections.observableArrayList(afectaciones));
         combo.setPromptText("Seleccione tipo de afectación");
+
+        // Configurar cómo se muestran los items en el ComboBox
+        combo.setCellFactory(param -> new ListCell<AfectacionProductos>() {
+            @Override
+            protected void updateItem(AfectacionProductos item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(combo.getPromptText());
+                } else {
+                    setText(item.getNombreAfectacion());
+                }
+            }
+        });
+
+        // Configurar cómo se muestra el item seleccionado
+        combo.setButtonCell(new ListCell<AfectacionProductos>() {
+            @Override
+            protected void updateItem(AfectacionProductos item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(combo.getPromptText());
+                } else {
+                    setText(item.getNombreAfectacion());
+                }
+            }
+        });
     }
 
     /**
@@ -111,14 +150,46 @@ public class ControllerProducts {
     private void configurarComboCategoria(ComboBox<CategoriaProductos> combo) {
         var categorias = categoriaService.listarCategorias();
 
-        if (categorias == null || categorias.isEmpty()) {
-            mostrarAlerta(AlertType.WARNING, "Sin datos", 
-                    "No se encontraron categorías de productos disponibles.");
-            return;
+        if (categorias == null) {
+            categorias = new ArrayList<>();
+        }
+
+        // Si es el ComboBox de filtrado (el que termina en 1), agregar opción "Ninguno"
+        if (combo == listCategoria1) {
+            CategoriaProductos ninguno = new CategoriaProductos();
+            ninguno.setIdCategoria(1L);
+            ninguno.setNombreCategoria("Ninguno");
+            categorias.add(0, ninguno);
         }
 
         combo.setItems(FXCollections.observableArrayList(categorias));
         combo.setPromptText("Seleccione categoría");
+
+        // Configurar cómo se muestran los items en el ComboBox
+        combo.setCellFactory(param -> new ListCell<CategoriaProductos>() {
+            @Override
+            protected void updateItem(CategoriaProductos item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(combo.getPromptText());
+                } else {
+                    setText(item.getNombreCategoria());
+                }
+            }
+        });
+
+        // Configurar cómo se muestra el item seleccionado
+        combo.setButtonCell(new ListCell<CategoriaProductos>() {
+            @Override
+            protected void updateItem(CategoriaProductos item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(combo.getPromptText());
+                } else {
+                    setText(item.getNombreCategoria());
+                }
+            }
+        });
     }
 
     // =============================================================
@@ -134,7 +205,11 @@ public class ControllerProducts {
     /** Devuelve el ID de la afectación seleccionada del segundo ComboBox. */
     public Long obtenerIdAfectacionSeleccionada1() {
         AfectacionProductos af = listAfectacion1.getValue();
-        return (af != null) ? af.getIdAfectacion() : null;
+        // Retorna null si no hay selección o si se seleccionó "Ninguno"
+        if (af == null || af.getNombreAfectacion().equals("Ninguno")) {
+            return null;
+        }
+        return af.getIdAfectacion();
     }
 
     /** Devuelve el ID de la categoría seleccionada del primer ComboBox. */
@@ -146,7 +221,11 @@ public class ControllerProducts {
     /** Devuelve el ID de la categoría seleccionada del segundo ComboBox. */
     public Long obtenerIdCategoriaSeleccionada1() {
         CategoriaProductos cat = listCategoria1.getValue();
-        return (cat != null) ? cat.getIdCategoria() : null;
+        // Retorna null si no hay selección o si se seleccionó "Ninguno"
+        if (cat == null || cat.getNombreCategoria().equals("Ninguno")) {
+            return null;
+        }
+        return cat.getIdCategoria();
     }
 
     // =============================================================
@@ -223,7 +302,7 @@ public class ControllerProducts {
         colAct.setCellFactory(param -> new TableCell<>() {
             private final Hyperlink link = new Hyperlink("Modificar");
             {
-                link.setStyle("-fx-text-fill: blue;");
+                link.setStyle("-fx-text-fill: #b60003;\n-fx-underline: true;");
             }
 
             @Override
@@ -356,6 +435,22 @@ public class ControllerProducts {
         });
     }
 
+    @FXML
+    private void limpiarFiltros() {
+        // Limpiar campos de texto de filtro
+        txtFnombre.clear();
+        txtFprecio.clear();
+        txtFstock.clear();
+        txtFunidad.clear();
+        
+        // Resetear ComboBox de filtrado
+        listCategoria1.setValue(null);
+        listAfectacion1.setValue(null);
+        
+        // Recargar datos originales
+        cargarDatosTabla();
+    }
+
     private void cargarDatosTabla() {
         try {
             var productos = productoService.obtenerTodos();
@@ -375,5 +470,56 @@ public class ControllerProducts {
         // TODO: Implementar ventana de modificación
         mostrarAlerta(AlertType.INFORMATION, "Modificar producto", 
             "Se abrirá la ventana de modificación para el producto: " + producto.getNombre());
+    }
+
+    @FXML
+    private void filtroProductos(){
+        try {
+            // Obtener valores de los campos de texto
+            String nombre = txtFnombre.getText().isEmpty() ? null : txtFnombre.getText();
+            Double precio = null;
+            if (!txtFprecio.getText().isEmpty()) {
+                try {
+                    precio = Double.parseDouble(txtFprecio.getText());
+                } catch (NumberFormatException e) {
+                    mostrarAlerta(AlertType.WARNING, "Dato inválido", "El precio debe ser un número válido");
+                    return;
+                }
+            }
+            
+            Integer stock = null;
+            if (!txtFstock.getText().isEmpty()) {
+                try {
+                    stock = Integer.parseInt(txtFstock.getText());
+                } catch (NumberFormatException e) {
+                    mostrarAlerta(AlertType.WARNING, "Dato inválido", "El stock debe ser un número entero");
+                    return;
+                }
+            }
+            
+            String unidad = txtFunidad.getText().isEmpty() ? null : txtFunidad.getText();
+            
+            // Obtener IDs de los ComboBox
+            Long catId = obtenerIdCategoriaSeleccionada1();
+            Long afecId = obtenerIdAfectacionSeleccionada1();
+            
+            // Convertir a Integer solo si no son null
+            Integer idCategoria = catId != null ? catId.intValue() : null;
+            Integer idAfectacion = afecId != null ? afecId.intValue() : null;
+
+            var productos = productoService.filtrarProductos(
+                nombre, precio, stock, unidad, idAfectacion, idCategoria
+            );
+
+            if (productos == null) {
+                productos = new ArrayList<>();
+            }
+            tablaProductos.setItems(FXCollections.observableArrayList(productos));
+            tablaProductos.refresh();
+        } catch (Exception e) {
+            mostrarAlerta(AlertType.ERROR, "Error al cargar datos", 
+                "No se pudieron cargar los datos de los productos.\n" + e.getMessage());
+            System.out.println("Error al cargar datos de productos: " + e.getMessage());
+        }
     }
 }

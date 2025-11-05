@@ -15,6 +15,12 @@ public class Comprobante {
     private Long idCliente;             // FK → Cliente
     private Long idUsuario;             // FK → Usuario
 
+    // Campos adicionales para nombres
+    private String nombreCliente;
+    private String clienteDistrito;
+    private String medioPago;
+    private String clienteDocumento;
+
     // Constructor vacío (requerido por frameworks como JPA)
     public Comprobante() {}
 
@@ -34,6 +40,28 @@ public class Comprobante {
         this.idUsuario = idUsuario;
     }
 
+    // Constructor completo con datos extra(útil para pruebas o creación manual)
+    public Comprobante(Long idComprobante, LocalDate fechaEmision, String serie,
+                    BigDecimal totalFinal,String direccionEnvio,BigDecimal devengado, 
+                    Long idTipoComprobante, Long idMedioPago, Long idCliente, Long idUsuario,
+                    String nombreCliente, String clienteDistrito,
+                    String medioPago, String clienteDocumento) {
+        this.idComprobante = idComprobante;
+        this.fechaEmision = fechaEmision;
+        this.serie = serie; 
+        this.devengado = devengado;
+        this.totalFinal = totalFinal;
+        this.direccionEnvio = direccionEnvio;
+        this.idTipoComprobante = idTipoComprobante;
+        this.idMedioPago = idMedioPago;
+        this.idCliente = idCliente;
+        this.idUsuario = idUsuario;
+        this.nombreCliente = nombreCliente;
+        this.clienteDistrito = clienteDistrito;
+        this.medioPago = medioPago;
+        this.clienteDocumento = clienteDocumento;
+    }
+
     // Getters
     public Long getIdComprobante() { return idComprobante; }
     public LocalDate getFechaEmision() { return fechaEmision; }
@@ -45,6 +73,10 @@ public class Comprobante {
     public Long getIdMedioPago() { return idMedioPago; }
     public Long getIdCliente() { return idCliente; }
     public Long getIdUsuario() { return idUsuario; }
+    public String getNombreCliente() { return nombreCliente; }
+    public String getClienteDistrito() { return clienteDistrito; }
+    public String getMedioPago() { return medioPago; }
+    public String getClienteDocumento() { return clienteDocumento; }
 
     // Setters
     public void setIdComprobante(Long idComprobante) { this.idComprobante = idComprobante; }
@@ -57,4 +89,8 @@ public class Comprobante {
     public void setIdMedioPago(Long idMedioPago) { this.idMedioPago = idMedioPago; }
     public void setIdCliente(Long idCliente) { this.idCliente = idCliente; }
     public void setIdUsuario(Long idUsuario) { this.idUsuario = idUsuario; }
+    public void setNombreCliente(String nombreCliente) { this.nombreCliente = nombreCliente; }
+    public void setClienteDistrito(String clienteDistrito) { this.clienteDistrito = clienteDistrito;}
+    public void setMedioPago(String medioPago) { this.medioPago = medioPago; }
+    public void setClienteDocumento(String clienteDocumento) { this.clienteDocumento = clienteDocumento;}
 }

@@ -209,7 +209,7 @@
                            <children>
                               <VBox minWidth="150.0" prefWidth="700.0">
                                  <children>
-                                    <TabPane prefHeight="200.0" prefWidth="616.0" tabClosingPolicy="UNAVAILABLE">
+                                    <TabPane fx:id="tabPane" prefHeight="200.0" prefWidth="616.0" tabClosingPolicy="UNAVAILABLE">
                                       <tabs>
                                         <Tab text="Por Documento">
                                           <content>
@@ -233,12 +233,12 @@
                                           <content>
                                             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                    <children>
-                                                      <HBox alignment="CENTER" layoutX="264.0" layoutY="-4.0" prefHeight="100.0" prefWidth="250.0">
+                                                      <HBox alignment="CENTER" layoutX="14.0" layoutY="-4.0" prefHeight="100.0" prefWidth="250.0">
                                                          <children>
                                                             <TextField fx:id="txtNombres1" prefWidth="215.0" promptText="Nombres" styleClass="textIn" />
                                                          </children>
                                                       </HBox>
-                                                      <HBox alignment="CENTER" layoutX="14.0" layoutY="-4.0" prefHeight="100.0" prefWidth="250.0">
+                                                      <HBox alignment="CENTER" layoutX="264.0" layoutY="-4.0" prefHeight="100.0" prefWidth="250.0">
                                                          <children>
                                                             <TextField fx:id="txtApellidos1" prefHeight="35.0" prefWidth="215.0" promptText="Apellidos" styleClass="textIn" />
                                                          </children>
@@ -285,7 +285,7 @@
                                     <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" />
                                     <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                                        <children>
-                                          <Button mnemonicParsing="false" prefWidth="72.0" styleClass="buttonIn" text="Filtrar" />
+                                          <Button mnemonicParsing="false" onMouseClicked="#filtrarClientes" prefWidth="72.0" styleClass="buttonIn" text="Filtrar" />
                                        </children>
                                     </HBox>
                                  </children>

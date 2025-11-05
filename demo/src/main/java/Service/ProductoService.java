@@ -32,5 +32,17 @@ public class ProductoService {
             throw new RuntimeException("Error al registrar producto: " + e.getMessage());
         }
     }
+    
+
+    public List<Producto> filtrarProductos(String nombre, Double precio, Integer stock, String unidad,
+    Integer idAfectacion, Integer idCategoria) {
+        try {
+            List<Producto> productos = repository.filtrarProductos(nombre, precio, stock, unidad, idCategoria, idAfectacion);
+            return productos != null ? productos : java.util.Collections.emptyList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error al obtener productos: " + e.getMessage());
+        }
+    }
 
 }

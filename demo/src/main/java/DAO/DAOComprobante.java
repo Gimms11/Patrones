@@ -8,9 +8,9 @@ public interface DAOComprobante {
     public void eliminarComprobante(Comprobante comp);
     public List<Comprobante> listarComprobante();
     public Comprobante buscarComprobante(Comprobante comp);
-    public List<Comprobante> filtrarComprovanteHoy (LocalDate hoy);
+    public List<Comprobante> filtrarComprovanteHoy ();
     public List<Comprobante> filtrarComprobantesSemana();
-    public List<Comprobante> filtrarComprobantePorMes(int año, int mes);
-    public List<Comprobante> filtrarComprobantePorAño(int año);
+    public List<Comprobante> filtrarComprobantePorMes();
+    public List<Comprobante> filtrarComprobantePorAño();
     public List<Comprobante> filtrarComprobantePorCliente(Long clienteId);
 }

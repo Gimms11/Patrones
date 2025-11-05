@@ -32,5 +32,4 @@ public abstract class DAOFactory {
     public abstract DAOCliente getClienteDAO();
     public abstract DAOComprobante getComprobanteDAO();
     public abstract DAOMedioPago getMedioPagoDAO();
-    public abstract DAOFiltrarClientes getFiltrarClientesDAO();
 }

@@ -11,13 +11,10 @@ import service.TipoDocumentoService;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.Alert.AlertType;
 import javafx.beans.property.SimpleStringProperty;
 import java.util.List;
 import java.util.ArrayList;
-import DAO.DAOFiltrarClientes;
-import DAOImpl.DAOFiltrarClientesImpl;
 
 public class ControllerClientes {
 
@@ -27,15 +24,17 @@ public class ControllerClientes {
     @FXML private ComboBox<Provincia> listProvincia;
     @FXML private ComboBox<Distrito> listDistrito;
 
-    // --- ComboBox del segundo formulario ---
+    // --- ComboBox del formulario de filtro ---
+    @FXML private TabPane tabPane;
     @FXML private ComboBox<TipoDocumento> comboTipoDocumento1;
     @FXML private ComboBox<Departamento> listDepartamento1;
     @FXML private ComboBox<Provincia> listProvincia1;
     @FXML private ComboBox<Distrito> listDistrito1;
 
     // --- Campos de filtrado ---
-    @FXML private TextField txtFiltroDocumento;
-    @FXML private TextField txtFiltroNombre;
+    @FXML private TextField txtNumDoc1;
+    @FXML private TextField txtNombres1;
+    @FXML private TextField txtApellidos1;
     
     // --- TableView y sus columnas ---
     @FXML private TableView<Cliente> tablaClientes;
@@ -83,6 +82,13 @@ public class ControllerClientes {
             // Configurar ComboBox de tipos de documentos
             configurarCombo(comboTipoDocumento);
             configurarCombo(comboTipoDocumento1);
+
+            // Listener para el cambio de paneles
+            tabPane.getSelectionModel().selectedItemProperty().addListener((obs, oldTab, newTab) -> {
+                if (newTab != null) {
+                    int index = tabPane.getSelectionModel().getSelectedIndex();
+                }
+            });
 
         } catch (Exception e) {
             mostrarError("Error de inicialización", "No se pudieron cargar los datos iniciales.", e.getMessage());
@@ -415,16 +421,100 @@ public class ControllerClientes {
      */
     @FXML
     private void filtrarClientes() {
-        String numDoc = txtFiltroDocumento.getText();
-        String nombre = txtFiltroNombre.getText();
-        Long idDistrito = obtenerIdDistritoSeleccionado1();
+        try {
+            int index = tabPane.getSelectionModel().getSelectedIndex();
+            String numDocumento = null, nombres = null, apellidos = null;
+            Integer idDistrito = null, idDocumento = null;
 
-        DAOFiltrarClientes filtroDAO = new DAOFiltrarClientesImpl();
-        List<Cliente> clientesFiltrados = filtroDAO.filtrarPorMultiplesCriterios(
-            numDoc.isEmpty() ? null : numDoc,
-            nombre.isEmpty() ? null : nombre,
-            idDistrito);
+            switch (index) {
+                case 0:
+                    // Filtro solo por Documento
+                    nombres = apellidos = null;
+                    idDistrito = null;
 
-        tablaClientes.setItems(FXCollections.observableArrayList(clientesFiltrados));
+                    // Comprobación de tipo de documento y número
+                    TipoDocumento tipoDoc = comboTipoDocumento1.getValue();
+                    numDocumento = txtNumDoc1.getText().trim();
+
+                    // Si ambos campos están vacíos, mostrar todos
+                    if (tipoDoc == null && numDocumento.isEmpty()) {
+                        cargarDatosTabla();
+                        return;
+                    }
+
+                    // Si hay tipo de documento seleccionado, validar número
+                    if (tipoDoc != null) {
+                        if (!numDocumento.isEmpty()) {
+                            // Validación de longitud según tipo
+                            if (tipoDoc.getIdDocumento() == 1 && numDocumento.length() != 8) {
+                                mostrarAdvertencia("Datos incorrectos", "El DNI debe tener 8 caracteres.");
+                                return;
+                            }
+                            if (tipoDoc.getIdDocumento() == 2 && numDocumento.length() != 11) {
+                                mostrarAdvertencia("Datos incorrectos", "El RUC debe tener 11 caracteres.");
+                                return;
+                            }
+                        }
+                        idDocumento = tipoDoc.getIdDocumento().intValue();
+                    }
+                    break;
+
+                case 1:
+                    // Filtro por nombres y apellidos
+                    numDocumento = null;
+                    idDistrito = idDocumento = null;
+                    
+                    nombres = txtNombres1.getText().trim();
+                    apellidos = txtApellidos1.getText().trim();
+                    
+                    // Si ambos campos están vacíos, mostrar todos los clientes
+                    if (nombres.isEmpty() && apellidos.isEmpty()) {
+                        cargarDatosTabla();
+                        return;
+                    }
+                    break;
+
+                case 2:
+                    // Filtro por Ubicación
+                    numDocumento = nombres = apellidos = null;
+                    idDocumento = null;
+                    
+                    Distrito distrito = listDistrito1.getValue();
+                    
+                    // Si no hay distrito seleccionado, mostrar todos los clientes
+                    if (distrito == null) {
+                        cargarDatosTabla();
+                        return;
+                    }
+                    
+                    idDistrito = distrito.getIdDistrito().intValue();
+                    break;
+
+                default:
+                    return;
+            }
+
+            // Aplicar filtros
+            List<Cliente> clientesFiltrados = clienteService.filtrarClientes(
+                numDocumento, 
+                nombres, 
+                apellidos, 
+                idDistrito, 
+                idDocumento
+            );
+
+            // Actualizar la tabla con los resultados
+            if (clientesFiltrados.isEmpty()) {
+                mostrarInfo("Sin resultados", "No se encontraron clientes con los criterios especificados.");
+            }
+
+            tablaClientes.setItems(FXCollections.observableArrayList(clientesFiltrados));
+            tablaClientes.refresh();
+
+        } catch (Exception e) {
+            mostrarError("Error al filtrar", 
+                "No se pudieron aplicar los filtros especificados.", 
+                e.getMessage());
+        }
     }
 }

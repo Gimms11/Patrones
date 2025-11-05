@@ -15,7 +15,22 @@ public class ProductoService {
     }
 
     public List<Producto> obtenerTodos() {
-        return repository.listarProducto();
+        try {
+            List<Producto> productos = repository.listarProducto();
+            return productos != null ? productos : java.util.Collections.emptyList();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error al obtener productos: " + e.getMessage());
+        }
+    }
+
+    public void registrarProducto(Producto produc) {
+        try {
+            repository.registarProducto(produc);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error al registrar producto: " + e.getMessage());
+        }
     }
 
 }

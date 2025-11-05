@@ -8,4 +8,11 @@ public interface DAOProducto {
     public void eliminarProducto(Producto produc);
     public List<Producto> listarProducto();
     public Producto buscarProducto(Producto produc);
+    List<Producto> filtrarProductos(
+            String nombre,
+            Double precio,
+            Integer stock,
+            String unidadMedida,
+            Integer idCategoria,
+            Integer idAfectacion) throws Exception;
 }

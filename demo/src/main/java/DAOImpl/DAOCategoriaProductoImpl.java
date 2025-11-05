@@ -32,4 +32,29 @@ public class DAOCategoriaProductoImpl implements DAOCategoriaProducto {
 
         return lista;
     }
+
+    @Override
+    public CategoriaProductos obtener(Long id) {
+        CategoriaProductos categoria = null;
+        String sql = "SELECT idcategoria, nombre, descripcion FROM tipocategoria WHERE idcategoria = ?";
+
+        try (Connection conexion = ConexionBD.getInstance().getConnection();
+             PreparedStatement ps = conexion.prepareStatement(sql)) {
+
+            ps.setLong(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    categoria = new CategoriaProductos();
+                    categoria.setIdCategoria(rs.getLong("idcategoria"));
+                    categoria.setNombreCategoria(rs.getString("nombre"));
+                    categoria.setDescripcion(rs.getString("descripcion"));
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("❌ Error al obtener la categoría: " + e.getMessage());
+        }
+
+        return categoria;
+    }
 }

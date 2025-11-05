@@ -17,4 +17,9 @@ public class AfectacionService {
     public List<AfectacionProductos> listarAfectaciones() {
         return repository.obtenerTodas();
     }
+
+    public AfectacionProductos obtenerAfectacion(Long id) {
+        if (id == null) return null;
+        return repository.obtener(id);
+    }
 }

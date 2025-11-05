@@ -6,6 +6,8 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextArea?>
@@ -75,15 +77,11 @@
                                     <TextField fx:id="txtCorreo" promptText="Correo Electronico" styleClass="textIn" />
                                  </children>
                               </HBox>
-                              <VBox>
+                              <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="25.0">
                                  <children>
-                                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="25.0">
-                                       <children>
-                                          <ComboBox fx:id="comboTipoDocumento" prefWidth="150.0" promptText="Tipo Documento" styleClass="boxIn" />
-                                       </children>
-                                    </HBox>
+                                    <ComboBox fx:id="comboTipoDocumento" prefWidth="150.0" promptText="Tipo Documento" styleClass="boxIn" />
                                  </children>
-                              </VBox>
+                              </HBox>
                               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="25.0">
                                  <children>
                                     <TextField fx:id="txtNumDoc" promptText="N° Documento" styleClass="textIn" />
@@ -207,96 +205,118 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
-                        <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                        <HBox alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT">
                            <children>
-                              <Label text="Filtro" />
-                              <HBox alignment="CENTER" nodeOrientation="LEFT_TO_RIGHT">
+                              <VBox minWidth="150.0" prefWidth="700.0">
                                  <children>
-                                    <VBox minWidth="150.0" prefHeight="200.0" prefWidth="150.0">
-                                       <children>
-                                          <HBox alignment="CENTER" prefHeight="100.0" prefWidth="134.0">
-                                             <children>
-                                                <ComboBox fx:id="comboTipoDocumento1" prefWidth="150.0" promptText="Tipo Documento" styleClass="boxIn" />
-                                             </children>
-                                          </HBox>
-                                          <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-                                             <children>
-                                                <TextField promptText="N° Documento" styleClass="textIn" />
-                                             </children>
-                                          </HBox>
-                                       </children>
-                                       <HBox.margin>
-                                          <Insets right="50.0" />
-                                       </HBox.margin>
-                                    </VBox>
-                                    <VBox alignment="CENTER" minWidth="150.0" prefHeight="200.0" prefWidth="150.0">
-                                       <children>
-                                          <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-                                             <children>
-                                                <TextField promptText="Nombres" styleClass="textIn" />
-                                             </children>
-                                          </HBox>
-                                          <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-                                             <children>
-                                                <TextField promptText="Apellidos" styleClass="textIn" />
-                                             </children>
-                                          </HBox>
-                                       </children>
-                                       <HBox.margin>
-                                          <Insets right="50.0" />
-                                       </HBox.margin>
-                                    </VBox>
-                                    <VBox alignment="CENTER" minWidth="100.0" prefHeight="200.0" prefWidth="150.0">
-                                       <children>
-                                          <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-                                             <children>
-                                                <ComboBox fx:id="listDepartamento1" prefWidth="150.0" promptText="Departamento" styleClass="boxIn" />
-                                             </children>
-                                          </HBox>
-                                          <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-                                             <children>
-                                                <ComboBox fx:id="listProvincia1" prefWidth="150.0" promptText="Provincia" styleClass="boxIn" />
-                                             </children>
-                                          </HBox>
-                                       </children>
-                                       <HBox.margin>
-                                          <Insets right="50.0" />
-                                       </HBox.margin>
-                                    </VBox>
-                                    <VBox alignment="TOP_RIGHT" minWidth="100.0" prefHeight="200.0" prefWidth="150.0">
-                                       <children>
-                                          <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-                                             <children>
-                                                <ComboBox fx:id="listDistrito1" prefWidth="150.0" promptText="Distrito" styleClass="boxIn" />
-                                             </children>
-                                          </HBox>
-                                          <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0">
-                                             <children>
-                                                <Button mnemonicParsing="false" styleClass="buttonIn" text="Filtrar" />
-                                             </children>
-                                          </HBox>
-                                       </children>
-                                       <HBox.margin>
-                                          <Insets />
-                                       </HBox.margin>
-                                    </VBox>
+                                    <TabPane prefHeight="200.0" prefWidth="616.0" tabClosingPolicy="UNAVAILABLE">
+                                      <tabs>
+                                        <Tab text="Por Documento">
+                                          <content>
+                                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                   <children>
+                                                      <HBox alignment="CENTER" layoutX="14.0" layoutY="-4.0" prefHeight="100.0" prefWidth="250.0" spacing="25.0">
+                                                         <children>
+                                                            <ComboBox fx:id="comboTipoDocumento1" prefWidth="215.0" promptText="Tipo Documento" styleClass="boxIn" />
+                                                         </children>
+                                                      </HBox>
+                                                      <HBox alignment="CENTER" layoutX="264.0" layoutY="-4.0" prefHeight="100.0" prefWidth="250.0" spacing="25.0">
+                                                         <children>
+                                                            <TextField fx:id="txtNumDoc1" prefWidth="215.0" promptText="N° Documento" styleClass="textIn" />
+                                                         </children>
+                                                      </HBox>
+                                                   </children>
+                                                </AnchorPane>
+                                          </content>
+                                        </Tab>
+                                        <Tab text="Por Nombres">
+                                          <content>
+                                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                   <children>
+                                                      <HBox alignment="CENTER" layoutX="264.0" layoutY="-4.0" prefHeight="100.0" prefWidth="250.0">
+                                                         <children>
+                                                            <TextField fx:id="txtNombres1" prefWidth="215.0" promptText="Nombres" styleClass="textIn" />
+                                                         </children>
+                                                      </HBox>
+                                                      <HBox alignment="CENTER" layoutX="14.0" layoutY="-4.0" prefHeight="100.0" prefWidth="250.0">
+                                                         <children>
+                                                            <TextField fx:id="txtApellidos1" prefHeight="35.0" prefWidth="215.0" promptText="Apellidos" styleClass="textIn" />
+                                                         </children>
+                                                      </HBox>
+                                                   </children>
+                                                </AnchorPane>
+                                          </content>
+                                        </Tab>
+                                          <Tab text="Por Ubicación">
+                                             <content>
+                                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                                   <children>
+                                                      <HBox alignment="CENTER" layoutX="14.0" layoutY="-4.0" prefHeight="100.0" prefWidth="200.0" spacing="25.0">
+                                                         <children>
+                                                            <ComboBox fx:id="listDepartamento1" prefWidth="150.0" promptText="Departamento" styleClass="boxIn" />
+                                                         </children>
+                                                      </HBox>
+                                                      <HBox alignment="CENTER" layoutX="214.0" layoutY="-4.0" prefHeight="100.0" prefWidth="200.0" spacing="25.0">
+                                                         <children>
+                                                            <ComboBox fx:id="listProvincia1" prefWidth="150.0" promptText="Provincia" styleClass="boxIn" />
+                                                         </children>
+                                                      </HBox>
+                                                      <HBox alignment="CENTER" layoutX="421.0" layoutY="-4.0" prefHeight="100.0" prefWidth="200.0" spacing="25.0">
+                                                         <children>
+                                                            <ComboBox fx:id="listDistrito1" prefWidth="150.0" promptText="Distrito" styleClass="boxIn" />
+                                                         </children>
+                                                      </HBox>
+                                                   </children>
+                                                </AnchorPane>
+                                             </content>
+                                          </Tab>
+                                      </tabs>
+                                    </TabPane>
                                  </children>
-                              </HBox>
+                                 <HBox.margin>
+                                    <Insets right="50.0" />
+                                 </HBox.margin>
+                                 <padding>
+                                    <Insets bottom="5.0" />
+                                 </padding>
+                              </VBox>
+                              <VBox alignment="TOP_RIGHT" minWidth="100.0" prefHeight="200.0" prefWidth="50.0">
+                                 <children>
+                                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" />
+                                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                                       <children>
+                                          <Button mnemonicParsing="false" prefWidth="72.0" styleClass="buttonIn" text="Filtrar" />
+                                       </children>
+                                    </HBox>
+                                 </children>
+                                 <HBox.margin>
+                                    <Insets />
+                                 </HBox.margin>
+                              </VBox>
                            </children>
-                           <GridPane.margin>
-                              <Insets left="10.0" right="10.0" top="5.0" />
-                           </GridPane.margin>
-                        </VBox>
+                           <padding>
+                              <Insets left="15.0" />
+                           </padding>
+                        </HBox>
                         <BorderPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
                            <center>
-                              <TableView prefHeight="200.0" prefWidth="706.0" styleClass="tableOut" BorderPane.alignment="CENTER">
+                              <TableView fx:id="tablaClientes" prefHeight="200.0" prefWidth="706.0" styleClass="tableOut" BorderPane.alignment="CENTER">
                                 <columns>
-                                  <TableColumn prefWidth="75.0" text="C1" />
-                                  <TableColumn prefWidth="75.0" text="C2" />
+                                  <TableColumn fx:id="col_id" prefWidth="75.0" text="idCliente" />
+                                  <TableColumn fx:id="col_nombres" prefWidth="75.0" text="Nombres" />
+                                    <TableColumn fx:id="col_apellidos" prefWidth="75.0" text="Apellidos" />
+                                    <TableColumn fx:id="col_telefono" prefWidth="75.0" text="Telefono" />
+                                    <TableColumn fx:id="col_tipoDoc" prefWidth="75.0" text="TipoDoc" />
+                                    <TableColumn fx:id="col_numDoc" prefWidth="75.0" text="numDoc" />
+                                    <TableColumn fx:id="col_distrito" prefWidth="75.0" text="Distrito" />
+                                    <TableColumn fx:id="col_modificar" prefWidth="75.0" text="Modificar" />
                                 </columns>
                                  <BorderPane.margin>
                                     <Insets bottom="10.0" left="10.0" right="10.0" top="5.0" />
                                  </BorderPane.margin>
+                                 <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                 </columnResizePolicy>
                               </TableView>
                            </center>
                         </BorderPane>

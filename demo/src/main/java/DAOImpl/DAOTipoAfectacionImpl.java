@@ -32,4 +32,29 @@ public class DAOTipoAfectacionImpl implements DAOTipoAfectacion {
 
         return lista;
     }
+
+    @Override
+    public AfectacionProductos obtener(Long id) {
+        AfectacionProductos afectacion = null;
+        String sql = "SELECT idafectacion, nombre, descripcion FROM tipoafectacion WHERE idafectacion = ?";
+
+        try (Connection conexion = ConexionBD.getInstance().getConnection();
+             PreparedStatement ps = conexion.prepareStatement(sql)) {
+
+            ps.setLong(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    afectacion = new AfectacionProductos();
+                    afectacion.setIdAfectacion(rs.getLong("idafectacion"));
+                    afectacion.setNombreAfectacion(rs.getString("nombre"));
+                    afectacion.setDescripcion(rs.getString("descripcion"));
+                }
+            }
+
+        } catch (SQLException e) {
+            System.err.println("❌ Error al obtener la afectación: " + e.getMessage());
+        }
+
+        return afectacion;
+    }
 }

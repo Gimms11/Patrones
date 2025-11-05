@@ -11,6 +11,10 @@ public class Producto {
     private long idCategoria;
     private String unidadMedida;       // Ej: "UND", "KG", "LTR"
     private Long idTipoAfectacion;     // FK → AfectacionProductos (ej: 1 = Gravado, 2 = Exonerado, etc )
+    
+    // Campos adicionales para nombres
+    private String nombreCategoria;
+    private String nombreAfectacion;
 
     // Constructor vacío
     public Producto() {}
@@ -21,8 +25,8 @@ public class Producto {
         this.precio = precio;
         this.unidadMedida = unidadMedida;
     }
-
-    // Constructor completo
+    
+    // Semi-Constructor completo
     public Producto(Long idProducto, String nombre, BigDecimal precio, Integer stock,
                     String descripcion,String unidadMedida, Long idTipoAfectacion,long idCategoria) {
         this.idProducto = idProducto;
@@ -33,6 +37,22 @@ public class Producto {
         this.idCategoria = idCategoria;
         this.unidadMedida = unidadMedida;
         this.idTipoAfectacion = idTipoAfectacion;
+    }
+
+    // Constructor completo
+    public Producto(Long idProducto, String nombre, BigDecimal precio, Integer stock,
+                    String descripcion,String unidadMedida, Long idTipoAfectacion,long idCategoria,
+                    String nombreCategoria, String nombreAfectacion) {
+        this.idProducto = idProducto;
+        this.nombre = nombre;
+        this.precio = precio;
+        this.stock = stock;
+        this.descripcion = descripcion;
+        this.idCategoria = idCategoria;
+        this.unidadMedida = unidadMedida;
+        this.idTipoAfectacion = idTipoAfectacion;
+        this.nombreCategoria = nombreCategoria;
+        this.nombreAfectacion = nombreAfectacion;
     }
 
     // Getters
@@ -54,6 +74,12 @@ public class Producto {
     public void setIdCategoria(long idCategoria) { this.idCategoria = idCategoria; }
     public void setUnidadMedida(String unidadMedida) { this.unidadMedida = unidadMedida; }
     public void setIdTipoAfectacion(Long idTipoAfectacion) { this.idTipoAfectacion = idTipoAfectacion; }
+    
+    // Getters y Setters para los campos adicionales
+    public String getNombreCategoria() { return nombreCategoria; }
+    public void setNombreCategoria(String nombreCategoria) { this.nombreCategoria = nombreCategoria; }
+    public String getNombreAfectacion() { return nombreAfectacion; }
+    public void setNombreAfectacion(String nombreAfectacion) { this.nombreAfectacion = nombreAfectacion; }
 
     @Override
     public String toString() {

@@ -4,9 +4,23 @@ import DAOImpl.PostgresDAOFactory;
 
 public abstract class DAOFactory {
 
-    // Método para obtener la conexión (opcional, si lo necesitas en los DAO)
+    // Tipos de bases de datos soportadas
+    public static final int POSTGRES = 1;
+    // ... otros tipos de bases de datos
+
+    // Método para obtener la instancia de Factory
+    public static DAOFactory getDAOFactory(int whichFactory) {
+        switch (whichFactory) {
+            case POSTGRES:
+                return new PostgresDAOFactory();
+            default:
+                return null;
+        }
+    }
+
+    // Método por defecto que retorna PostgresDAOFactory
     public static DAOFactory getDAOFactory() {
-        return new PostgresDAOFactory();
+        return getDAOFactory(POSTGRES);
     }
 
     public abstract DAOUbigeo getUbigeoDAO();
@@ -18,4 +32,5 @@ public abstract class DAOFactory {
     public abstract DAOCliente getClienteDAO();
     public abstract DAOComprobante getComprobanteDAO();
     public abstract DAOMedioPago getMedioPagoDAO();
+    public abstract DAOFiltrarClientes getFiltrarClientesDAO();
 }

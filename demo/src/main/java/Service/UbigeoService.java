@@ -30,4 +30,9 @@ public class UbigeoService {
         if (idProvincia == null) return List.of();
         return repository.obtenerDistritosPorProvincia(idProvincia);
     }
+
+    public Distrito obtenerDistrito(Long id) {
+        if (id == null) return null;
+        return repository.obtenerDistrito(id);
+    }
 }

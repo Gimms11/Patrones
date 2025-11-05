@@ -53,17 +53,17 @@
                            <children>
                               <HBox alignment="CENTER" prefHeight="100.0">
                                  <children>
-                                    <TextField prefWidth="250.0" promptText="Nombre" styleClass="textIn" />
+                                    <TextField fx:id="txtNombre" prefWidth="250.0" promptText="Nombre" styleClass="textIn" />
                                  </children>
                               </HBox>
                               <HBox alignment="CENTER" prefHeight="100.0">
                                  <children>
-                                    <TextField prefWidth="250.0" promptText="Precio" styleClass="textIn" />
+                                    <TextField fx:id="txtPrecio" prefWidth="250.0" promptText="Precio" styleClass="textIn" />
                                  </children>
                               </HBox>
                               <HBox alignment="CENTER" prefHeight="100.0">
                                  <children>
-                                    <TextField prefWidth="250.0" promptText="Stock Inicial" styleClass="textIn" />
+                                    <TextField fx:id="txtStock" prefWidth="250.0" promptText="Stock Inicial" styleClass="textIn" />
                                  </children>
                               </HBox>
                            </children>
@@ -82,7 +82,7 @@
                               </HBox>
                               <HBox alignment="CENTER" prefHeight="100.0" spacing="25.0">
                                  <children>
-                                    <TextField prefWidth="250.0" promptText="Unidad Medida" styleClass="textIn" />
+                                    <TextField fx:id="txtUnidad" prefWidth="250.0" promptText="Unidad Medida" styleClass="textIn" />
                                  </children>
                               </HBox>
                            </children>
@@ -96,10 +96,10 @@
                               <RowConstraints maxHeight="50.0" minHeight="10.0" percentHeight="40.0" prefHeight="104.80001220703124" vgrow="SOMETIMES" />
                            </rowConstraints>
                            <children>
-                              <TextArea prefHeight="200.0" prefWidth="225.0" promptText="Descripción" styleClass="textIn" />
+                              <TextArea fx:id="txtDesc" prefHeight="200.0" prefWidth="225.0" promptText="Descripción" styleClass="textIn" />
                               <BorderPane GridPane.rowIndex="1">
                                  <right>
-                                    <Button mnemonicParsing="false" styleClass="buttonIn" text="Aceptar" BorderPane.alignment="CENTER">
+                                    <Button mnemonicParsing="false" onMouseClicked="#insertarProducto" styleClass="buttonIn" text="Aceptar" BorderPane.alignment="CENTER">
                                        <BorderPane.margin>
                                           <Insets top="5.0" />
                                        </BorderPane.margin></Button>
@@ -262,14 +262,22 @@
                         </VBox>
                         <BorderPane prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="2">
                            <center>
-                              <TableView prefHeight="200.0" prefWidth="706.0" styleClass="tableOut" BorderPane.alignment="CENTER">
+                              <TableView fx:id="tablaProductos" prefHeight="200.0" prefWidth="706.0" styleClass="tableOut" BorderPane.alignment="CENTER">
                                 <columns>
-                                  <TableColumn prefWidth="75.0" text="C1" />
-                                  <TableColumn prefWidth="75.0" text="C2" />
+                                  <TableColumn fx:id="colId" prefWidth="75.0" text="idProducto" />
+                                  <TableColumn fx:id="colNombre" prefWidth="75.0" text="Nombre" />
+                                    <TableColumn fx:id="colStock" prefWidth="75.0" text="Stock Actual" />
+                                    <TableColumn fx:id="colCat" prefWidth="75.0" text="Categoria" />
+                                    <TableColumn fx:id="colAfec" prefWidth="75.0" text="TipoAfectacion" />
+                                    <TableColumn fx:id="colMedida" prefWidth="75.0" text="UnidadMedida" />
+                                    <TableColumn fx:id="colAct" prefWidth="75.0" text="Actualizar" />
                                 </columns>
                                  <BorderPane.margin>
                                     <Insets bottom="10.0" left="10.0" right="10.0" top="5.0" />
                                  </BorderPane.margin>
+                                 <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                 </columnResizePolicy>
                               </TableView>
                            </center>
                         </BorderPane>

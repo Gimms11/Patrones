@@ -1,14 +1,21 @@
 package controller;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.math.BigDecimal;
+
 import DTO.AfectacionProductos;
 import DTO.CategoriaProductos;
+import DTO.Producto;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ComboBox;
+import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.beans.property.SimpleStringProperty;
 import service.AfectacionService;
 import service.CategoriaService;
+import service.ProductoService;
 
 /**
  * Controlador para la gestión de productos.
@@ -21,13 +28,32 @@ public class ControllerProducts {
     @FXML private ComboBox<AfectacionProductos> listAfectacion;
     @FXML private ComboBox<AfectacionProductos> listAfectacion1;
 
-    private AfectacionService afectacionService;
-
     // === COMBOBOX DE CATEGORÍA ===
     @FXML private ComboBox<CategoriaProductos> listCategoria;
     @FXML private ComboBox<CategoriaProductos> listCategoria1;
 
+    // === TABLA DE PRODUCTOS ===
+    @FXML private TableView<Producto> tablaProductos;
+    @FXML private TableColumn<Producto, String> colId;
+    @FXML private TableColumn<Producto, String> colNombre;
+    @FXML private TableColumn<Producto, String> colStock;
+    @FXML private TableColumn<Producto, String> colCat;
+    @FXML private TableColumn<Producto, String> colAfec;
+    @FXML private TableColumn<Producto, String> colMedida;
+    @FXML private TableColumn<Producto, Hyperlink> colAct;
+
+    // --- Datos de insercción del producto ---
+
+    @FXML private TextField txtNombre;
+    @FXML private TextField txtPrecio;
+    @FXML private TextField txtStock;
+    @FXML private TextField txtUnidad;
+    @FXML private TextArea txtDesc;
+
+    // === SERVICIOS ===
+    private AfectacionService afectacionService;
     private CategoriaService categoriaService;
+    private ProductoService productoService;
 
     // =============================================================
     // MÉTODO PRINCIPAL DE INICIALIZACIÓN
@@ -38,6 +64,10 @@ public class ControllerProducts {
             // Inicialización de servicios
             this.afectacionService = new AfectacionService();
             this.categoriaService = new CategoriaService();
+            this.productoService = new ProductoService();
+
+            // Configuración de la tabla
+            configurarTabla();
 
             // Configuración de ambos grupos de ComboBox
             configurarComboAfectacion(listAfectacion);
@@ -135,5 +165,215 @@ public class ControllerProducts {
         alert.setHeaderText(null);
         alert.setContentText(mensaje);
         alert.showAndWait();
+    }
+
+    private void configurarTabla() {
+        // Configurar columna ID
+        colId.setCellValueFactory(cellData -> {
+            if (cellData.getValue() == null) return new SimpleStringProperty("");
+            Long id = cellData.getValue().getIdProducto();
+            return new SimpleStringProperty(id != null ? id.toString() : "");
+        });
+
+        // Configurar columna Nombre
+        colNombre.setCellValueFactory(cellData -> {
+            if (cellData.getValue() == null) return new SimpleStringProperty("");
+            return new SimpleStringProperty(
+                cellData.getValue().getNombre() != null ? 
+                cellData.getValue().getNombre() : ""
+            );
+        });
+
+        // Configurar columna Stock
+        colStock.setCellValueFactory(cellData -> {
+            if (cellData.getValue() == null) return new SimpleStringProperty("");
+            Integer stock = cellData.getValue().getStock();
+            return new SimpleStringProperty(stock != null ? stock.toString() : "");
+        });
+
+        // Configurar columna Categoría
+        colCat.setCellValueFactory(cellData -> {
+            if (cellData.getValue() == null) return new SimpleStringProperty("");
+            return new SimpleStringProperty(
+                cellData.getValue().getNombreCategoria() != null ? 
+                cellData.getValue().getNombreCategoria() : ""
+            );
+        });
+
+
+        // Configurar columna Afectación
+        colAfec.setCellValueFactory(cellData -> {
+            if (cellData.getValue() == null) return new SimpleStringProperty("");
+            return new SimpleStringProperty(
+                cellData.getValue().getNombreAfectacion() != null ? 
+                cellData.getValue().getNombreAfectacion() : ""
+            );
+        });
+
+        // Configurar columna Unidad de Medida
+        colMedida.setCellValueFactory(cellData -> {
+            if (cellData.getValue() == null) return new SimpleStringProperty("");
+            return new SimpleStringProperty(
+                cellData.getValue().getUnidadMedida() != null ? 
+                cellData.getValue().getUnidadMedida() : ""
+            );
+        });
+
+        // Configurar columna de Acciones
+        colAct.setCellFactory(param -> new TableCell<>() {
+            private final Hyperlink link = new Hyperlink("Modificar");
+            {
+                link.setStyle("-fx-text-fill: blue;");
+            }
+
+            @Override
+            protected void updateItem(Hyperlink item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(link);
+                    link.setOnAction(event -> {
+                        Producto producto = getTableRow().getItem();
+                        if (producto != null) {
+                            abrirVentanaModificar(producto);
+                        }
+                    });
+                }
+            }
+        });
+
+        // Cargar datos iniciales
+        cargarDatosTabla();
+    }
+
+    @FXML
+    public void insertarProducto() {
+        try {
+            // Validaciones
+            if (txtNombre.getText().isEmpty()) {
+                mostrarAlerta(AlertType.WARNING, "Datos incorrectos", "El nombre del producto es obligatorio.");
+                return;
+            }
+
+            String precioText = txtPrecio.getText();
+            if (precioText.isEmpty()) {
+                mostrarAlerta(AlertType.WARNING, "Datos incorrectos", "El precio es obligatorio.");
+                return;
+            }
+
+            BigDecimal precio;
+            try {
+                precio = new BigDecimal(precioText);
+                if (precio.compareTo(BigDecimal.ZERO) <= 0) {
+                    mostrarAlerta(AlertType.WARNING, "Datos incorrectos", "El precio debe ser mayor a 0.");
+                    return;
+                }
+            } catch (NumberFormatException e) {
+                mostrarAlerta(AlertType.WARNING, "Datos incorrectos", "El precio debe ser un número válido.");
+                return;
+            }
+
+            String stockText = txtStock.getText();
+            Integer stock = null;
+            if (!stockText.isEmpty()) {
+                try {
+                    stock = Integer.parseInt(stockText);
+                    if (stock < 0) {
+                        mostrarAlerta(AlertType.WARNING, "Datos incorrectos", "El stock no puede ser negativo.");
+                        return;
+                    }
+                } catch (NumberFormatException e) {
+                    mostrarAlerta(AlertType.WARNING, "Datos incorrectos", "El stock debe ser un número entero válido.");
+                    return;
+                }
+            }
+
+            Long idAfectacion = obtenerIdAfectacionSeleccionada();
+            if (idAfectacion == null) {
+                mostrarAlerta(AlertType.WARNING, "Datos incorrectos", "Debe seleccionar un tipo de afectación.");
+                return;
+            }
+
+            Long idCategoria = obtenerIdCategoriaSeleccionada();
+            if (idCategoria == null) {
+                mostrarAlerta(AlertType.WARNING, "Datos incorrectos", "Debe seleccionar una categoría.");
+                return;
+            }
+
+            // Crear objeto Producto
+            Producto producto = new Producto(
+                null, // idProducto (será generado por la BD)
+                txtNombre.getText(),
+                precio,
+                stock,
+                txtDesc.getText(),
+                txtUnidad.getText(),
+                idAfectacion,
+                idCategoria
+            );
+
+            // Registrar el producto
+            productoService.registrarProducto(producto);
+            mostrarAlerta(AlertType.INFORMATION, "Registro exitoso", "El producto se ha registrado correctamente.");
+            
+            // Limpiar campos
+            limpiarCampos();
+            
+            // Recargar tabla
+            cargarDatosTabla();
+
+        } catch (Exception e) {
+            mostrarAlerta(AlertType.ERROR, "Error al registrar", 
+                "No se pudo registrar el producto.\nError: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private void limpiarCampos() {
+        // Limpiar campos de texto
+        txtNombre.clear();
+        txtPrecio.clear();
+        txtStock.clear();
+        txtUnidad.clear();
+        txtDesc.clear();
+        
+        // Limpiar selecciones de ComboBox manteniendo los promptText      
+        limpiarCombo(listCategoria);
+        limpiarCombo(listAfectacion);
+    }
+
+    private <T> void limpiarCombo(ComboBox<T> comboBox) {
+        comboBox.getSelectionModel().clearSelection();
+        comboBox.setValue(null);
+
+        comboBox.setButtonCell(new javafx.scene.control.ListCell<T>() {
+            @Override
+            protected void updateItem(T item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty ? comboBox.getPromptText() : item.toString());
+            }
+        });
+    }
+
+    private void cargarDatosTabla() {
+        try {
+            var productos = productoService.obtenerTodos();
+            if (productos == null) {
+                productos = new ArrayList<>();
+            }
+            tablaProductos.setItems(FXCollections.observableArrayList(productos));
+            tablaProductos.refresh();
+        } catch (Exception e) {
+            mostrarAlerta(AlertType.ERROR, "Error al cargar datos", 
+                "No se pudieron cargar los datos de los productos.\n" + e.getMessage());
+            System.out.println("Error al cargar datos de productos: " + e.getMessage());
+        }
+    }
+
+    private void abrirVentanaModificar(Producto producto) {
+        // TODO: Implementar ventana de modificación
+        mostrarAlerta(AlertType.INFORMATION, "Modificar producto", 
+            "Se abrirá la ventana de modificación para el producto: " + producto.getNombre());
     }
 }

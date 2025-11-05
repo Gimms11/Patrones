@@ -48,4 +48,9 @@ public class PostgresDAOFactory extends DAOFactory {
     public DAOTipoComprobante getTipoComprobanteDAO() {
         return new DAOTipoComprobanteImpl();
     }
+
+    @Override
+    public DAOFiltrarClientes getFiltrarClientesDAO() {
+        return new DAOFiltrarClientesImpl();    
+    }
 }

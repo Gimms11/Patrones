@@ -79,4 +79,27 @@ public class DAOUbigeoImpl implements DAOUbigeo {
         }
         return distritos;
     }
+
+    @Override
+    public Distrito obtenerDistrito(Long id) {
+        String sql = "SELECT iddistrito, nombre, idprovincia FROM distrito WHERE iddistrito = ?";
+
+        try (Connection conn = ConexionBD.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setLong(1, id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Distrito d = new Distrito();
+                    d.setIdDistrito(rs.getLong("iddistrito"));
+                    d.setNombreDistrito(rs.getString("nombre"));
+                    d.setIdProvincia(rs.getLong("idprovincia"));
+                    return d;
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al obtener distrito", e);
+        }
+        return null;
+    }
 }

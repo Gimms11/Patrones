@@ -18,4 +18,9 @@ public class CategoriaService {
     public List<CategoriaProductos> listarCategorias() {
         return repository.obtenerTodas();
     }
+
+    public CategoriaProductos obtenerCategoria(Long id) {
+        if (id == null) return null;
+        return repository.obtener(id);
+    }
 }

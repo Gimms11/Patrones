@@ -11,13 +11,17 @@ public class Cliente {
     private Long idDistrito;
     private Long idDocumento;
 
+    // Campos adicionales para nombres
+    private String nombreDistrito;
+    private String nombreTipoDocumento;
+
     // ✅ Constructor vacío (necesario para frameworks y JavaFX)
     public Cliente() {}
 
     // ✅ Constructor completo
     public Cliente(Long idCliente, String nombres, String apellidos, String telefono,
                    String correo, String direccion, String numDocumento,
-                   Long idDistrito, Long idDocumento) {
+                   Long idDistrito, Long idDocumento, String nombreDistrito, String nombreTipoDocumento) {
         this.idCliente = idCliente;
         this.nombres = nombres;
         this.apellidos = apellidos;
@@ -56,6 +60,12 @@ public class Cliente {
 
     public Long getIdDocumento() { return idDocumento; }
     public void setIdDocumento(Long idDocumento) { this.idDocumento = idDocumento; }
+
+    // Getters y Setters para los campos adicionales
+    public String getNombreDistrito() { return nombreDistrito; }
+    public void setNombreDistrito(String nombreDistrito) { this.nombreDistrito = nombreDistrito; }
+    public String getNombreTipoDocumento() { return nombreTipoDocumento; }
+    public void setNombreTipoDocumento(String nombreTipoDocumento) { this.nombreTipoDocumento = nombreTipoDocumento; }
 
     @Override
     public String toString() {

@@ -25,7 +25,10 @@ public class DAOClienteImpl implements DAOCliente {
         "SELECT * FROM cliente WHERE idcliente = ?";
 
     private static final String SQL_SELECT_ALL = 
-        "SELECT * FROM cliente";
+        "SELECT c.*, d.nombre AS nombreDistrito, t.nombre AS nombreTipoDocumento " +
+        "FROM cliente c " +
+        "INNER JOIN distrito d ON d.iddistrito = c.iddistrito " +
+        "INNER JOIN tipodocumento t ON t.iddocumento = c.iddocumento";
 
     @Override
     public void registrarCliente(Cliente cliente) {
@@ -99,7 +102,9 @@ public class DAOClienteImpl implements DAOCliente {
                         rs.getString("direccion"),
                         rs.getString("numdocumento"),
                         rs.getLong("iddistrito"),
-                        rs.getLong("iddocumento")
+                        rs.getLong("iddocumento"),
+                        rs.getString("nombreDistrito"),
+                        rs.getString("nombreTipoDocumento")
                     );
                 }
             }
@@ -127,8 +132,12 @@ public class DAOClienteImpl implements DAOCliente {
                     rs.getString("direccion"),
                     rs.getString("numdocumento"),
                     rs.getLong("iddistrito"),
-                    rs.getLong("iddocumento")
+                    rs.getLong("iddocumento"),
+                    rs.getString("nombredistrito"),
+                    rs.getString("nombretipodocumento")
                 );
+                cliente.setNombreDistrito(rs.getString("nombredistrito"));
+                cliente.setNombreTipoDocumento(rs.getString("nombretipodocumento"));
                 lista.add(cliente);
             }
 

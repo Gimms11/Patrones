@@ -131,3 +131,72 @@
     -fx-border-color: -color-g1;
     -fx-background-color: -color-g1;
 }
+
+/* ========================= */
+/* TABPANE PERSONALIZADO */
+/* ========================= */
+
+.tabPane {
+    -fx-background-color: transparent;
+    -fx-padding: 4;
+}
+
+/* Fondo general del área de contenido del TabPane */
+.tab-pane .tab-content-area {
+    -fx-background-color: -color-fondo;
+    -fx-border-color: transparent;
+}
+
+/* Contenedor de las pestañas (cabecera superior) */
+.tab-pane .tab-header-area {
+    -fx-background-color: transparent;
+}
+
+/* Cada pestaña individual */
+.tab-pane .tab {
+    -fx-background-color: #f5f5f5;
+    -fx-padding: 6 6;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+    -fx-font-size: 12.5px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -color-g2;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.05), 5, 0.1, 0, 1);
+}
+
+/* Hover (cuando pasas el mouse sobre una pestaña) */
+.tab-pane .tab:hover {
+    -fx-background-color: #ffffff;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.15), 8, 0.3, 0, 1);
+    -fx-text-fill: -color-primario;
+}
+
+/* Pestaña seleccionada */
+.tab-pane .tab:selected {
+    -fx-background-color: #ffffff;
+    -fx-text-fill: -color-primario;
+    -fx-effect: dropshadow(gaussian, rgba(220, 25, 27, 0.2), 10, 0.4, 0, 1);
+}
+
+/* Línea o borde inferior de la cabecera del tabPane */
+.tab-pane .tab-header-background {
+    -fx-background-color: transparent;
+    -fx-border-color: -color-g3;
+    -fx-border-width: 0 0 1 0;
+}
+
+/* Texto dentro de las pestañas */
+.tab-pane .tab-label {
+    -fx-text-fill: inherit;
+    -fx-font-family: -fx-main-font;
+    -fx-font-size: 12.5px;
+    -fx-font-weight: bold;
+}
+
+/* Contenido dentro de cada Tab */
+.tab-pane .tab-content-area .content {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 0 0 8 8;
+    -fx-padding: 10;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.08), 8, 0.2, 0, 1);
+}

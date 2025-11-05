@@ -17,4 +17,9 @@ public class TipoDocumentoService {
     public List<TipoDocumento> cargarTipoDocumentos() {
         return repository.obtenerTodos();
     }
+
+    public TipoDocumento obtenerTipoDocumento(Long id) {
+        if (id == null) return null;
+        return repository.obtener(id);
+    }
 }

@@ -15,32 +15,53 @@ import java.util.List;
 public class ControllerFacturas {
 
     // === ELEMENTOS DE LA VISTA vistosa ===
-    @FXML private ComboBox<Producto> listProductos;
-    @FXML private ComboBox<MedioPago> listMediosPago;
-    @FXML private ComboBox<TipoComprobante> listTipoComp;
+    @FXML
+    private ComboBox<Producto> listProductos;
+    @FXML
+    private ComboBox<MedioPago> listMediosPago;
+    @FXML
+    private ComboBox<TipoComprobante> listTipoComp;
 
-    @FXML private TextField prodPrecio;
-    @FXML private TextField prodStock;
-    @FXML private TextField prodCat;
-    @FXML private TextField prodAfec;
-    @FXML private TextField prodUnidad;
-    @FXML private TextField prodImp;
+    @FXML
+    private TextField prodPrecio;
+    @FXML
+    private TextField prodStock;
+    @FXML
+    private TextField prodCat;
+    @FXML
+    private TextField prodAfec;
+    @FXML
+    private TextField prodUnidad;
+    @FXML
+    private TextField prodImp;
 
-    @FXML private TextField numDocumento;
-    @FXML private TextField nomCliente;
-    @FXML private TextField apeCliente;
+    @FXML
+    private TextField numDocumento;
+    @FXML
+    private TextField nomCliente;
+    @FXML
+    private TextField apeCliente;
 
-    @FXML private TextField txtNumSerie;
-    @FXML private TextField txtCantidad;
-    @FXML private TextField txtFechaEmision;
+    @FXML
+    private TextField txtNumSerie;
+    @FXML
+    private TextField txtCantidad;
+    @FXML
+    private TextField txtFechaEmision;
 
-    @FXML private TableView<DetalleComprobante> listDetalles;
+    @FXML
+    private TableView<DetalleComprobante> listDetalles;
 
-    @FXML private TableColumn<DetalleComprobante, Long> colIdProducto;
-    @FXML private TableColumn<DetalleComprobante, Integer> colCantidad;
-    @FXML private TableColumn<DetalleComprobante, BigDecimal> colPrecioUnit;
-    @FXML private TableColumn<DetalleComprobante, BigDecimal> colSubtotal;
-    @FXML private TableColumn<DetalleComprobante, BigDecimal> colTotal;
+    @FXML
+    private TableColumn<DetalleComprobante, Long> colIdProducto;
+    @FXML
+    private TableColumn<DetalleComprobante, Integer> colCantidad;
+    @FXML
+    private TableColumn<DetalleComprobante, BigDecimal> colPrecioUnit;
+    @FXML
+    private TableColumn<DetalleComprobante, BigDecimal> colSubtotal;
+    @FXML
+    private TableColumn<DetalleComprobante, BigDecimal> colTotal;
 
     // === SERVICIOS Y LISTAS ===
     private ProductoService productoService;
@@ -65,7 +86,7 @@ public class ControllerFacturas {
     @FXML
     public void initialize() {
         try {
-            //Generar lista vacia de detalles
+            // Generar lista vacia de detalles
             listaDetalle = new ArrayList<>();
 
             // Inyección manual de servicios
@@ -92,11 +113,13 @@ public class ControllerFacturas {
 
             // Listener para el producto seleccionado
             listProductos.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
-                if (newVal != null) mostrarDatosProducto(newVal);
+                if (newVal != null)
+                    mostrarDatosProducto(newVal);
             });
 
         } catch (Exception e) {
-            mostrarAlerta(AlertType.ERROR, "Error de inicialización", "Ocurrió un error al cargar los datos: " + e.getMessage());
+            mostrarAlerta(AlertType.ERROR, "Error de inicialización",
+                    "Ocurrió un error al cargar los datos: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -105,7 +128,7 @@ public class ControllerFacturas {
     // MÉTODOS DE CONFIGURACIÓN
     // =============================================================
 
-    /** Configurar la tabla y las columnas de la tabla*/
+    /** Configurar la tabla y las columnas de la tabla */
     private void configurarTabla() {
         // Configurar columnas de la tabla
         colIdProducto.setCellValueFactory(data -> new javafx.beans.property.SimpleLongProperty(
@@ -164,7 +187,7 @@ public class ControllerFacturas {
 
         prodAfec.setText(nombreAfectacion);
         prodCat.setText(nombreCategoria);
-        prodImp.setText(producto.getIdTipoAfectacion() == 1? "IGV" : "Ninguno");
+        prodImp.setText(producto.getIdTipoAfectacion() == 1 ? "IGV" : "Ninguno");
     }
 
     /** Busca un cliente por número de documento */
@@ -193,7 +216,8 @@ public class ControllerFacturas {
         if (cliente != null) {
             nomCliente.setText(cliente.getNombres());
             apeCliente.setText(cliente.getApellidos());
-            mostrarAlerta(AlertType.INFORMATION, "Cliente encontrado", "Cliente: " + nomCliente.getText() + " " + apeCliente.getText());
+            mostrarAlerta(AlertType.INFORMATION, "Cliente encontrado",
+                    "Cliente: " + nomCliente.getText() + " " + apeCliente.getText());
         } else {
             nomCliente.setText("");
             apeCliente.setText("");
@@ -220,6 +244,10 @@ public class ControllerFacturas {
         return listMediosPago.getSelectionModel().getSelectedItem();
     }
 
+    public TipoComprobante obtenerTipoComprobante() {
+        return listTipoComp.getSelectionModel().getSelectedItem();
+    }
+
     /** Muestra una alerta de tipo JavaFX */
     private void mostrarAlerta(AlertType tipo, String titulo, String mensaje) {
         Alert alert = new Alert(tipo);
@@ -240,7 +268,8 @@ public class ControllerFacturas {
 
     /**
      * Maneja el evento del botón Agregar.
-     * Valida los campos necesarios antes de proceder con la generación del comprobante.
+     * Valida los campos necesarios antes de proceder con la generación del
+     * comprobante.
      */
     @FXML
     private void btnAgregar() {
@@ -283,7 +312,7 @@ public class ControllerFacturas {
 
     private void generarSerie() {
         String serie;
-        
+
         // Validar si hay comprobantes existentes
         if (listComprobantes == null || listComprobantes.isEmpty()) {
             serie = "FG-1"; // Serie inicial
@@ -293,7 +322,7 @@ public class ControllerFacturas {
             Comprobante ultimoComprobante = listComprobantes.get(listComprobantes.size() - 1);
             String seriePrev = ultimoComprobante.getSerie();
             System.out.println("DEBUG: Última serie encontrada: " + seriePrev);
-            
+
             try {
                 String[] parts = seriePrev.split("-");
                 if (parts.length == 2) {
@@ -348,9 +377,9 @@ public class ControllerFacturas {
 
             // Validar stock
             if (producto.getStock() < cantidad) {
-                mostrarAlerta(AlertType.WARNING, "Stock insuficiente", 
-                    "Stock disponible: " + producto.getStock() + "\n" +
-                    "Cantidad solicitada: " + cantidad);
+                mostrarAlerta(AlertType.WARNING, "Stock insuficiente",
+                        "Stock disponible: " + producto.getStock() + "\n" +
+                                "Cantidad solicitada: " + cantidad);
                 return;
             }
 
@@ -374,10 +403,10 @@ public class ControllerFacturas {
                 listaDetalle = new ArrayList<>();
             }
 
-            System.out.println("DEBUG: Agregando detalle - Producto: " + producto.getIdProducto() + 
-                             "Cantidad: " + cantidad + 
-                             "Subtotal: " + subtotal + 
-                             "Total: " + total);
+            System.out.println("DEBUG: Agregando detalle - Producto: " + producto.getIdProducto() +
+                    "Cantidad: " + cantidad +
+                    "Subtotal: " + subtotal +
+                    "Total: " + total);
 
             listaDetalle.add(detalle);
             listDetalles.getItems().add(detalle);
@@ -390,16 +419,20 @@ public class ControllerFacturas {
         }
     }
 
-
     @FXML
-    private void btnGenerarComprobante(){
-        btnGuardarComprobante();
+    private void btnGenerarComprobante() {
+
+        if (!btnGuardarComprobante()){
+            return;
+        }
+
         System.out.println("DEBUG: Comprobante guardado, actualizando lista de comprobantes");
-        System.out.println("DEBUG: Lista de comprobantes actualizada, cantidad: " + (listComprobantes != null ? listComprobantes.size() : 0));
+        System.out.println("DEBUG: Lista de comprobantes actualizada, cantidad: "
+                + (listComprobantes != null ? listComprobantes.size() : 0));
         mostrarComprobanteEnAlerta();
 
         configurarComboProd(listProductos);
-        limpiarCampos();;
+        limpiarCampos();
     }
 
     /**
@@ -438,80 +471,159 @@ public class ControllerFacturas {
      * Guarda el comprobante actual con todos sus detalles en la base de datos.
      * Realiza validaciones necesarias antes de guardar.
      */
-    private void btnGuardarComprobante() {
-        // Validar que haya detalles para guardar
-        if (listaDetalle == null || listaDetalle.isEmpty()) {
-            mostrarAlerta(AlertType.WARNING, "Validación", "No hay productos agregados al comprobante");
-            return;
+    
+    private boolean btnGuardarComprobante() {
+        try {
+            // 1. Validar que haya detalles para guardar (primera validación para evitar trabajo innecesario)
+            if (listaDetalle == null || listaDetalle.isEmpty()) {
+                mostrarAlerta(AlertType.WARNING, "Validación", 
+                    "No hay productos agregados al comprobante.\nDebe agregar al menos un producto.");
+                return false;
+            }
+
+            // 2. Validaciones de campos obligatorios
+            if (!validarCamposObligatorios()) {
+                return false;
+            }
+
+            // 3. Validar selección de tipo de comprobante
+            TipoComprobante tipoComprobante = listTipoComp.getSelectionModel().getSelectedItem();
+            if (tipoComprobante == null) {
+                mostrarAlerta(AlertType.WARNING, "Validación", 
+                    "Debe seleccionar un tipo de comprobante.\nSeleccione una opción de la lista.");
+                listTipoComp.requestFocus();
+                return false;
+            }
+
+            // 4. Validar selección de medio de pago
+            MedioPago medioPago = listMediosPago.getSelectionModel().getSelectedItem();
+            if (medioPago == null) {
+                mostrarAlerta(AlertType.WARNING, "Validación", 
+                    "Debe seleccionar un medio de pago.\nSeleccione una opción de la lista.");
+                listMediosPago.requestFocus();
+                return false;
+            }
+
+            // 5. Validar datos del cliente
+            Cliente cliente = validarCliente();
+            if (cliente == null) {
+                return false;
+            }
+
+            Comprobante comprobante = new Comprobante();
+
+            // Generar nuevo ID de comprobante
+            comprobante.setIdComprobante(listComprobantes.stream()
+                    .mapToLong(Comprobante::getIdComprobante)
+                    .max()
+                    .orElse(0L) + 1);
+            comprobante.setFechaEmision(java.time.LocalDate.now());
+            comprobante.setSerie(txtNumSerie.getText());
+
+            //Calcular la suma de los totales de los detalles
+            BigDecimal sumaTotal = listaDetalle.stream()
+                    .map(DetalleComprobante::getTotal)
+                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+            comprobante.setTotalFinal(sumaTotal);
+
+            //Calcular la suma de los subtotales de los detalles
+            BigDecimal sumaDevengado = listaDetalle.stream()
+                    .map(DetalleComprobante::getSubtotal)
+                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+            comprobante.setDevengado(sumaDevengado);
+
+            // Usamos el cliente ya validado
+            comprobante.setDireccionEnvio(cliente.getDireccion());
+            comprobante.setIdTipoComprobante(tipoComprobante.getIdTipoComprobante());
+            comprobante.setIdMedioPago(medioPago.getIdMedioPago());
+            comprobante.setIdCliente(cliente.getIdCliente());
+            comprobante.setIdUsuario(1L);
+
+            try {
+                // Primero guardamos el comprobante
+                comprobanteService.subirComprobante(comprobante);
+                
+                // Luego guardamos cada detalle
+                for (DetalleComprobante detalle : listaDetalle) {
+                    detalle.setIdComprobante(comprobante.getIdComprobante());
+                    detalleComprobanteService.registrarDetalleComprobante(detalle);
+                }
+                
+                // Actualizamos la lista de comprobantes solo después de un guardado exitoso
+                this.listComprobantes = comprobanteService.listarComprobante();
+                System.out.println("DEBUG: Comprobante y detalles guardados correctamente");
+                return true;
+            } catch (Exception e) {
+                mostrarAlerta(AlertType.ERROR, "Error al guardar", 
+                    "No se pudo guardar el comprobante: " + e.getMessage());
+                throw e; // Re-lanzamos la excepción para que se maneje en el catch exterior
+            }
+        } catch (Exception e) {
+            System.err.println("Error en btnGuardarComprobante: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
+
+    // Mostrar Comprobantes en una alerta
+    /**
+     * Valida que todos los campos obligatorios estén completos
+     */
+    private boolean validarCamposObligatorios() {
+        StringBuilder errores = new StringBuilder();
+
+        if (txtNumSerie.getText().trim().isEmpty()) {
+            errores.append("- El número de serie es obligatorio\n");
+            txtNumSerie.requestFocus();
         }
 
-        // Validar que se haya seleccionado el tipo de comprobante
-        if (listTipoComp.getSelectionModel().getSelectedItem() == null) {
-            mostrarAlerta(AlertType.WARNING, "Validación", "Seleccione un tipo de comprobante");
-            return;
+        if (numDocumento.getText().trim().isEmpty()) {
+            errores.append("- El número de documento del cliente es obligatorio\n");
+            numDocumento.requestFocus();
         }
 
-        // Validar que se haya seleccionado el medio de pago
-        if (listMediosPago.getSelectionModel().getSelectedItem() == null) {
-            mostrarAlerta(AlertType.WARNING, "Validación", "Seleccione un medio de pago");
-            return;
+        if (errores.length() > 0) {
+            mostrarAlerta(AlertType.WARNING, "Campos obligatorios",
+                    "Por favor complete los siguientes campos:\n" + errores.toString());
+            return false;
         }
 
-        Comprobante comprobante = new Comprobante();
+        return true;
+    }
 
-        // Generar nuevo ID de comprobante
-        comprobante.setIdComprobante(listComprobantes.stream()
-                .mapToLong(Comprobante::getIdComprobante)
-                .max()
-                .orElse(0L) + 1);
-        comprobante.setFechaEmision(java.time.LocalDate.now());
-        comprobante.setSerie(txtNumSerie.getText());
-
-        //Calcular la suma de los totales de los detalles
-        BigDecimal sumaTotal = listaDetalle.stream()
-                .map(DetalleComprobante::getTotal)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-        comprobante.setTotalFinal(sumaTotal);
-
-        //Calcular la suma de los subtotales de los detalles
-        BigDecimal sumaDevengado = listaDetalle.stream()
-                .map(DetalleComprobante::getSubtotal)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-        comprobante.setDevengado(sumaDevengado);
-
-        //Obtenemos el Cliente por su numDocumento
+    /**
+     * Valida que el cliente exista y tenga los datos necesarios
+     */
+    private Cliente validarCliente() {
+        String numeroDocumento = numDocumento.getText().trim();
         Cliente cliente = listClientes.stream()
-                .filter(c -> c.getNumDocumento() != null && c.getNumDocumento().trim().equals(numDocumento.getText().trim()))
+                .filter(c -> c.getNumDocumento() != null &&
+                        c.getNumDocumento().trim().equals(numeroDocumento))
                 .findFirst()
                 .orElse(null);
 
-        comprobante.setDireccionEnvio(cliente.getDireccion());
-        comprobante.setIdTipoComprobante(listTipoComp.getSelectionModel().getSelectedItem().getIdTipoComprobante());
-        comprobante.setIdMedioPago(listMediosPago.getSelectionModel().getSelectedItem().getIdMedioPago());
-        comprobante.setIdCliente(cliente.getIdCliente());
-        comprobante.setIdUsuario(1L);
-
-        try {
-            // Primero guardamos el comprobante
-            comprobanteService.subirComprobante(comprobante);
-            this.listComprobantes = comprobanteService.listarComprobante();
-
-            // Luego guardamos cada detalle
-            for (DetalleComprobante detalle : listaDetalle) {
-                detalle.setIdComprobante(comprobante.getIdComprobante());
-                detalleComprobanteService.registrarDetalleComprobante(detalle);
-            }
-            
-            System.out.println("DEBUG: Comprobante y detalles guardados correctamente");
-        } catch (Exception e) {
-            throw new RuntimeException("Error al guardar comprobante y detalles: " + e.getMessage(), e);
+        if (cliente == null) {
+            mostrarAlerta(AlertType.WARNING, "Cliente no encontrado",
+                    "No se encontró un cliente con el número de documento: " + numeroDocumento);
+            numDocumento.requestFocus();
+            return null;
         }
+
+        if (cliente.getDireccion() == null || cliente.getDireccion().trim().isEmpty()) {
+            mostrarAlerta(AlertType.WARNING, "Datos incompletos",
+                    "El cliente no tiene una dirección registrada.\n" +
+                            "Por favor, actualice los datos del cliente antes de continuar.");
+            numDocumento.requestFocus();
+            return null;
+        }
+
+        return cliente;
     }
 
-    //Mostrar Comprobantes en una alerta
-    private void mostrarComprobanteEnAlerta(){
+    private void mostrarComprobanteEnAlerta() {
         if (listComprobantes != null && !listComprobantes.isEmpty()) {
             Comprobante c = listComprobantes.get(listComprobantes.size() - 1);
             StringBuilder comprobanteStr = new StringBuilder("Comprobante Generado:\n");

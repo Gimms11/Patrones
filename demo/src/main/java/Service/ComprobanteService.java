@@ -24,51 +24,12 @@ public class ComprobanteService {
         }
     }
 
-    public List<Comprobante> listarComprobanteHoy() {
+    public List<Comprobante> listarComprobanteFiltro(Integer index, String numDocumentoCliente, String numSerie) {
         try {
-            List<Comprobante> comprobantes = repository.filtrarComprovanteHoy();
+            List<Comprobante> comprobantes = repository.filtrarComprobantes(index, numDocumentoCliente, numSerie);
             return comprobantes != null ? comprobantes : new ArrayList<>();
         } catch (Exception e) {
             throw new RuntimeException("Error al listar comprobantes del día: " + e.getMessage(), e);
-        }
-    }
-
-    public List<Comprobante> listarComprobanteSemana() {
-        try {
-            List<Comprobante> comprobantes = repository.filtrarComprobantesSemana();
-            return comprobantes != null ? comprobantes : new ArrayList<>();
-        } catch (Exception e) {
-            throw new RuntimeException("Error al listar comprobantes de la semana: " + e.getMessage(), e);
-        }
-    }
-
-    public List<Comprobante> listarComprobanteMes() {
-        try {
-            List<Comprobante> comprobantes = repository.filtrarComprobantePorMes();
-            return comprobantes != null ? comprobantes : new ArrayList<>();
-        } catch (Exception e) {
-            throw new RuntimeException("Error al listar comprobantes del mes: " + e.getMessage(), e);
-        }
-    }
-
-    public List<Comprobante> listarComprobanteAño() {
-        try {
-            List<Comprobante> comprobantes = repository.filtrarComprobantePorAño();
-            return comprobantes != null ? comprobantes : new ArrayList<>();
-        } catch (Exception e) {
-            throw new RuntimeException("Error al listar comprobantes del año: " + e.getMessage(), e);
-        }
-    }
-
-    public List<Comprobante> listarComprobanteCliente(Long numDocumento) {
-        if (numDocumento == null) {
-            throw new IllegalArgumentException("El número de documento no puede ser nulo");
-        }
-        try {
-            List<Comprobante> comprobantes = repository.filtrarComprobantePorCliente(numDocumento);
-            return comprobantes != null ? comprobantes : new ArrayList<>();
-        } catch (Exception e) {
-            throw new RuntimeException("Error al listar comprobantes del cliente: " + e.getMessage(), e);
         }
     }
 

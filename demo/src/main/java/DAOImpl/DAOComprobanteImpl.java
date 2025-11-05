@@ -48,54 +48,6 @@ public class DAOComprobanteImpl implements DAOComprobante{
         "JOIN distrito d ON cl.iddistrito = d.iddistrito " +
         "JOIN mediopago mp ON c.idmediopago = mp.idmediopago";
 
-    private static final String SQLfiltroHoy =
-        "SELECT c.*, cl.nombres AS nombrecliente, d.nombre AS nombredistrito, " +
-        "mp.nombre AS mediopago, cl.numdocumento AS clientedocumento " +
-        "FROM comprobante c " +
-        "JOIN cliente cl ON c.idcliente = cl.idcliente " +
-        "JOIN distrito d ON cl.iddistrito = d.iddistrito " +
-        "JOIN mediopago mp ON c.idmediopago = mp.idmediopago " +
-        "WHERE DATE(c.fechaemision) = CURRENT_DATE";
-
-    private static final String SQLfiltroSemana =
-        "SELECT c.*, cl.nombres AS nombrecliente, d.nombre AS nombredistrito, " +
-        "mp.nombre AS mediopago, cl.numdocumento AS clientedocumento " +
-        "FROM comprobante c " +
-        "JOIN cliente cl ON c.idcliente = cl.idcliente " +
-        "JOIN distrito d ON cl.iddistrito = d.iddistrito " +
-        "JOIN mediopago mp ON c.idmediopago = mp.idmediopago " +
-        "WHERE c.fechaemision >= (CURRENT_DATE - INTERVAL '7 days') " +
-        "AND c.fechaemision <= CURRENT_DATE";
-
-    private static final String SQLfiltroMesInterval =
-        "SELECT c.*, cl.nombres AS nombrecliente, d.nombre AS nombredistrito, " +
-        "mp.nombre AS mediopago, cl.numdocumento AS clientedocumento " +
-        "FROM comprobante c " +
-        "JOIN cliente cl ON c.idcliente = cl.idcliente " +
-        "JOIN distrito d ON cl.iddistrito = d.iddistrito " +
-        "JOIN mediopago mp ON c.idmediopago = mp.idmediopago " +
-        "WHERE c.fechaemision >= (CURRENT_DATE - INTERVAL '1 month') " +
-        "AND c.fechaemision <= CURRENT_DATE";
-
-    private static final String SQLfiltroAño =
-        "SELECT c.*, cl.nombres AS nombrecliente, d.nombre AS nombredistrito, " +
-        "mp.nombre AS mediopago, cl.numdocumento AS clientedocumento " +
-        "FROM comprobante c " +
-        "JOIN cliente cl ON c.idcliente = cl.idcliente " +
-        "JOIN distrito d ON cl.iddistrito = d.iddistrito " +
-        "JOIN mediopago mp ON c.idmediopago = mp.idmediopago " +
-        "WHERE c.fechaemision >= (CURRENT_DATE - INTERVAL '1 year') " +
-        "AND c.fechaemision <= CURRENT_DATE";
-
-    private static final String SQLfiltroPorDNI =
-        "SELECT c.*, cl.nombres AS nombrecliente, d.nombre AS nombredistrito, " +
-        "mp.nombre AS mediopago, cl.numdocumento AS clientedocumento " +
-        "FROM comprobante c " +
-        "JOIN cliente cl ON c.idcliente = cl.idcliente " +
-        "JOIN distrito d ON cl.iddistrito = d.iddistrito " +
-        "JOIN mediopago mp ON c.idmediopago = mp.idmediopago " +
-        "WHERE cl.numdocumento = ?";
-
 
     @Override
     public void registarComprobante(Comprobante comp) {
@@ -174,83 +126,84 @@ public class DAOComprobanteImpl implements DAOComprobante{
         return co;
     }
 
-    public List<Comprobante> filtrarComprovanteHoy (){
-        List<Comprobante> comprobanteHoy= new ArrayList<>();
-        try {
-            Connection conn=ConexionBD.getInstance().getConnection();
-            PreparedStatement ps= conn.prepareStatement(SQLfiltroHoy);
-            ResultSet res=ps.executeQuery();
-            while (res.next()) {
-                comprobanteHoy.add(mapearComprobante(res));
+    @Override
+    public List<Comprobante> filtrarComprobantes(Integer tiempoIndex, String numDocumentoCliente, String numSerie) throws SQLException {
+        List<Comprobante> listaComprobantes = new ArrayList<>();
+        
+        StringBuilder sql = new StringBuilder(
+            "SELECT c.*, cl.nombres AS nombrecliente, d.nombre AS nombredistrito, " +
+            "mp.nombre AS mediopago, cl.numdocumento AS clientedocumento " +
+            "FROM comprobante c " +
+            "JOIN cliente cl ON c.idcliente = cl.idcliente " +
+            "JOIN distrito d ON cl.iddistrito = d.iddistrito " +
+            "JOIN mediopago mp ON c.idmediopago = mp.idmediopago"
+        );
+
+        List<Object> params = new ArrayList<>();
+
+        // Construir la parte WHERE de la consulta
+        if (tiempoIndex != null || numDocumentoCliente != null || numSerie != null) {
+            sql.append(" WHERE (1=0"); // Iniciamos con falso para usar OR
+
+            // Filtro por tiempo
+            if (tiempoIndex != null) {
+                sql.append(" OR (");
+                switch (tiempoIndex) {
+                    case 0: // Hoy
+                        sql.append("DATE(c.fechaemision) = CURRENT_DATE");
+                        break;
+                    case 1: // Semana
+                        sql.append("c.fechaemision >= (CURRENT_DATE - INTERVAL '7 days') " +
+                                "AND c.fechaemision <= CURRENT_DATE");
+                        break;
+                    case 2: // Mes
+                        sql.append("c.fechaemision >= (CURRENT_DATE - INTERVAL '1 month') " +
+                                "AND c.fechaemision <= CURRENT_DATE");
+                        break;
+                    case 3: // Año
+                        sql.append("c.fechaemision >= (CURRENT_DATE - INTERVAL '1 year') " +
+                                "AND c.fechaemision <= CURRENT_DATE");
+                        break;
+                }
+                sql.append(")");
             }
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Error al listar comprobantes: " + e.getMessage(), e);
-        }        return comprobanteHoy ;
-    }
-
-    public List<Comprobante> filtrarComprobantesSemana(){
-        List<Comprobante> comprobanteSemana= new ArrayList<>();
-        try {
-            Connection conn=ConexionBD.getInstance().getConnection();
-            PreparedStatement ps= conn.prepareStatement(SQLfiltroSemana);
-            ResultSet res=ps.executeQuery();
-            while (res.next()) {
-                comprobanteSemana.add(mapearComprobante(res));
+            // Filtro por número de documento del cliente
+            if (numDocumentoCliente != null && !numDocumentoCliente.trim().isEmpty()) {
+                sql.append(" OR cl.numdocumento ILIKE ?");
+                params.add("%" + numDocumentoCliente + "%");
             }
 
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Error al listar comprobantes: " + e.getMessage(), e);
-        }   
-        return comprobanteSemana;
-    }
+            // Filtro por número de serie
+            if (numSerie != null && !numSerie.trim().isEmpty()) {
+                sql.append(" OR c.numserie ILIKE ?");
+                params.add("%" + numSerie + "%");
+            }
 
-    public List<Comprobante> filtrarComprobantePorMes(){
-        List<Comprobante> comprobanteMes= new ArrayList<>();
-        try {
-            Connection conn=ConexionBD.getInstance().getConnection();
-            PreparedStatement ps= conn.prepareStatement(SQLfiltroMesInterval);
-            ResultSet res=ps.executeQuery();
-            while (res.next()) {
-                comprobanteMes.add(mapearComprobante(res));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Error al listar comprobantes: " + e.getMessage(), e);
-        } 
-        return comprobanteMes;
-    }
-    public List<Comprobante> filtrarComprobantePorAño(){
-        List<Comprobante> comprobanteAño= new ArrayList<>();
-        try {
-            Connection conn=ConexionBD.getInstance().getConnection();
-            PreparedStatement ps= conn.prepareStatement(SQLfiltroAño);
-            ResultSet res=ps.executeQuery();
-            while (res.next()) {
-                comprobanteAño.add(mapearComprobante(res));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Error al listar comprobantes: " + e.getMessage(), e);
-        } 
-        return comprobanteAño;
-    }
-    public List<Comprobante> filtrarComprobantePorCliente(Long numDocumento){
-        List<Comprobante> comprobanteCliente= new ArrayList<>();
-        try {
-            Connection conn=ConexionBD.getInstance().getConnection();
-            PreparedStatement ps= conn.prepareStatement(SQLfiltroPorDNI);
-            ps.setLong(1, numDocumento);
-            ResultSet res=ps.executeQuery();
-            while (res.next()) {
-                comprobanteCliente.add(mapearComprobante(res));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Error al listar comprobantes: " + e.getMessage(), e);
+            sql.append(")"); // Cerramos el WHERE
         }
-        return comprobanteCliente;
+
+        // Ordenar por fecha de emisión descendente
+        sql.append(" ORDER BY c.fechaemision DESC");
+
+        try (Connection conn = ConexionBD.getInstance().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql.toString())) {
+
+            // Establecer los parámetros
+            for (int i = 0; i < params.size(); i++) {
+                ps.setObject(i + 1, params.get(i));
+            }
+
+            try (ResultSet res = ps.executeQuery()) {
+                while (res.next()) {
+                    listaComprobantes.add(mapearComprobante(res));
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error al filtrar comprobantes: " + e.getMessage());
+            throw e;
+        }
+
+        return listaComprobantes;
     }
 }

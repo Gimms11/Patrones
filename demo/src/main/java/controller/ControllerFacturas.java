@@ -79,6 +79,7 @@ public class ControllerFacturas {
     private List<Comprobante> listComprobantes;
 
     private List<DetalleComprobante> listaDetalle;
+    private List<Producto> productosEnDetalle;  // Lista temporal para mantener los productos agregados
 
     // =============================================================
     // INITIALIZE
@@ -86,8 +87,9 @@ public class ControllerFacturas {
     @FXML
     public void initialize() {
         try {
-            // Generar lista vacia de detalles
+            // Generar listas vacias
             listaDetalle = new ArrayList<>();
+            productosEnDetalle = new ArrayList<>();
 
             // Inyección manual de servicios
             this.productoService = new ProductoService();
@@ -131,8 +133,15 @@ public class ControllerFacturas {
     /** Configurar la tabla y las columnas de la tabla */
     private void configurarTabla() {
         // Configurar columnas de la tabla
-        colNameProducto.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(
-                obtenerProductoSeleccionado().getNombre()));
+        colNameProducto.setCellValueFactory(data -> {
+            long idProducto = data.getValue().getIdProducto();
+            return new javafx.beans.property.SimpleStringProperty(
+                productosEnDetalle.stream()
+                    .filter(p -> p.getIdProducto() == idProducto)
+                    .map(Producto::getNombre)
+                    .findFirst()
+                    .orElse(""));
+        });
         colCantidad.setCellValueFactory(data -> new javafx.beans.property.SimpleIntegerProperty(
                 data.getValue().getCantidadProductos()).asObject());
         colPrecioUnit.setCellValueFactory(data -> new javafx.beans.property.SimpleObjectProperty<>(
@@ -408,6 +417,11 @@ public class ControllerFacturas {
                     "Subtotal: " + subtotal +
                     "Total: " + total);
 
+            // Agregar el producto a la lista temporal si no existe
+            if (!productosEnDetalle.contains(producto)) {
+                productosEnDetalle.add(producto);
+            }
+
             listaDetalle.add(detalle);
             listDetalles.getItems().add(detalle);
             listDetalles.refresh();
@@ -460,8 +474,9 @@ public class ControllerFacturas {
         limpiarCombo(listMediosPago);
         limpiarCombo(listTipoComp);
 
-        // Reiniciar lista de detalles
+        // Reiniciar listas
         listaDetalle = new ArrayList<>();
+        productosEnDetalle.clear();
 
         // Reiniciar Tabla de detalles
         listDetalles.getItems().clear();

@@ -146,7 +146,7 @@ public class DAOComprobanteImpl implements DAOComprobante{
         if (tiempoIndex != null && tiempoIndex >= 0 && tiempoIndex <= 3) {
             switch (tiempoIndex) {
                 case 0: // Hoy
-                    conditions.add("DATE(c.fechaemision) = CURRENT_DATE");
+                    conditions.add("c.fechaemision >= (CURRENT_DATE - INTERVAL '1 days') AND c.fechaemision <= CURRENT_DATE");
                     break;
                 case 1: // Semana
                     conditions.add("c.fechaemision >= (CURRENT_DATE - INTERVAL '7 days') AND c.fechaemision <= CURRENT_DATE");

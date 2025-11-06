@@ -140,47 +140,41 @@ public class DAOComprobanteImpl implements DAOComprobante{
         );
 
         List<Object> params = new ArrayList<>();
+        List<String> conditions = new ArrayList<>();
 
-        // Construir la parte WHERE de la consulta
-        if (tiempoIndex != null || numDocumentoCliente != null || numSerie != null) {
-            sql.append(" WHERE (1=0"); // Iniciamos con falso para usar OR
-
-            // Filtro por tiempo
-            if (tiempoIndex != null) {
-                sql.append(" OR (");
-                switch (tiempoIndex) {
-                    case 0: // Hoy
-                        sql.append("DATE(c.fechaemision) = CURRENT_DATE");
-                        break;
-                    case 1: // Semana
-                        sql.append("c.fechaemision >= (CURRENT_DATE - INTERVAL '7 days') " +
-                                "AND c.fechaemision <= CURRENT_DATE");
-                        break;
-                    case 2: // Mes
-                        sql.append("c.fechaemision >= (CURRENT_DATE - INTERVAL '1 month') " +
-                                "AND c.fechaemision <= CURRENT_DATE");
-                        break;
-                    case 3: // Año
-                        sql.append("c.fechaemision >= (CURRENT_DATE - INTERVAL '1 year') " +
-                                "AND c.fechaemision <= CURRENT_DATE");
-                        break;
-                }
-                sql.append(")");
+        // Filtro por tiempo
+        if (tiempoIndex != null && tiempoIndex >= 0 && tiempoIndex <= 3) {
+            switch (tiempoIndex) {
+                case 0: // Hoy
+                    conditions.add("DATE(c.fechaemision) = CURRENT_DATE");
+                    break;
+                case 1: // Semana
+                    conditions.add("c.fechaemision >= (CURRENT_DATE - INTERVAL '7 days') AND c.fechaemision <= CURRENT_DATE");
+                    break;
+                case 2: // Mes
+                    conditions.add("c.fechaemision >= (CURRENT_DATE - INTERVAL '1 month') AND c.fechaemision <= CURRENT_DATE");
+                    break;
+                case 3: // Año
+                    conditions.add("c.fechaemision >= (CURRENT_DATE - INTERVAL '1 year') AND c.fechaemision <= CURRENT_DATE");
+                    break;
             }
+        }
 
-            // Filtro por número de documento del cliente
-            if (numDocumentoCliente != null && !numDocumentoCliente.trim().isEmpty()) {
-                sql.append(" OR cl.numdocumento ILIKE ?");
-                params.add("%" + numDocumentoCliente + "%");
-            }
+        // Filtro por número de documento del cliente
+        if (numDocumentoCliente != null && !numDocumentoCliente.trim().isEmpty()) {
+            conditions.add("cl.numdocumento ILIKE ?");
+            params.add("%" + numDocumentoCliente + "%");
+        }
 
-            // Filtro por número de serie
-            if (numSerie != null && !numSerie.trim().isEmpty()) {
-                sql.append(" OR c.numserie ILIKE ?");
-                params.add("%" + numSerie + "%");
-            }
+        // Filtro por número de serie
+        if (numSerie != null && !numSerie.trim().isEmpty()) {
+            conditions.add("c.numserie = ?");
+            params.add(numSerie);
+        }
 
-            sql.append(")"); // Cerramos el WHERE
+        // Agregar condiciones WHERE si hay alguna
+        if (!conditions.isEmpty()) {
+            sql.append(" WHERE ").append(String.join(" AND ", conditions));
         }
 
         // Ordenar por fecha de emisión descendente

@@ -52,7 +52,7 @@
                            <children>
                               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="25.0">
                                  <children>
-                                    <ComboBox fx:id="listDepartamento" prefWidth="150.0" promptText="Periodo" styleClass="boxIn" />
+                                    <ComboBox fx:id="listPeriodo" prefWidth="150.0" promptText="Periodo" styleClass="boxIn" />
                                  </children>
                               </HBox>
                            </children>
@@ -61,7 +61,7 @@
                            <children>
                               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                                  <children>
-                                    <TextField fx:id="txtNombres" promptText="N° Factura" styleClass="textIn" />
+                                    <TextField fx:id="txtFactura" promptText="N° Factura" styleClass="textIn" />
                                  </children>
                               </HBox>
                            </children>
@@ -70,7 +70,7 @@
                            <children>
                               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="25.0">
                                  <children>
-                                    <TextField fx:id="txtCorreo" promptText="N° Documento" styleClass="textIn" />
+                                    <TextField fx:id="txtDocumento" promptText="N° Documento" styleClass="textIn" />
                                  </children>
                               </HBox>
                            </children>
@@ -82,7 +82,7 @@
                            <children>
                               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="25.0">
                                  <children>
-                                    <Button mnemonicParsing="false" styleClass="buttonIn" text="Aceptar" />
+                                    <Button mnemonicParsing="false" onAction="#filtrarComprobantes" styleClass="buttonIn" text="Aceptar" />
                                  </children>
                               </HBox>
                            </children>

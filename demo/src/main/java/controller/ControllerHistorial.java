@@ -25,7 +25,9 @@ public class ControllerHistorial {
     @FXML private TableColumn<Comprobante, String> col_totalFinal;
 
     // === CAMPOS DE FILTRO ===
-    @FXML private TextField txtNumeroDoc;
+    @FXML private ComboBox<String> listPeriodo;
+    @FXML private TextField txtFactura;
+    @FXML private TextField txtDocumento;
 
     // === SERVICIOS ===
     private ComprobanteService comprobanteService;
@@ -35,6 +37,9 @@ public class ControllerHistorial {
         try {
             // Inicialización de servicios
             this.comprobanteService = new ComprobanteService();
+
+            // Configurar el listener para txtFactura
+            configurarListeners();
 
             // Configuración de la tabla
             configurarTabla();
@@ -49,7 +54,31 @@ public class ControllerHistorial {
         }
     }
 
+    private void configurarListeners() {
+        // Listener para el campo de número de factura
+        txtFactura.textProperty().addListener((observable, oldValue, newValue) -> {
+            boolean hasSerieFilter = newValue != null && !newValue.trim().isEmpty();
+            
+            // Deshabilitar/habilitar controles según el contenido de txtFactura
+            listPeriodo.setDisable(hasSerieFilter);
+            txtDocumento.setDisable(hasSerieFilter);
+            
+            // Limpiar controles si txtFactura tiene contenido
+            if (hasSerieFilter) {
+                listPeriodo.getSelectionModel().clearSelection();
+                txtDocumento.clear();
+            } else {
+                // Cuando se limpia txtFactura, habilitar los otros controles
+                listPeriodo.setDisable(false);
+                txtDocumento.setDisable(false);
+            }
+        });
+    }
+
     private void configurarTabla() {
+        //Añadir Ninguno, hoy, hace una semana, hace un mes, hace un año a listPeriodo
+        listPeriodo.getItems().addAll("hoy", "una semana", "un mes", "un año", "ninguno");
+
         // Configurar columna Serie
         col_serie.setCellValueFactory(cellData -> {
             if (cellData.getValue() == null) return new SimpleStringProperty("");
@@ -142,6 +171,41 @@ public class ControllerHistorial {
     public void cargarDatosTabla() {
         try {
             List<Comprobante> comprobantes = comprobanteService.listarComprobante();
+            cargarDatosTabla(comprobantes);
+        } catch (Exception e) {
+            mostrarError("Error al cargar datos", 
+                        "No se pudieron cargar los comprobantes.", 
+                        e.getMessage());
+        }
+    }
+
+    // === MÉTODO DE FILTRO ===
+    @FXML
+    private void filtrarComprobantes() {
+        // 1. Obtener valores de los filtros
+        Integer periodoSelect = null;
+        if (listPeriodo != null && !listPeriodo.getSelectionModel().isEmpty()) {
+            int selectedIndex = listPeriodo.getSelectionModel().getSelectedIndex();
+            // Si se selecciona "ninguno" (índice 4), dejamos periodoSelect como null
+            if (selectedIndex != 4) {
+                periodoSelect = selectedIndex;
+            }
+        }
+
+        // 2. Obtener NumFactura y numDocumento
+        String numFactura = txtFactura.getText().trim();
+        String numDocumento = txtDocumento.getText().trim();
+
+        try {
+            // Solo enviar valores si no están vacíos
+            String docFiltro = numDocumento.isEmpty() ? null : numDocumento;
+            String serieFiltro = numFactura.isEmpty() ? null : numFactura;
+            
+            List<Comprobante> comprobantes = comprobanteService.listarComprobanteFiltro(
+                periodoSelect, // Ya es Integer, no necesita casting
+                docFiltro,    // Filtro por número de documento del cliente
+                serieFiltro   // Filtro por número de serie/factura
+            );
             cargarDatosTabla(comprobantes);
         } catch (Exception e) {
             mostrarError("Error al cargar datos", 

@@ -65,12 +65,25 @@ public class ControllerHistorial {
             
             // Limpiar controles si txtFactura tiene contenido
             if (hasSerieFilter) {
-                listPeriodo.getSelectionModel().clearSelection();
+                limpiarCombo(listPeriodo);
                 txtDocumento.clear();
             } else {
                 // Cuando se limpia txtFactura, habilitar los otros controles
                 listPeriodo.setDisable(false);
                 txtDocumento.setDisable(false);
+            }
+        });
+    }
+
+    private <T> void limpiarCombo(ComboBox<T> comboBox) {
+        comboBox.getSelectionModel().clearSelection();
+        comboBox.setValue(null);
+
+        comboBox.setButtonCell(new javafx.scene.control.ListCell<T>() {
+            @Override
+            protected void updateItem(T item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty ? comboBox.getPromptText() : item.toString());
             }
         });
     }
@@ -172,6 +185,7 @@ public class ControllerHistorial {
         try {
             List<Comprobante> comprobantes = comprobanteService.listarComprobante();
             cargarDatosTabla(comprobantes);
+            actualizarResumenVentas();
         } catch (Exception e) {
             mostrarError("Error al cargar datos", 
                         "No se pudieron cargar los comprobantes.", 
@@ -207,11 +221,51 @@ public class ControllerHistorial {
                 serieFiltro   // Filtro por número de serie/factura
             );
             cargarDatosTabla(comprobantes);
+            actualizarResumenVentas();
         } catch (Exception e) {
             mostrarError("Error al cargar datos", 
                         "No se pudieron cargar los comprobantes.", 
                         e.getMessage());
         }
+    }
+
+    // === MÉTODOS DE PARA SACAR DATOS DE LISTA ===
+    @FXML private Label txtCantVentas;
+    @FXML private Label txtTotalVentas;
+    @FXML private Label txtTotalImpuestos;
+    @FXML private Label txtTotalFinal;
+
+    private void actualizarResumenVentas() {
+        List<Comprobante> comprobantes = tablaComprobantes.getItems();
+        if (comprobantes == null || comprobantes.isEmpty()) {
+            txtCantVentas.setText("0");
+            txtTotalVentas.setText("S/ 0.00");
+            txtTotalImpuestos.setText("S/ 0.00");
+            txtTotalFinal.setText("S/ 0.00");
+            return;
+        }
+
+        int cantidadVentas = comprobantes.size();
+        double totalVentas = 0.0;
+        double totalImpuestos = 0.0;
+        double totalFinal = 0.0;
+
+        for (Comprobante c : comprobantes) {
+            if (c.getDevengado() != null) {
+                totalVentas += c.getDevengado().doubleValue();
+            }
+            if (c.getTotalFinal() != null || c.getDevengado() != null) {
+                totalImpuestos += c.getTotalFinal().doubleValue() - c.getDevengado().doubleValue();
+            }
+            if (c.getTotalFinal() != null) {
+                totalFinal += c.getTotalFinal().doubleValue();
+            }
+        }
+
+        txtCantVentas.setText(String.valueOf(cantidadVentas));
+        txtTotalVentas.setText(String.format("S/ %.2f", totalVentas));
+        txtTotalImpuestos.setText(String.format("S/ %.2f", totalImpuestos));
+        txtTotalFinal.setText(String.format("S/ %.2f", totalFinal));
     }
 
     // === MÉTODOS DE ALERTA ===

@@ -53,7 +53,7 @@ public class ControllerFacturas {
     private TableView<DetalleComprobante> listDetalles;
 
     @FXML
-    private TableColumn<DetalleComprobante, Long> colIdProducto;
+    private TableColumn<DetalleComprobante, String> colNameProducto;
     @FXML
     private TableColumn<DetalleComprobante, Integer> colCantidad;
     @FXML
@@ -131,8 +131,8 @@ public class ControllerFacturas {
     /** Configurar la tabla y las columnas de la tabla */
     private void configurarTabla() {
         // Configurar columnas de la tabla
-        colIdProducto.setCellValueFactory(data -> new javafx.beans.property.SimpleLongProperty(
-                data.getValue().getIdProducto()).asObject());
+        colNameProducto.setCellValueFactory(data -> new javafx.beans.property.SimpleStringProperty(
+                obtenerProductoSeleccionado().getNombre()));
         colCantidad.setCellValueFactory(data -> new javafx.beans.property.SimpleIntegerProperty(
                 data.getValue().getCantidadProductos()).asObject());
         colPrecioUnit.setCellValueFactory(data -> new javafx.beans.property.SimpleObjectProperty<>(
@@ -440,7 +440,7 @@ public class ControllerFacturas {
      */
     private void limpiarCampos() {
         // Limpiar campos de producto
-        listProductos.getSelectionModel().clearSelection();
+        limpiarCombo(listProductos);
         prodPrecio.clear();
         prodStock.clear();
         prodCat.clear();
@@ -457,14 +457,27 @@ public class ControllerFacturas {
         // Limpiar campos de comprobante
         txtNumSerie.clear();
         txtFechaEmision.clear();
-        listMediosPago.getSelectionModel().clearSelection();
-        listTipoComp.getSelectionModel().clearSelection();
+        limpiarCombo(listMediosPago);
+        limpiarCombo(listTipoComp);
 
         // Reiniciar lista de detalles
         listaDetalle = new ArrayList<>();
 
         // Reiniciar Tabla de detalles
         listDetalles.getItems().clear();
+    }
+
+    private <T> void limpiarCombo(ComboBox<T> comboBox) {
+        comboBox.getSelectionModel().clearSelection();
+        comboBox.setValue(null);
+
+        comboBox.setButtonCell(new javafx.scene.control.ListCell<T>() {
+            @Override
+            protected void updateItem(T item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty ? comboBox.getPromptText() : item.toString());
+            }
+        });
     }
 
     /**

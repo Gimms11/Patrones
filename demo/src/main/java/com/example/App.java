@@ -10,6 +10,11 @@ import javafx.scene.text.Font;
 
 import java.io.IOException;
 
+import DTO.Empresa;
+import DTO.Usuario;
+import Lectores.LectorEmpresa;
+import Lectores.LectorSesion;
+
 /**
  * JavaFX App
  */
@@ -33,6 +38,14 @@ public class App extends Application {
         stage.setTitle("Sistema de Facturación");
         stage.setScene(scene);
         stage.show();
+
+        LectorEmpresa lector = new LectorEmpresa();
+        Empresa emp = lector.leerArchivoJson(null);
+        System.out.println("Empresa cargada: " + emp.getNombre() + ", RUC: " + emp.getRuc());
+
+        LectorSesion lectorSesion = new LectorSesion();
+        Usuario lec =lectorSesion.leerArchivoJson(null);
+        System.out.println("Usuario cargado: " + lec.getUsername() + ", Rol: " + lec.getRol());
     }
 
     static void setRoot(String fxml) throws IOException {

@@ -20,7 +20,12 @@ public class DAOClienteImpl implements DAOCliente {
 
     private static final String SQL_DELETE = "DELETE FROM cliente WHERE idcliente = ?";
 
-    private static final String SQL_SELECT_BY_ID = "SELECT * FROM cliente WHERE idcliente = ?";
+    private static final String SQL_SELECT_BY_ID = "SELECT c.*, d.nombre AS nombreDistrito, t.nombre AS nombreTipoDocumento "
+            +
+            "FROM cliente c " +
+            "INNER JOIN distrito d ON d.iddistrito = c.iddistrito " +
+            "INNER JOIN tipodocumento t ON t.iddocumento = c.iddocumento" +
+            " WHERE c.idcliente = ?";
 
     private static final String SQL_SELECT_ALL = "SELECT c.*, d.nombre AS nombreDistrito, t.nombre AS nombreTipoDocumento "
             +

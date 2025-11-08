@@ -17,8 +17,11 @@ public class DAODetalleComprobanteImpl implements DAODetalleComprobante {
         "INSERT INTO detallecomprobante (iddetalle, cantproductos, preciounitario, subtotal, total, idcomprobante, idproducto) " +
         "VALUES ((SELECT COALESCE(MAX(iddetalle), 0) + 1 FROM detallecomprobante), ?, ?, ?, ?, ?, ?)";
     private static final String SQLeliminar = "DELETE FROM detallecomprobante WHERE iddetalle = ?";
-    private static final String SQLlista = "SELECT * FROM detallecomprobante";
-    private static final String SQLlistaPorComprobante = "SELECT * FROM detallecomprobante WHERE idcomprobante = ?";
+    private static final String SQLlista = "SELECT c.*,p.nombre AS nombreProducto FROM detallecomprobante "+
+            "  JOIN producto p ON detallecomprobante.idproducto = p.idproducto;";
+    private static final String SQLlistaPorComprobante = "SELECT c.*,p.nombre AS nombreProducto FROM detallecomprobante c\n" + //
+                "  JOIN producto p ON c.idproducto = p.idproducto\n" + //
+                "  WHERE idcomprobante = ?;";
 
     @Override
     public void registrarDetalleComprobante(DetalleComprobante detalle) {
@@ -93,6 +96,7 @@ public class DAODetalleComprobanteImpl implements DAODetalleComprobante {
         detalle.setTotal(rs.getBigDecimal("total"));
         detalle.setIdComprobante(rs.getLong("idcomprobante"));
         detalle.setIdProducto(rs.getLong("idproducto"));
+        detalle.setNombreProducto(rs.getString("nombreProducto"));
         return detalle;
     }
 }

@@ -4,6 +4,8 @@ module com.example {
     requires java.sql;
     requires javafx.graphics;
     requires javafx.web;
+    requires itextpdf;
+    
 
     opens controller to javafx.fxml;
     exports controller;

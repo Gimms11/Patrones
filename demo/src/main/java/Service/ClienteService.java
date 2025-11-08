@@ -32,4 +32,8 @@ public class ClienteService {
             throw new RuntimeException("Error al obtener Clientes: " + e.getMessage());
         }
     }
+
+    public Cliente obtenerPorId(Long id) {
+        return repository.buscarCliente(id);
+    }
 }

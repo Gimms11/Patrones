@@ -5,7 +5,7 @@ import java.util.List;
 import DTO.Cliente;
 
 public interface DAOCliente {
-    void registrarCliente(Cliente cliente);
+    void registrarCliente(Cliente cliente) throws SQLException;
     void actualizarCliente(Cliente cliente);
     void eliminarCliente(Cliente cliente);
     Cliente buscarCliente(Long idCliente);

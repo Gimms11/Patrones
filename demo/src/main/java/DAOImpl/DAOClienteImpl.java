@@ -34,7 +34,7 @@ public class DAOClienteImpl implements DAOCliente {
             "INNER JOIN tipodocumento t ON t.iddocumento = c.iddocumento";
 
     @Override
-    public void registrarCliente(Cliente cliente) {
+    public void registrarCliente(Cliente cliente) throws SQLException {
         try (Connection conn = ConexionBD.getInstance().getConnection();
                 PreparedStatement ps = conn.prepareStatement(SQL_INSERT)) {
 
@@ -46,10 +46,39 @@ public class DAOClienteImpl implements DAOCliente {
             ps.setString(6, cliente.getNumDocumento());
             ps.setLong(7, cliente.getIdDistrito());
             ps.setLong(8, cliente.getIdDocumento());
-            ps.executeUpdate();
+            
+            try {
+                ps.executeUpdate();
+            } catch (SQLException e) {
+                // Verificar si es un error de duplicación
+                if (e.getSQLState().equals("23505")) { // Código PostgreSQL para unique_violation
+                    // Verificar qué campo único fue violado
+                    if (e.getMessage().contains("numdocumento")) {
+                        throw new SQLException(String.format(
+                            "El número de documento\n'%s'\nya está registrado en el\nsistema.",
+                            cliente.getNumDocumento()));
+                    } else if (e.getMessage().contains("correo")) {
+                        throw new SQLException(String.format(
+                            "El correo electrónico\n'%s'\nya está en uso.",
+                            cliente.getCorreo()));
+                    } else if (e.getMessage().contains("telefono")) {
+                        throw new SQLException(String.format(
+                            "El número de teléfono\n'%s'\nya está registrado.",
+                            cliente.getTelefono()));
+                    } else {
+                        throw new SQLException(
+                            "Los datos ingresados ya\n" +
+                            "existen para otro cliente\n" +
+                            "en el sistema.");
+                    }
+                }
+                // Si es otro tipo de error, lo propagamos
+                throw e;
+            }
 
         } catch (SQLException e) {
             System.err.println("Error al registrar cliente: " + e.getMessage());
+            throw e; // Propagar el error para que la capa superior pueda manejarlo
         }
     }
 

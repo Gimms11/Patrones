@@ -262,7 +262,7 @@
                                           </HBox>
                                           <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                                              <children>
-                                                <ComboBox fx:id="listTipoComp" prefWidth="150.0" promptText="Comprobante" styleClass="boxIn" />
+                                                <TextField fx:id="txtComprobante" editable="false" promptText="Tipo Comprobante" styleClass="textIn" />
                                              </children>
                                           </HBox>
                                        </children>

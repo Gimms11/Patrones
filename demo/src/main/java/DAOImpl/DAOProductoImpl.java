@@ -81,7 +81,7 @@ public class DAOProductoImpl implements DAOProducto {
     }
 
     @Override
-    public void registarProducto(Producto produc) {
+    public void registarProducto(Producto produc) throws SQLException {
         try (Connection conn = ConexionBD.getInstance().getConnection();
              PreparedStatement ps = conn.prepareStatement(SQLregistrar)) {
 
@@ -92,11 +92,23 @@ public class DAOProductoImpl implements DAOProducto {
             ps.setString(5, produc.getUnidadMedida());
             ps.setLong(6, produc.getIdTipoAfectacion());
             ps.setLong(7, produc.getIdCategoria());
-            ps.executeUpdate();
+            
+            try {
+                ps.executeUpdate();
+            } catch (SQLException e) {
+                // Verificar si es un error de duplicación (código PostgreSQL para unique_violation)
+                if (e.getSQLState().equals("23505")) {
+                    String mensajeError = "Ya existe un producto con el\n" +
+                                        "nombre '" + produc.getNombre() + "'.\n" +
+                                        "Por favor, elija otro nombre.";
+                    throw new SQLException(mensajeError);
+                }
+                throw e;
+            }
 
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Error al registrar producto: " + e.getMessage());
+            System.err.println("Error al registrar producto: " + e.getMessage());
+            throw e; // Propagar el error para que la capa superior pueda manejarlo
         }
     }
 

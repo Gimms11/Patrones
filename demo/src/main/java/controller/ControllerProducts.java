@@ -334,13 +334,28 @@ public class ControllerProducts {
                 mostrarAlerta(AlertType.WARNING, "Datos incorrectos", "El nombre del producto es obligatorio.");
                 return;
             }
-
+            // Validaciones
+            if (txtStock.getText().isEmpty()) {
+                mostrarAlerta(AlertType.WARNING, "Datos incorrectos", "El nombre del producto es obligatorio.");
+                return;
+            }
+            // Validaciones
+            if (txtUnidad.getText().isEmpty()) {
+                mostrarAlerta(AlertType.WARNING, "Datos incorrectos", "El nombre del producto es obligatorio.");
+                return;
+            }
+            // Validaciones
+            if (txtDesc.getText().isEmpty()) {
+                mostrarAlerta(AlertType.WARNING, "Datos incorrectos", "El nombre del producto es obligatorio.");
+                return;
+            }
+            // Validaciones
             String precioText = txtPrecio.getText();
             if (precioText.isEmpty()) {
                 mostrarAlerta(AlertType.WARNING, "Datos incorrectos", "El precio es obligatorio.");
                 return;
             }
-
+            // Validaciones
             BigDecimal precio;
             try {
                 precio = new BigDecimal(precioText);

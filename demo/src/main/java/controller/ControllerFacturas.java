@@ -19,8 +19,6 @@ public class ControllerFacturas {
     private ComboBox<Producto> listProductos;
     @FXML
     private ComboBox<MedioPago> listMediosPago;
-    @FXML
-    private ComboBox<TipoComprobante> listTipoComp;
 
     @FXML
     private TextField prodPrecio;
@@ -48,6 +46,8 @@ public class ControllerFacturas {
     private TextField txtCantidad;
     @FXML
     private TextField txtFechaEmision;
+    @FXML
+    private TextField txtComprobante;
 
     @FXML
     private TableView<DetalleComprobante> listDetalles;
@@ -77,6 +77,8 @@ public class ControllerFacturas {
     private List<CategoriaProductos> listCategoriaProductos;
     private List<Cliente> listClientes;
     private List<Comprobante> listComprobantes;
+    private List<TipoComprobante> listTipoComprobantes;
+    private TipoComprobante tipocomprobanteActual;
 
     private List<DetalleComprobante> listaDetalle;
     private List<Producto> productosEnDetalle;  // Lista temporal para mantener los productos agregados
@@ -106,11 +108,11 @@ public class ControllerFacturas {
             this.listCategoriaProductos = categoriaService.listarCategorias();
             this.listClientes = clienteService.obtenerTodos();
             this.listComprobantes = comprobanteService.listarComprobante();
+            this.listTipoComprobantes = tipoComprobanteService.listarTipoComprobantes();
 
             // Configurar combos
             configurarComboProd(listProductos);
             configurarComboMedioPago(listMediosPago);
-            configurarComboTipoComprobante(listTipoComp);
             configurarTabla();
 
             // Listener para el producto seleccionado
@@ -167,12 +169,6 @@ public class ControllerFacturas {
         combo.setItems(FXCollections.observableArrayList(tipos));
     }
 
-    /** Configura el ComboBox de Tipos de Comprobantes */
-    private void configurarComboTipoComprobante(ComboBox<TipoComprobante> combo) {
-        var tipos = tipoComprobanteService.listarTipoComprobantes();
-        combo.setItems(FXCollections.observableArrayList(tipos));
-    }
-
     // =============================================================
     // EVENTOS DE INTERFAZ
     // =============================================================
@@ -202,6 +198,13 @@ public class ControllerFacturas {
     /** Busca un cliente por número de documento */
     @FXML
     private void buscarCliente() {
+        // Si ya hay un comprobante en proceso, no permitir buscar otro cliente
+        if (!listDetalles.getItems().isEmpty()) {
+            mostrarAlerta(AlertType.WARNING, "Operación no permitida", 
+                "Ya hay un comprobante en proceso. Complete la generación del comprobante actual.");
+            return;
+        }
+
         String numDoc = numDocumento.getText();
 
         // Validación básica
@@ -225,6 +228,22 @@ public class ControllerFacturas {
         if (cliente != null) {
             nomCliente.setText(cliente.getNombres());
             apeCliente.setText(cliente.getApellidos());
+            
+            // Configurar tipos de comprobante según el tipo de documento
+            if (cliente.getIdDocumento() == 1) { // DNI
+                // Filtrar solo Boletas
+                tipocomprobanteActual = listTipoComprobantes.get(1);
+                txtComprobante.setText(tipocomprobanteActual.getNombreTipo());
+
+            } else if (cliente.getIdDocumento() == 2) { // RUC
+                // Filtrar solo Facturas
+                tipocomprobanteActual = listTipoComprobantes.get(0); 
+                txtComprobante.setText(tipocomprobanteActual.getNombreTipo());
+            }
+
+            // Deshabilitar los campos de búsqueda una vez encontrado el cliente
+            numDocumento.setDisable(true);
+            
             mostrarAlerta(AlertType.INFORMATION, "Cliente encontrado",
                     "Cliente: " + nomCliente.getText() + " " + apeCliente.getText());
         } else {
@@ -251,10 +270,6 @@ public class ControllerFacturas {
 
     public MedioPago obtenerMedioPagoSeleccionado() {
         return listMediosPago.getSelectionModel().getSelectedItem();
-    }
-
-    public TipoComprobante obtenerTipoComprobante() {
-        return listTipoComp.getSelectionModel().getSelectedItem();
     }
 
     /** Muestra una alerta de tipo JavaFX */
@@ -462,7 +477,10 @@ public class ControllerFacturas {
         prodUnidad.clear();
         prodImp.clear();
         txtCantidad.clear();
+        txtComprobante.clear();
 
+        // Habilitar y limpiar campos de cliente
+        numDocumento.setDisable(false);  // Habilitar nuevamente la búsqueda
         // Limpiar campos de cliente
         numDocumento.clear();
         nomCliente.clear();
@@ -472,7 +490,6 @@ public class ControllerFacturas {
         txtNumSerie.clear();
         txtFechaEmision.clear();
         limpiarCombo(listMediosPago);
-        limpiarCombo(listTipoComp);
 
         // Reiniciar listas
         listaDetalle = new ArrayList<>();
@@ -515,11 +532,9 @@ public class ControllerFacturas {
             }
 
             // 3. Validar selección de tipo de comprobante
-            TipoComprobante tipoComprobante = listTipoComp.getSelectionModel().getSelectedItem();
-            if (tipoComprobante == null) {
+            if (txtComprobante.getText() == null || txtComprobante.getText().trim().isEmpty()) {
                 mostrarAlerta(AlertType.WARNING, "Validación", 
-                    "Debe seleccionar un tipo de comprobante.\nSeleccione una opción de la lista.");
-                listTipoComp.requestFocus();
+                    "Debe seleccionar un tipo de comprobante.");
                 return false;
             }
 
@@ -564,7 +579,7 @@ public class ControllerFacturas {
 
             // Usamos el cliente ya validado
             comprobante.setDireccionEnvio(cliente.getDireccion());
-            comprobante.setIdTipoComprobante(tipoComprobante.getIdTipoComprobante());
+            comprobante.setIdTipoComprobante(tipocomprobanteActual.getIdTipoComprobante());
             comprobante.setIdMedioPago(medioPago.getIdMedioPago());
             comprobante.setIdCliente(cliente.getIdCliente());
             comprobante.setIdUsuario(1L);

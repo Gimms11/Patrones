@@ -1,5 +1,6 @@
 package service;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import DTO.Producto;
@@ -24,12 +25,23 @@ public class ProductoService {
         }
     }
 
-    public void registrarProducto(Producto produc) {
+    public void registrarProducto(Producto produc) throws RuntimeException {
         try {
             repository.registarProducto(produc);
+        } catch (SQLException e) {
+            // El mensaje de error ya viene formateado del DAO
+            String mensajeError = "Error al registrar producto:\n" + e.getMessage();
+            // Dividir el mensaje en líneas más cortas si es necesario
+            if (mensajeError.length() > 50) {
+                mensajeError = mensajeError.replaceAll("(.{45,}?)\\s", "$1\n");
+            }
+            throw new RuntimeException(mensajeError);
         } catch (Exception e) {
             e.printStackTrace();
-            throw new RuntimeException("Error al registrar producto: " + e.getMessage());
+            String mensajeError = "Error inesperado al registrar\n" +
+                                "el producto. Por favor,\n" +
+                                "intente nuevamente.";
+            throw new RuntimeException(mensajeError);
         }
     }
     

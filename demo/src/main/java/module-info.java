@@ -5,6 +5,7 @@ module com.example {
     requires javafx.graphics;
     requires javafx.web;
     requires itextpdf;
+    requires java.desktop;
     
 
     opens controller to javafx.fxml;

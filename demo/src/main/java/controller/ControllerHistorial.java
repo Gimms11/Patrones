@@ -10,6 +10,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.beans.property.SimpleStringProperty;
 import service.ComprobanteService;
+import service.genPDFService;
 
 public class ControllerHistorial {
     
@@ -225,6 +226,28 @@ public class ControllerHistorial {
         } catch (Exception e) {
             mostrarError("Error al cargar datos", 
                         "No se pudieron cargar los comprobantes.", 
+                        e.getMessage());
+        }
+    }
+
+    // === MÉTODO PARA GENERAR PDF ===
+
+    @FXML
+    private void generarPDFComprobante() {
+        Comprobante comprobanteSeleccionado = tablaComprobantes.getSelectionModel().getSelectedItem();
+        if (comprobanteSeleccionado == null) {
+            mostrarAdvertencia("Selección requerida", "Por favor, seleccione un comprobante para generar el PDF.");
+            return;
+        }
+
+        try {
+            genPDFService gen = new genPDFService();
+            gen.generarPDF(comprobanteSeleccionado);
+
+            mostrarInfo("PDF generado", "El PDF del comprobante ha sido generado exitosamente.");
+        } catch (Exception e) {
+            mostrarError("Error al generar PDF", 
+                        "No se pudo generar el PDF del comprobante.", 
                         e.getMessage());
         }
     }

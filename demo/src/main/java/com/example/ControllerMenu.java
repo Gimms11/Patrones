@@ -1,10 +1,34 @@
 package com.example;
 
 import java.io.IOException;
+import java.util.ResourceBundle;
+
+import org.kordamp.ikonli.javafx.FontIcon;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Tooltip;
 
 public class ControllerMenu {
+    @FXML private FontIcon das;
+    @FXML private FontIcon agr1;
+    @FXML private FontIcon agr2;
+    @FXML private FontIcon agr3;
+    @FXML private FontIcon historial;
+
+
+    @FXML
+    public void initialize() {
+        Tooltip tooltip = new Tooltip("Dashboard");
+        Tooltip.install(das, tooltip);
+        tooltip = new Tooltip("Generar Comprobantes");
+        Tooltip.install(agr1, tooltip);
+        tooltip = new Tooltip("Agregar Clientes");
+        Tooltip.install(agr2, tooltip);
+        tooltip = new Tooltip("Agregar Productos");
+        Tooltip.install(agr3, tooltip);
+        tooltip = new Tooltip("Historial de Comprobantes");
+        Tooltip.install(historial, tooltip);
+    }
 
     @FXML
     private void goToDashboard() throws IOException {

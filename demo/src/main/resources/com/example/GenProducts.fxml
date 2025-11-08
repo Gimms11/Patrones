@@ -259,7 +259,6 @@
                            <center>
                               <TableView fx:id="tablaProductos" prefHeight="200.0" prefWidth="706.0" styleClass="tableOut" BorderPane.alignment="CENTER">
                                 <columns>
-                                  <TableColumn fx:id="colId" prefWidth="75.0" text="idProducto" />
                                   <TableColumn fx:id="colNombre" prefWidth="75.0" text="Nombre" />
                                     <TableColumn fx:id="colStock" prefWidth="75.0" text="Stock Actual" />
                                     <TableColumn fx:id="colCat" prefWidth="75.0" text="Categoria" />

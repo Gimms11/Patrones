@@ -302,7 +302,6 @@
                            <center>
                               <TableView fx:id="tablaClientes" prefHeight="200.0" prefWidth="706.0" styleClass="tableOut" BorderPane.alignment="CENTER">
                                 <columns>
-                                  <TableColumn fx:id="col_id" prefWidth="75.0" text="idCliente" />
                                   <TableColumn fx:id="col_nombres" prefWidth="75.0" text="Nombres" />
                                     <TableColumn fx:id="col_apellidos" prefWidth="75.0" text="Apellidos" />
                                     <TableColumn fx:id="col_telefono" prefWidth="75.0" text="Telefono" />

@@ -16,11 +16,11 @@
             <VBox alignment="CENTER" layoutY="51.2" prefHeight="499.0" prefWidth="43.0" spacing="50.0" styleClass="sidebar-menu" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="51.0">
                <children>
                   <!-- Íconos de navegación -->
-                  <FontIcon iconLiteral="fas-chart-area" iconSize="20" onMouseClicked="#goToDashboard" styleClass="icon" />
-                  <FontIcon iconLiteral="fas-paperclip" iconSize="20" onMouseClicked="#goToGenFactures" styleClass="icon" />
-                  <FontIcon iconLiteral="fas-user" iconSize="20" onMouseClicked="#goToClients" styleClass="icon" />
-                  <FontIcon iconLiteral="fas-shopping-cart" iconSize="20" onMouseClicked="#gotoGenProducts" styleClass="icon" />
-                  <FontIcon iconLiteral="fas-history" iconSize="20" onMouseClicked="#goToHistory" styleClass="icon" />
+                  <FontIcon fx:id="das" iconLiteral="fas-chart-area" iconSize="20" onMouseClicked="#goToDashboard" styleClass="icon" />
+                  <FontIcon fx:id="agr1" iconLiteral="fas-paperclip" iconSize="20" onMouseClicked="#goToGenFactures" styleClass="icon" />
+                  <FontIcon fx:id="agr2" iconLiteral="fas-user" iconSize="20" onMouseClicked="#goToClients" styleClass="icon" />
+                  <FontIcon fx:id="agr3" iconLiteral="fas-shopping-cart" iconSize="20" onMouseClicked="#gotoGenProducts" styleClass="icon" />
+                  <FontIcon fx:id="historial" iconLiteral="fas-history" iconSize="20" onMouseClicked="#goToHistory" styleClass="icon" />
                   <FontIcon iconLiteral="fas-cog" iconSize="20" onMouseClicked="#goToConfigurations" styleClass="icon" />
                </children>
             </VBox>

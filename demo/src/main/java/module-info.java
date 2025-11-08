@@ -6,6 +6,7 @@ module com.example {
     requires javafx.web;
     requires itextpdf;
     requires java.desktop;
+    requires org.kordamp.ikonli.javafx;
     
 
     opens controller to javafx.fxml;

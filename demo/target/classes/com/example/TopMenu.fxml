@@ -18,8 +18,8 @@
         <AnchorPane nodeOrientation="RIGHT_TO_LEFT" prefHeight="50.0" prefWidth="200.0" BorderPane.alignment="CENTER">
           <children>
             <AnchorPane layoutX="10.0" layoutY="7.0" prefHeight="50.0" prefWidth="50.0" styleClass="userIcon" />
-            <Label layoutX="63.0" layoutY="5.0" text="Nallely Nuñez Campos" />
-            <Label layoutX="63.0" layoutY="28.0" text="Nallelync03@gmail.com" />
+            <Label fx:id="txtUserName" layoutX="63.0" layoutY="5.0" text="Nallely Nuñez Campos" />
+            <Label fx:id="txtRol" layoutX="63.0" layoutY="28.0" text="Nallelync03@gmail.com" />
           </children>
                <styleClass>
                   <String fx:value="userBox" />

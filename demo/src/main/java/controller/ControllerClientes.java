@@ -38,7 +38,6 @@ public class ControllerClientes {
     
     // --- TableView y sus columnas ---
     @FXML private TableView<Cliente> tablaClientes;
-    @FXML private TableColumn<Cliente, String> col_id;
     @FXML private TableColumn<Cliente, String> col_nombres;
     @FXML private TableColumn<Cliente, String> col_apellidos;
     @FXML private TableColumn<Cliente, String> col_telefono;
@@ -276,12 +275,6 @@ public class ControllerClientes {
      */
     private void configurarTabla() {
         // Configurar las columnas
-        col_id.setCellValueFactory(cellData -> {
-            if (cellData.getValue() == null) return new SimpleStringProperty("");
-            Long id = cellData.getValue().getIdCliente();
-            return new SimpleStringProperty(id != null ? id.toString() : "");
-        });
-        
         col_nombres.setCellValueFactory(cellData -> {
             if (cellData.getValue() == null) return new SimpleStringProperty("");
             return new SimpleStringProperty(

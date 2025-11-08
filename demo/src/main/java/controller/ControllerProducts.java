@@ -1,7 +1,6 @@
 package controller;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.math.BigDecimal;
 
 import DTO.AfectacionProductos;
@@ -11,7 +10,6 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.beans.property.SimpleStringProperty;
 import service.AfectacionService;
 import service.CategoriaService;
@@ -34,7 +32,6 @@ public class ControllerProducts {
 
     // === TABLA DE PRODUCTOS ===
     @FXML private TableView<Producto> tablaProductos;
-    @FXML private TableColumn<Producto, String> colId;
     @FXML private TableColumn<Producto, String> colNombre;
     @FXML private TableColumn<Producto, String> colStock;
     @FXML private TableColumn<Producto, String> colCat;
@@ -247,12 +244,6 @@ public class ControllerProducts {
     }
 
     private void configurarTabla() {
-        // Configurar columna ID
-        colId.setCellValueFactory(cellData -> {
-            if (cellData.getValue() == null) return new SimpleStringProperty("");
-            Long id = cellData.getValue().getIdProducto();
-            return new SimpleStringProperty(id != null ? id.toString() : "");
-        });
 
         // Configurar columna Nombre
         colNombre.setCellValueFactory(cellData -> {

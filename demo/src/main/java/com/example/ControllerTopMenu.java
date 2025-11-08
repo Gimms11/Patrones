@@ -1,15 +1,22 @@
 package com.example;
 
+import javafx.scene.control.Label;
+
+import DTO.Usuario;
 import javafx.fxml.FXML;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import service.LectorService;
 import javafx.scene.Node;
 
 public class ControllerTopMenu {
 
     @FXML
     private BorderPane topMenu_total;
+
+    @FXML private Label txtUserName;
+    @FXML private Label txtRol;
 
     @FXML
     private void btnMinimizar() {
@@ -32,6 +39,12 @@ public class ControllerTopMenu {
         // Hacer que la barra de título permita arrastrar la ventana
         topMenu_total.setOnMousePressed(this::handleMousePressed);
         topMenu_total.setOnMouseDragged(this::handleMouseDragged);
+
+        LectorService lectorService = new LectorService();
+        Usuario usuarioActual = lectorService.leerUsuario();
+
+        txtUserName.setText(usuarioActual.getUsername());
+        txtRol.setText(usuarioActual.getRol());
     }
 
     private void handleMousePressed(MouseEvent event) {

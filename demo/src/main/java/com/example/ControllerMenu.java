@@ -1,7 +1,6 @@
 package com.example;
 
 import java.io.IOException;
-import java.util.ResourceBundle;
 
 import org.kordamp.ikonli.javafx.FontIcon;
 

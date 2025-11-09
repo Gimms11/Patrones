@@ -2,7 +2,6 @@ package Interfaces;
 
 
 import DTO.*;
-import java.util.List;
 
 public interface GeneradorPDFBuilder {
     void iniciarDocumento(String rutaSalida) throws Exception; // abre Document y PdfWriter

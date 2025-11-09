@@ -85,7 +85,7 @@ public class ControllerClientes {
             // Listener para el cambio de paneles
             tabPane.getSelectionModel().selectedItemProperty().addListener((obs, oldTab, newTab) -> {
                 if (newTab != null) {
-                    int index = tabPane.getSelectionModel().getSelectedIndex();
+                    //int index = tabPane.getSelectionModel().getSelectedIndex();
                 }
             });
 

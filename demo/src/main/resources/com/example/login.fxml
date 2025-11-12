@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.text.Font?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="898.0" prefWidth="1372.0" stylesheets="@styles/styleLogin.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.ControllerLogin">
+   <children>
+      <Label id="ltitulo" layoutX="253.0" layoutY="123.0" prefHeight="131.0" prefWidth="288.0" text="Bienvenido de nuevo!!" textAlignment="CENTER" wrapText="true">
+         <font>
+            <Font size="34.0" />
+         </font>
+      </Label>
+      <Label id="lsubtitulo" layoutX="332.0" layoutY="291.0" prefHeight="20.0" prefWidth="136.0" text="Acceder a tu cuenta..." textFill="#797777">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+      <HBox layoutX="252.0" layoutY="332.0" prefHeight="28.0" prefWidth="85.0">
+         <children>
+            <Label id="lusuario" text="Usuario ">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
+      <HBox layoutX="253.0" layoutY="353.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="57.0" prefWidth="288.0" style="-fx-alignment: center_left; -fx-spacing: -20px;">
+         <children>
+            <TextField id="txtusername" fx:id="txtusername" prefHeight="33.0" prefWidth="291.0" promptText="Ingrese su usuario." />
+            <FontIcon iconColor="#a8a8a8" iconLiteral="fas-at" />
+         </children>
+      </HBox>
+      <HBox layoutX="252.0" layoutY="435.0" prefHeight="28.0" prefWidth="109.0">
+         <children>
+            <Label id="lcontraseña" text="Contraseña:">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
+      <HBox layoutX="253.0" layoutY="456.0" prefHeight="57.0" prefWidth="290.0" style="-fx-alignment: center_left; -fx-spacing: -20px;">
+         <children>
+            <PasswordField id="txtcontraseña" fx:id="txtcontraseña" prefHeight="33.0" prefWidth="290.0" promptText="Ingrese su contraseña" />
+            <FontIcon iconColor="#a8a8a8" iconLiteral="fas-lock" />
+         </children>
+      </HBox>
+      <HBox layoutX="241.0" layoutY="506.0" prefHeight="34.0" prefWidth="239.0" style="-fx-alignment: center_left; -fx-spacing: 8px;">
+         <children>
+            <CheckBox id="checkcontraseña" fx:id="checkcontraseña" contentDisplay="GRAPHIC_ONLY" mnemonicParsing="false" prefHeight="23.0" prefWidth="192.0">
+               <graphic>
+                  <HBox alignment="CENTER_LEFT" prefHeight="23.0" prefWidth="61.0">
+                     <children>
+                        <FontIcon id="eyesIcon" fx:id="eyesIcon" iconColor="#a8a8a8" iconLiteral="fas-eye-slash" iconSize="16" />
+                        <Label prefHeight="17.0" prefWidth="112.0" text="Mostrar contraseña" />
+                     </children>
+                  </HBox>
+               </graphic>
+            </CheckBox>
+         </children>
+      </HBox>
+      <ImageView fitHeight="503.0" fitWidth="695.0" layoutX="599.0" layoutY="152.0">
+         <image>
+            <Image url="@images/login.png" />
+         </image>
+      </ImageView>
+      <Button id="btningresar" fx:id="btningresar" layoutX="253.0" layoutY="582.0" mnemonicParsing="false" onAction="#handleLogin" prefHeight="34.0" prefWidth="290.0" text="Ingresar" />
+   </children>
+</AnchorPane>

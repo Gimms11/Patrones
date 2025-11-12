@@ -1,0 +1,64 @@
+
+.check-box .box {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 0;
+}
+
+.check-box:selected .box {
+    -fx-background-color: transparent;
+}
+
+.check-box .mark {
+    -fx-background-color: transparent;
+}
+
+.check-box {
+    -fx-background-color: transparent;
+    -fx-padding: 5px;
+    -fx-border-color: transparent;
+}
+
+.check-box:hover {
+    -fx-background-color: #f0f0f0;
+    -fx-background-radius: 3px;
+}
+
+.text-field, .password-field {
+    -fx-border-color: red;
+    -fx-border-radius: 5px;
+    -fx-background-radius: 5px;
+}
+
+.text-field:focused, .password-field:focused {
+    -fx-border-color: #ff4444;
+    -fx-border-width: 2px;
+}
+
+.button {
+    -fx-background-color: #d22222;
+    -fx-text-fill: #ffffff;
+    -fx-background-radius: 5px;
+}
+
+.button:hover {
+    -fx-background-color: red;
+}
+
+.button:pressed {
+    -fx-background-color: #cc0000;
+}
+
+.hbox-field {
+    -fx-alignment: center_left;
+    -fx-spacing: 10px;
+}
+
+#ltitulo {
+    -fx-font-weight: bold;
+    -fx-text-alignment: center;
+}
+
+#lsubtitulo {
+    -fx-text-fill: #797777;
+}

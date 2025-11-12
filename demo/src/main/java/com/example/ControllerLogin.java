@@ -5,6 +5,9 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import service.ManejadorService;
+
+import java.io.IOException;
 
 import org.kordamp.ikonli.javafx.FontIcon;
 
@@ -14,7 +17,7 @@ import DTO.Usuario;
 public class ControllerLogin {
     @FXML
     private AnchorPane topMenu_total;
-
+    
     @FXML
     private TextField txtusername;
     @FXML
@@ -81,7 +84,7 @@ public class ControllerLogin {
     }
 
     @FXML
-    private void handleLogin() {
+    private void handleLogin()  throws IOException{
         String username = txtusername.getText();
         String password;
         
@@ -99,14 +102,17 @@ public class ControllerLogin {
         Usuario usuario = usuarioDAO.autenticarUsuario(username, password);
         if (usuario != null) {
             mostrarAlerta("Exito", "Login exitoso!\nBienvenido: " + usuario.getUsername() + "\nRol: " + usuario.getRol());
+            ManejadorService manejadorService = new ManejadorService();
+            manejadorService.guardarUsuario(usuario);
+            App.setRoot("Dashboard");
         } else {
             mostrarAlerta("Error", "Usuario o contraseña incorrectos.");
         }
     }
-
+    
     @FXML
     private void btnCerrar() {
         Stage stage = (Stage) topMenu_total.getScene().getWindow();
-        stage.close(); // Cierra la ventana
+        stage.close();
     }
 }

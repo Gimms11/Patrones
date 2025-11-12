@@ -1,6 +1,6 @@
 {
-    "idUsuario": 1,
-    "username": "NallelyADMIN",
-    "password": "admin123",
-    "rol": "ADMIN"
+  "idUsuario": 1,
+  "username": "Usuario",
+  "password": "Contrasena123",
+  "rol": "Admin"
 }

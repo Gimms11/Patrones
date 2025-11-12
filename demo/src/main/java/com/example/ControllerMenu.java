@@ -1,10 +1,13 @@
 package com.example;
 
 import java.io.IOException;
+import java.util.Optional;
 
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Tooltip;
 
 public class ControllerMenu {
@@ -55,7 +58,15 @@ public class ControllerMenu {
     }
     @FXML
     private void goToSingOut() throws IOException {
-        App.setRoot("Login");
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Cerrar sesión");
+        alert.setHeaderText("¿Está seguro que desea cerrar sesión?");
+        alert.setContentText("Se perderá la sesión actual.");
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            App.setRoot("Login");
+        }
     }
 
     /*

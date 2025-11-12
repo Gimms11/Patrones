@@ -12,6 +12,9 @@ module com.example {
     opens controller to javafx.fxml;
     exports controller;
 
+    opens DTO to com.google.gson;
+    exports DTO;
+
     opens com.example to javafx.fxml;
     exports com.example;
 }

@@ -1,20 +1,21 @@
 package Lectores;
 
-import DTO.Empresa;
-import Interfaces.LectorJsonI;
+import DTO.Usuario;
+import Interfaces.ManejadorJsonI;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 
-public class LectorEmpresa implements LectorJsonI<Empresa> {
-    private String rutaArchivo = "demo\\src\\main\\java\\empresa.json";
+public class ManejadorSesion implements ManejadorJsonI<Usuario> {
+    private String RUTA_DEFECTO = "demo\\src\\main\\java\\sesionActual.json";
 
     @Override
-    public Empresa leerArchivoJson(String rutaArchivo) {
+    public Usuario leerArchivoJson(String rutaArchivo) {
         try {
             // Si no se proporciona una ruta, usar la ruta por defecto
             if (rutaArchivo == null || rutaArchivo.trim().isEmpty()) {
-                rutaArchivo = this.rutaArchivo;
+                rutaArchivo = this.RUTA_DEFECTO;
             }
 
             // Crear un StringBuilder para almacenar el contenido del archivo
@@ -35,7 +36,7 @@ public class LectorEmpresa implements LectorJsonI<Empresa> {
             json = json.substring(1, json.length() - 1);
             
             // Crear una nueva empresa
-            Empresa empresa = new Empresa();
+            Usuario usuario = new Usuario();
             
             // Separar los campos por comas y procesar cada uno
             for (String campo : json.split(",")) {
@@ -45,45 +46,28 @@ public class LectorEmpresa implements LectorJsonI<Empresa> {
                     String valor = partes[1].trim().replace("\"", "");
                     
                     switch (clave) {
-                        case "nombre":
-                            empresa.setNombre(valor);
+                        case "idUsuario":
+                            usuario.setIdUsuario(Long.parseLong(valor));
                             break;
-                        case "ruc":
-                            empresa.setRuc(valor);
+                        case "username":
+                            usuario.setUsername(valor);
                             break;
-                        case "id":
-                            empresa.setIdEmpresa(Long.parseLong(valor));
+                        case "password":
+                            usuario.setPassword(valor);
                             break;
-                        case "correo":
-                            empresa.setCorreo(valor);
-                            break;
-                        case "direccion":
-                            empresa.setDireccion(valor);
-                            break;
-                        case "telefono":
-                            empresa.setTelefono(valor);
-                            break;
-                        case "pais":
-                            empresa.setPais(valor);
-                            break;
-                        case "descripcion":
-                            empresa.setDescripcion(valor);
+                        case "rol":
+                            usuario.setRol(valor);
                             break;
                     }
                 }
             }
             
             // Validar campos obligatorios
-            if (empresa.getNombre() == null || empresa.getNombre().trim().isEmpty()) {
+            if (usuario.getUsername() == null || usuario.getUsername().trim().isEmpty()) {
                 throw new IllegalArgumentException("El nombre de la empresa es obligatorio");
             }
             
-            // Si no hay RUC, asignar uno por defecto para testing
-            if (empresa.getRuc() == null || empresa.getRuc().trim().isEmpty()) {
-                empresa.setRuc("20123456789");
-            }
-
-            return empresa;
+            return usuario;
 
         } catch (IOException e) {
             System.err.println("Error al leer el archivo JSON: " + e.getMessage());
@@ -94,5 +78,30 @@ public class LectorEmpresa implements LectorJsonI<Empresa> {
             e.printStackTrace();
             return null;
         }
+    }
+
+        @Override
+    public void escribirArchivoJson(Usuario usuario, String rutaArchivo) {
+        String ruta = (rutaArchivo == null || rutaArchivo.trim().isEmpty()) 
+                      ? RUTA_DEFECTO : rutaArchivo;
+
+        StringBuilder json = new StringBuilder();
+        json.append("{\n")
+            .append("  \"idUsuario\": ").append(usuario.getIdUsuario()).append(",\n")
+            .append("  \"username\": \"").append(escapeJson(usuario.getUsername())).append("\",\n")
+            .append("  \"password\": \"").append(escapeJson(usuario.getPassword())).append("\",\n")
+            .append("  \"rol\": \"").append(escapeJson(usuario.getRol())).append("\"\n")
+            .append("}");
+
+        try (FileWriter writer = new FileWriter(ruta)) {
+            writer.write(json.toString());
+        } catch (IOException e) {
+            throw new RuntimeException("Error al escribir el archivo JSON de usuario", e);
+        }
+    }
+
+    private String escapeJson(String value) {
+        if (value == null) return "";
+        return value.replace("\"", "\\\"");
     }
 }

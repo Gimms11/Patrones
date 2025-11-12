@@ -16,7 +16,7 @@ import java.io.File;
 
 public class genPDFService {
     
-    private LectorService lectorServicio = new LectorService();
+    private ManejadorService lectorServicio = new ManejadorService();
     private Empresa emp = lectorServicio.leerEmpresa();
 
     public void generarPDF(Comprobante comp) {

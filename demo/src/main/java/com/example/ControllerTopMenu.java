@@ -7,7 +7,7 @@ import javafx.fxml.FXML;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
-import service.LectorService;
+import service.ManejadorService;
 import javafx.scene.Node;
 
 public class ControllerTopMenu {
@@ -40,7 +40,7 @@ public class ControllerTopMenu {
         topMenu_total.setOnMousePressed(this::handleMousePressed);
         topMenu_total.setOnMouseDragged(this::handleMouseDragged);
 
-        LectorService lectorService = new LectorService();
+        ManejadorService lectorService = new ManejadorService();
         Usuario usuarioActual = lectorService.leerUsuario();
 
         txtUserName.setText(usuarioActual.getUsername());

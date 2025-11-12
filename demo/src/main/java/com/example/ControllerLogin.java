@@ -2,13 +2,19 @@ package com.example;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
+
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import DAOImpl.DAOUsuarioImpl;
 import DTO.Usuario;
 
 public class ControllerLogin {
+    @FXML
+    private AnchorPane topMenu_total;
+
     @FXML
     private TextField txtusername;
     @FXML
@@ -96,5 +102,11 @@ public class ControllerLogin {
         } else {
             mostrarAlerta("Error", "Usuario o contraseña incorrectos.");
         }
+    }
+
+    @FXML
+    private void btnCerrar() {
+        Stage stage = (Stage) topMenu_total.getScene().getWindow();
+        stage.close(); // Cierra la ventana
     }
 }

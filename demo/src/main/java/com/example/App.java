@@ -29,7 +29,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("Login"), 900, 700);
+        scene = new Scene(loadFXML("History"), 900, 700);
         //Asignar titulo a la ventana
         stage.setResizable(false);
         stage.initStyle(StageStyle.UNDECORATED);

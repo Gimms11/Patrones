@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Factura version="1.0" xmlns="http://www.sunat.gob.pe/cpe/see/glm">
+  <!-- FACTURA ELECTRÓNICA - Comprobante de pago por operación con RUC -->
+  <VersionSchema>2.1</VersionSchema>
+  <TipoComprobante>Factura</TipoComprobante>
+  <Emisor>
+    <TipoDocumento>6</TipoDocumento>
+    <NumeroDocumento>EMPRESA_RUC</NumeroDocumento>
+    <RazonSocial>EMPRESA_NOMBRE</RazonSocial>
+    <NombreComercial>EMPRESA_NOMBRE</NombreComercial>
+    <Ubigeo>150131</Ubigeo>
+    <Direccion>EMPRESA_DIRECCION</Direccion>
+    <EstadoOrigen>1</EstadoOrigen>
+    <CodigoEstablecimiento>0000</CodigoEstablecimiento>
+  </Emisor>
+  <Receptor>
+    <TipoDocumento>6</TipoDocumento>
+    <NumeroDocumento>12345678901</NumeroDocumento>
+    <RazonSocial>MiTrufely</RazonSocial>
+    <Direccion>Ica centro</Direccion>
+    <Ubigeo>150131</Ubigeo>
+  </Receptor>
+  <Referencia>
+    <Serie>FG-4</Serie>
+    <Numero>4</Numero>
+  </Referencia>
+  <Comprobante>
+    <FechaEmision>2025-11-08</FechaEmision>
+    <HoraEmision>12:00:00</HoraEmision>
+    <Moneda>PEN</Moneda>
+    <FormaPago>Tarjeta de Credito</FormaPago>
+    <TipoOperacion>0101</TipoOperacion>
+    <IndicadorTotales>1</IndicadorTotales>
+  </Comprobante>
+  <Resumen>
+    <Subtotal>
+      <Importe>155.00</Importe>
+    </Subtotal>
+    <Tributos>
+      <IGV>14.40</IGV>
+    </Tributos>
+    <MontoTotal>
+      <Importe>169.40</Importe>
+      <Moneda>PEN</Moneda>
+    </MontoTotal>
+  </Resumen>
+  <Adicional>
+    <InformacionLegal>
+      <Descripcion>Comprobante obligatorio de acuerdo al RUC del emisor</Descripcion>
+    </InformacionLegal>
+    <Firma>
+      <Estado>No Validado</Estado>
+    </Firma>
+  </Adicional>
+</Factura>

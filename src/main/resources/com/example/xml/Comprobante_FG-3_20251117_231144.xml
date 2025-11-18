@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Boleta version="1.0" xmlns="http://www.empresa.local/boleta">
+  <!-- BOLETA - Comprobante de pago simplificado (operaciones sin RUC) -->
+  <VersionSchema>1.0</VersionSchema>
+  <TipoComprobante>Boleta</TipoComprobante>
+  <Empresa>
+    <RUC>EMPRESA_RUC</RUC>
+    <Nombre>EMPRESA_NOMBRE</Nombre>
+  </Empresa>
+  <Cliente>
+    <Tipo>Natural</Tipo>
+    <Documento>72806338</Documento>
+    <Nombre>Albert Mijael</Nombre>
+  </Cliente>
+  <Referencia>
+    <Serie>FG-3</Serie>
+    <Numero>3</Numero>
+  </Referencia>
+  <Datos>
+    <Fecha>2025-11-08</Fecha>
+    <MedioPago>Efectivo</MedioPago>
+  </Datos>
+  <Total>
+    <Monto>72.20</Monto>
+    <Moneda>PEN</Moneda>
+  </Total>
+</Boleta>

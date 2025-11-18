@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Comprobante>
+  <Tipo>Factura</Tipo>
+  <Empresa>
+    <RUC>EMPRESA_RUC</RUC>
+    <Nombre>EMPRESA_NOMBRE</Nombre>
+    <Direccion>EMPRESA_DIRECCION</Direccion>
+  </Empresa>
+  <Cliente>
+    <Documento>12345678901</Documento>
+    <Nombre>Juan Pérez García</Nombre>
+    <Direccion>Av. Siempre Viva 742, Lima, Perú</Direccion>
+  </Cliente>
+  <Informacion>
+    <Serie>FG-001</Serie>
+    <Fecha>2024-11-17</Fecha>
+    <MedioPago>Transferencia Bancaria</MedioPago>
+  </Informacion>
+  <Items>
+    <!-- Los detalles se obtienen por separado en el servicio -->
+    <!-- ComprobantId: 1 -->
+  </Items>
+  <Totales>
+    <Devengado>1059.92</Devengado>
+    <TotalFinal>1250.50</TotalFinal>
+  </Totales>
+</Comprobante>

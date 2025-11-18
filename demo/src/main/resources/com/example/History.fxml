@@ -254,7 +254,7 @@
                         </VBox>
                         <AnchorPane prefHeight="138.0" prefWidth="821.0" GridPane.rowIndex="2">
                            <children>
-                              <Button layoutX="602.0" layoutY="76.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="180.0" styleClass="buttonIn" text="Enviar XML" />
+                              <Button layoutX="602.0" layoutY="76.0" mnemonicParsing="false" onAction="#generarYEnviarXMLComprobante" prefHeight="47.0" prefWidth="180.0" styleClass="buttonIn" text="Enviar XML" />
                               <Button fx:id="genPDF" layoutX="602.0" layoutY="14.0" mnemonicParsing="false" onAction="#generarPDFComprobante" prefHeight="47.0" prefWidth="180.0" styleClass="buttonIn" text="Generar PDF" />
                            </children>
                         </AnchorPane>

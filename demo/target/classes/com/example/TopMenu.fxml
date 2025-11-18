@@ -36,7 +36,7 @@
               <!-- Logo empresa -->
               <AnchorPane prefHeight="50.0" prefWidth="100.0" styleClass="iconPane" />
               <!-- Nombre empresa -->
-              <Label layoutX="106.0" layoutY="14.0" text="Mi Peru Empresa I.R.L" textFill="#ececec">
+              <Label layoutX="106.0" layoutY="14.0" text="MiTrufely S.A.C" textFill="#ececec">
                      <font>
                         <Font name="Agency FB Bold" size="15.0" />
                      </font></Label>

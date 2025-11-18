@@ -3,13 +3,19 @@ package controller;
 import java.util.List;
 import java.util.ArrayList;
 
+import DTO.Cliente;
 import DTO.Comprobante;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.layout.VBox;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.geometry.Insets;
+import service.ClienteService;
 import service.ComprobanteService;
+import service.XMLService;
 import service.genPDFService;
 
 public class ControllerHistorial {
@@ -252,6 +258,61 @@ public class ControllerHistorial {
         }
     }
 
+    @FXML
+    private void generarYEnviarXMLComprobante() {
+        // 1. Obtener comprobante seleccionado
+        Comprobante comprobanteSeleccionado = tablaComprobantes
+            .getSelectionModel().getSelectedItem();
+        
+        // 2. Validar selección
+        if (comprobanteSeleccionado == null) {
+            mostrarAdvertencia(
+                "Selección requerida",
+                "Por favor, seleccione un comprobante."
+            );
+            return;
+        }
+        
+        ClienteService clienteService = new ClienteService();
+        Cliente cliente = clienteService.obtenerPorId(comprobanteSeleccionado.getIdCliente());
+        
+        // 3. Validar que el cliente tenga al menos un correo
+        String correoDefault = cliente.getCorreo();
+        if (correoDefault == null || correoDefault.trim().isEmpty()) {
+            mostrarAdvertencia(
+                "Email no disponible",
+                "El cliente no tiene email registrado."
+            );
+            return;
+        }
+        
+        // 4. Mostrar panel de selección de correo
+        String correoDestino = mostrarPanelSeleccionCorreo(correoDefault);
+        if (correoDestino == null) {
+            // Usuario canceló
+            return;
+        }
+        
+        // 5. Usar el FACADE para generar y enviar
+        try {
+            XMLService xmlService = new XMLService();
+            xmlService.generarYEnviarXML(comprobanteSeleccionado, correoDestino);
+            
+            // 6. Mostrar éxito
+            mostrarInfo(
+                "XML generado",
+                "El XML ha sido generado y el correo enviado exitosamente.\n\n" +
+                "Destinatario: " + correoDestino
+            );
+        } catch (Exception e) {
+            mostrarError(
+                "Error al generar XML",
+                "No se pudo generar el XML del comprobante.",
+                e.getMessage()
+            );
+        }
+    }
+
     // === MÉTODOS DE PARA SACAR DATOS DE LISTA ===
     @FXML private Label txtCantVentas;
     @FXML private Label txtTotalVentas;
@@ -315,5 +376,119 @@ public class ControllerHistorial {
         alert.setHeaderText(titulo);
         alert.setContentText(mensaje + "\n\nDetalles: " + detalles);
         alert.showAndWait();
+    }
+
+    // === MÉTODOS PARA SELECCIONAR CORREO ===
+
+    /**
+     * Muestra un panel de diálogo para que el usuario elija entre
+     * enviar el XML al correo por defecto o a uno personalizado.
+     * 
+     * @param correoDefault El correo por defecto del cliente
+     * @return El correo elegido o null si el usuario canceló
+     */
+    private String mostrarPanelSeleccionCorreo(String correoDefault) {
+        Dialog<String> dialog = new Dialog<>();
+        dialog.setTitle("Seleccionar destinatario");
+        dialog.setHeaderText("¿A qué correo desea enviar el XML?");
+        dialog.setResizable(true);
+        
+        // Crear controles
+        RadioButton rbCorreoDefault = new RadioButton("Correo por defecto del cliente");
+        RadioButton rbCorreoCustom = new RadioButton("Correo personalizado");
+        ToggleGroup group = new ToggleGroup();
+        rbCorreoDefault.setToggleGroup(group);
+        rbCorreoCustom.setToggleGroup(group);
+        rbCorreoDefault.setSelected(true);
+        
+        Label lblCorreoDefault = new Label("Correo: " + correoDefault);
+        lblCorreoDefault.setStyle("-fx-text-fill: #666; -fx-font-size: 11;");
+        
+        TextField txtCorreoCustom = new TextField();
+        txtCorreoCustom.setPromptText("Ej: cliente@email.com");
+        txtCorreoCustom.setDisable(true);
+        
+        // Listener para habilitar/deshabilitar campo de texto
+        rbCorreoCustom.selectedProperty().addListener((obs, oldVal, newVal) -> {
+            txtCorreoCustom.setDisable(!newVal);
+            if (newVal) {
+                txtCorreoCustom.requestFocus();
+            }
+        });
+        
+        rbCorreoDefault.selectedProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal) {
+                txtCorreoCustom.setDisable(true);
+                txtCorreoCustom.clear();
+            }
+        });
+        
+        // Crear contenedor
+        VBox vbox = new VBox(10);
+        vbox.setPadding(new Insets(15));
+        vbox.getChildren().addAll(
+            rbCorreoDefault,
+            lblCorreoDefault,
+            new Separator(),
+            rbCorreoCustom,
+            txtCorreoCustom
+        );
+        
+        dialog.getDialogPane().setContent(vbox);
+        
+        // Agregar botones
+        ButtonType btnOK = new ButtonType("Enviar", ButtonBar.ButtonData.OK_DONE);
+        ButtonType btnCancelar = new ButtonType("Cancelar", ButtonBar.ButtonData.CANCEL_CLOSE);
+        dialog.getDialogPane().getButtonTypes().addAll(btnOK, btnCancelar);
+        
+        // Configurar validación
+        Button botonEnviar = (Button) dialog.getDialogPane().lookupButton(btnOK);
+        botonEnviar.setDisable(false);
+        
+        // Listener para validar correo personalizado
+        txtCorreoCustom.textProperty().addListener((obs, oldVal, newVal) -> {
+            if (rbCorreoCustom.isSelected()) {
+                boolean esValido = esCorreoValido(newVal);
+                botonEnviar.setDisable(!esValido);
+            }
+        });
+        
+        // Listener para el cambio de selección de radio button
+        rbCorreoDefault.selectedProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal) {
+                botonEnviar.setDisable(false);
+            }
+        });
+        
+        // Configurar resultado
+        dialog.setResultConverter(buttonType -> {
+            if (buttonType == btnOK) {
+                if (rbCorreoDefault.isSelected()) {
+                    return correoDefault;
+                } else if (rbCorreoCustom.isSelected()) {
+                    String correoCustom = txtCorreoCustom.getText().trim();
+                    if (esCorreoValido(correoCustom)) {
+                        return correoCustom;
+                    }
+                }
+            }
+            return null;
+        });
+        
+        return dialog.showAndWait().orElse(null);
+    }
+
+    /**
+     * Valida si el formato del correo es correcto.
+     * 
+     * @param correo El correo a validar
+     * @return true si el correo es válido, false en caso contrario
+     */
+    private boolean esCorreoValido(String correo) {
+        if (correo == null || correo.trim().isEmpty()) {
+            return false;
+        }
+        // Expresión regular simple para validar email
+        return correo.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$");
     }
 }

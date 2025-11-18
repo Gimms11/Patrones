@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Comprobante>
+  <Tipo>Boleta</Tipo>
+  <Empresa>
+    <RUC>EMPRESA_RUC</RUC>
+    <Nombre>EMPRESA_NOMBRE</Nombre>
+  </Empresa>
+  <Cliente>
+    <Documento>12345678</Documento>
+    <Nombre>María López Ruiz</Nombre>
+  </Cliente>
+  <Informacion>
+    <Serie>BL-001</Serie>
+    <Fecha>2024-11-17</Fecha>
+  </Informacion>
+  <Items>
+    <!-- Los detalles se obtienen por separado en el servicio -->
+    <!-- ComprobantId: 2 -->
+  </Items>
+  <Totales>
+    <TotalFinal>500.00</TotalFinal>
+  </Totales>
+</Comprobante>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Comprobante>
+  <Tipo>Factura</Tipo>
+  <Empresa>
+    <RUC>EMPRESA_RUC</RUC>
+    <Nombre>EMPRESA_NOMBRE</Nombre>
+    <Direccion>EMPRESA_DIRECCION</Direccion>
+  </Empresa>
+  <Cliente>
+    <Documento>12345678901</Documento>
+    <Nombre>MiTrufely</Nombre>
+    <Direccion>Ica centro</Direccion>
+  </Cliente>
+  <Informacion>
+    <Serie>FG-5</Serie>
+    <Fecha>2025-11-08</Fecha>
+    <MedioPago>Efectivo</MedioPago>
+  </Informacion>
+  <Items>
+    <!-- Los detalles se obtienen por separado en el servicio -->
+    <!-- ComprobantId: 5 -->
+  </Items>
+  <Totales>
+    <Devengado>140.00</Devengado>
+    <TotalFinal>147.20</TotalFinal>
+  </Totales>
+</Comprobante>

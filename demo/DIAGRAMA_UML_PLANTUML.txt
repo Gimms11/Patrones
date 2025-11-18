@@ -1,0 +1,213 @@
+@startuml Módulo XML - Patrones de Diseño
+
+!define ACCENT_COLOR #2E86AB
+!define STRATEGY_COLOR #A23B72
+!define FACTORY_COLOR #F18F01
+!define ADAPTER_COLOR #C73E1D
+!define FACADE_COLOR #6A994E
+!define DTO_COLOR #BC4749
+
+skinparam backgroundColor #FAFAFA
+skinparam ArrowColor #333333
+skinparam ClassBorderColor #333333
+skinparam ClassBackgroundColor #FFFFFF
+
+' ═════════════════════════════════════════════════════════════
+' STRATEGY PATTERN - Generadores XML
+' ═════════════════════════════════════════════════════════════
+
+interface XMLGenerator {
+    {abstract} +generar(comprobante: Comprobante): String
+}
+
+class FacturaXMLGenerator implements XMLGenerator {
+    -SINTETIZAR: Final String
+    +generar(comprobante: Comprobante): String
+    -agregarEmpresa(xml: StringBuilder): void
+    -agregarCliente(xml: StringBuilder, comprobante: Comprobante): void
+    -agregarReferencia(xml: StringBuilder, comprobante: Comprobante): void
+    -agregarComprobanteInfo(xml: StringBuilder, comprobante: Comprobante): void
+    -agregarTotales(xml: StringBuilder, comprobante: Comprobante): void
+    -agregarInformacionAdicional(xml: StringBuilder): void
+    -escaparXML(texto: String): String
+}
+
+class BoletaXMLGenerator implements XMLGenerator {
+    +generar(comprobante: Comprobante): String
+    -agregarEmpresa(xml: StringBuilder): void
+    -agregarCliente(xml: StringBuilder, comprobante: Comprobante): void
+    -agregarReferencia(xml: StringBuilder, comprobante: Comprobante): void
+    -agregarComprobanteInfo(xml: StringBuilder, comprobante: Comprobante): void
+    -agregarTotales(xml: StringBuilder, comprobante: Comprobante): void
+    -escaparXML(texto: String): String
+}
+
+' ═════════════════════════════════════════════════════════════
+' FACTORY METHOD PATTERN
+' ═════════════════════════════════════════════════════════════
+
+class XMLGeneratorFactory {
+    +{static} get(idTipoComprobante: long): XMLGenerator
+}
+
+XMLGeneratorFactory --> XMLGenerator : "crea >"
+XMLGeneratorFactory --> FacturaXMLGenerator : "<<uses>>"
+XMLGeneratorFactory --> BoletaXMLGenerator : "<<uses>>"
+
+' ═════════════════════════════════════════════════════════════
+' ADAPTER PATTERN - Email
+' ═════════════════════════════════════════════════════════════
+
+interface EmailSender {
+    {abstract} +sendEmail(to: String, subject: String, body: String, xmlFile: File): void
+}
+
+class MailTrapEmailAdapter implements EmailSender {
+    -{static} HOST: String
+    -{static} PORT: int
+    -{static} USERNAME: String
+    -{static} PASSWORD: String
+    -{static} FROM_EMAIL: String
+    +sendEmail(to: String, subject: String, body: String, xmlFile: File): void
+}
+
+' ═════════════════════════════════════════════════════════════
+' FACADE PATTERN - Orquestador Principal
+' ═════════════════════════════════════════════════════════════
+
+class XMLService {
+    -{static} XML_OUTPUT_DIR: String
+    -emailSender: EmailSender
+    +XMLService()
+    +generarYEnviarXML(comprobante: Comprobante, correoDestino: String): void
+    -validarEntrada(comprobante: Comprobante, correoDestino: String): void
+    -guardarXML(comprobante: Comprobante, contenidoXML: String): File
+    -enviarCorreoConXML(comprobante: Comprobante, correoDestino: String, archivoXML: File): void
+    -generarCuerpoCorreo(comprobante: Comprobante): String
+    -generarCuerpoFactura(comprobante: Comprobante): String
+    -generarCuerpoBoleta(comprobante: Comprobante): String
+    -generarCuerpoGenerico(comprobante: Comprobante): String
+    -crearDirectorioSiNoExiste(): void
+}
+
+XMLService --> XMLGenerator : "usa >"
+XMLService --> XMLGeneratorFactory : "usa >"
+XMLService --> EmailSender : "usa >"
+XMLService --> MailTrapEmailAdapter : "inyecta >"
+
+' ═════════════════════════════════════════════════════════════
+' DTOs
+' ═════════════════════════════════════════════════════════════
+
+class Comprobante {
+    -idComprobante: Long
+    -idTipoComprobante: Long
+    -serie: String
+    -fechaEmision: LocalDate
+    -clienteDocumento: String
+    -nombreCliente: String
+    -direccionEnvio: String
+    -clienteDistrito: String
+    -medioPago: String
+    -devengado: BigDecimal
+    -totalFinal: BigDecimal
+    -idCliente: Long
+    +getters/setters
+}
+
+class Cliente {
+    -idCliente: Long
+    -documento: String
+    -correo: String
+    -nombreCliente: String
+    +getters/setters
+}
+
+' ═════════════════════════════════════════════════════════════
+' SERVICES
+' ═════════════════════════════════════════════════════════════
+
+class ClienteService {
+    +obtenerPorId(idCliente: Long): Cliente
+}
+
+class ComprobanteService {
+    +listarComprobante(): List<Comprobante>
+    +listarComprobanteFiltro(periodo: Integer, documento: String, serie: String): List<Comprobante>
+}
+
+' ═════════════════════════════════════════════════════════════
+' CONTROLLER
+' ═════════════════════════════════════════════════════════════
+
+class ControllerHistorial {
+    -tablaComprobantes: TableView<Comprobante>
+    -listPeriodo: ComboBox<String>
+    -txtFactura: TextField
+    -txtDocumento: TextField
+    -comprobanteService: ComprobanteService
+    +initialize(): void
+    +generarPDFComprobante(): void
+    +generarYEnviarXMLComprobante(): void
+    -mostrarPanelSeleccionCorreo(correoDefault: String): String
+    -esCorreoValido(correo: String): boolean
+    -filtrarComprobantes(): void
+    -cargarDatosTabla(): void
+    -mostrarInfo(titulo: String, mensaje: String): void
+    -mostrarAdvertencia(titulo: String, mensaje: String): void
+    -mostrarError(titulo: String, mensaje: String, detalles: String): void
+}
+
+ControllerHistorial --> ComprobanteService : "usa >"
+ControllerHistorial --> ClienteService : "usa >"
+ControllerHistorial --> XMLService : "usa >"
+ControllerHistorial --> Comprobante : "maneja >"
+ControllerHistorial --> Cliente : "consulta >"
+
+' ═════════════════════════════════════════════════════════════
+' Relaciones con DTOs
+' ═════════════════════════════════════════════════════════════
+
+XMLGenerator --> Comprobante : "procesa >"
+XMLService --> Comprobante : "procesa >"
+ComprobanteService --> Comprobante : "retorna >"
+ClienteService --> Cliente : "retorna >"
+
+' ═════════════════════════════════════════════════════════════
+' Notas de Patrones
+' ═════════════════════════════════════════════════════════════
+
+note right of XMLGenerator
+  **STRATEGY PATTERN**
+  - Define familia de algoritmos (generar XML)
+  - Los encapsula
+  - Los hace intercambiables
+  - Permite cambiar sin afectar clientes
+end note
+
+note right of XMLGeneratorFactory
+  **FACTORY METHOD PATTERN**
+  - Crea objetos sin especificar clases concretas
+  - Delega creación en subclases/métodos
+  - ID 1 = Factura
+  - ID 2 = Boleta
+end note
+
+note right of EmailSender
+  **ADAPTER PATTERN**
+  - Convierte interfaz de JavaMail
+  - A nuestro contrato EmailSender
+  - Permite cambiar proveedor sin afectar código
+end note
+
+note right of XMLService
+  **FACADE PATTERN**
+  - Proporciona interfaz unificada
+  - Orquesta múltiples subsistemas:
+    • Strategy (XMLGenerator)
+    • Factory (XMLGeneratorFactory)
+    • Adapter (MailTrapEmailAdapter)
+  - Simplifica uso de complejidad
+end note
+
+@enduml

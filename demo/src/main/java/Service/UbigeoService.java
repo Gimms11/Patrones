@@ -35,4 +35,9 @@ public class UbigeoService {
         if (id == null) return null;
         return repository.obtenerDistrito(id);
     }
+
+    public List<Long> obtenerIds(Long id){
+        if (id == null) return null;
+        return repository.obtenerIds(id);
+    }
 }

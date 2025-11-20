@@ -10,8 +10,14 @@ import service.ClienteService;
 import service.TipoDocumentoService;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.beans.property.SimpleStringProperty;
 import java.util.List;
 import java.util.ArrayList;
@@ -401,13 +407,39 @@ public class ControllerClientes {
 
     /**
      * Abre la ventana de modificación de cliente
-     */
-    private void abrirVentanaModificar(Cliente cliente) {
-        // TODO: Implementar ventana de modificación
-        mostrarInfo("Modificar cliente", 
-            "Se abrirá la ventana de modificación para el cliente:\n" + 
-            cliente.getNombres() + " " + cliente.getApellidos());
+    */
+     private void abrirVentanaModificar(Cliente cliente) {
+        try {
+
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/example/ModCliente.fxml"));
+            Parent root = loader.load();
+            
+            // Obtener el controller de la ventana emergente
+            ControllerModCliente controller = loader.getController();
+
+            // Enviar el cliente seleccionado al controller
+            controller.setClienteSeleccionado(cliente);
+
+            // Crear ventana modal
+            Stage stage = new Stage();
+            stage.setTitle("Modificar Cliente");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL); // Modal: bloquea la ventana principal
+            stage.setResizable(false);
+            stage.initStyle(StageStyle.UNDECORATED);
+
+            stage.showAndWait();  // Espera a que se cierre
+
+            // Luego de cerrarse, recargar la tabla
+            cargarDatosTabla();
+
+        } catch (Exception e) {
+            mostrarError("Error al abrir ventana",
+                    "No se pudo abrir la ventana de modificación.",
+                    e.getMessage());
+        }
     }
+
 
     /**
      * Método para filtrar clientes

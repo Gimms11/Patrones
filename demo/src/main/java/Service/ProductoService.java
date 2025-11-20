@@ -44,7 +44,6 @@ public class ProductoService {
             throw new RuntimeException(mensajeError);
         }
     }
-    
 
     public List<Producto> filtrarProductos(String nombre, Double precio, Integer stock, String unidad,
     Integer idAfectacion, Integer idCategoria) {
@@ -57,4 +56,11 @@ public class ProductoService {
         }
     }
 
+    public Producto obteneProducto(Long id){
+        return repository.buscarProducto(id);
+    }
+
+    public void actualizarProducto(Producto producto){
+        repository.actualizarProducto(producto);
+    }
 }

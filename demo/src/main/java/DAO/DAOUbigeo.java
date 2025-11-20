@@ -10,4 +10,5 @@ public interface DAOUbigeo {
     List<Provincia> obtenerProvinciasPorDepartamento(Long idDepartamento);
     List<Distrito> obtenerDistritosPorProvincia(Long idProvincia);
     Distrito obtenerDistrito(Long id);
+    List<Long> obtenerIds(Long idDistrito);
 }

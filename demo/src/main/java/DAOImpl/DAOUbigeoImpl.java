@@ -101,5 +101,36 @@ public class DAOUbigeoImpl implements DAOUbigeo {
             throw new RuntimeException("Error al obtener distrito", e);
         }
         return null;
+    } 
+
+    @Override
+    public List<Long> obtenerIds(Long idDistrito){
+        String sqlString =
+                "SELECT d.iddistrito, p.idprovincia, dep.iddepartamento"
+                + " FROM distrito d"
+                + " JOIN provincia p ON d.idprovincia = p.idprovincia"
+                + " JOIN departamento dep ON p.iddepartamento = dep.iddepartamento"
+                + " WHERE d.iddistrito = ?";
+        
+        try (Connection conn = ConexionBD.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sqlString)) {
+
+            stmt.setLong(1, idDistrito);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    List<Long> lista = new ArrayList<>();
+                    lista.add(rs.getLong("iddistrito"));
+                    System.out.println("idDIstrito es: " + lista.get(0));
+                    lista.add(rs.getLong("idprovincia"));
+                    System.out.println("idProvincia es: " + lista.get(1));
+                    lista.add(rs.getLong("iddepartamento"));
+                    System.out.println("idDepartamento es: " + lista.get(2));
+                    return lista;
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al obtener distrito", e);
+        }
+        return null;
     }
 }

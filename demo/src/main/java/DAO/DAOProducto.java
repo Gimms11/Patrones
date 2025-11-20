@@ -8,7 +8,7 @@ public interface DAOProducto {
     public void actualizarProducto(Producto produc);
     public void eliminarProducto(Producto produc);
     public List<Producto> listarProducto();
-    public Producto buscarProducto(Producto produc);
+    public Producto buscarProducto(Long idProducto);
     List<Producto> filtrarProductos(
             String nombre,
             Double precio,

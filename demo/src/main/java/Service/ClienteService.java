@@ -3,6 +3,8 @@ package service;
 import java.sql.SQLException;
 import java.util.List;
 
+import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
+
 import DTO.Cliente;
 import DAO.DAOCliente;
 import DAO.DAOFactory;
@@ -52,5 +54,10 @@ public class ClienteService {
 
     public Cliente obtenerPorId(Long id) {
         return repository.buscarCliente(id);
+    }
+
+    public void actualizarCliente(Cliente cliente){
+        if(cliente == null) return;
+        repository.actualizarCliente(cliente);
     }
 }

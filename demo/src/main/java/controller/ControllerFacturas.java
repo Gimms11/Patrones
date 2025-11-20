@@ -12,6 +12,8 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
+
 public class ControllerFacturas {
 
     // === ELEMENTOS DE LA VISTA vistosa ===
@@ -159,8 +161,27 @@ public class ControllerFacturas {
 
     /** Configura el ComboBox de productos con los datos del servicio */
     private void configurarComboProd(ComboBox<Producto> combo) {
-        var productos = productoService.obtenerTodos();
-        combo.setItems(FXCollections.observableArrayList(productos));
+        List<Producto> productos = productoService.obtenerTodos();
+
+        // Nueva lista filtrada
+        List<Producto> productosFiltrados = new ArrayList<>();
+
+        for (Producto p : productos) {
+            if (p.getNombre() == null) continue;
+
+            String nombre = p.getNombre().trim();
+
+            // Verifica si está completamente en MAYÚSCULAS
+            if (nombre.equals(nombre.toUpperCase())) {
+                // Si está en mayúsculas completas, NO se agrega
+                continue;
+            }
+
+            // Se agrega normalmente
+            productosFiltrados.add(p);
+        }
+
+        combo.setItems(FXCollections.observableArrayList(productosFiltrados));
     }
 
     /** Configura el ComboBox de medios de Pago del servicio */
@@ -226,6 +247,16 @@ public class ControllerFacturas {
 
         // Mostrar resultado
         if (cliente != null) {
+            // Verificar si el cliente está desactivado (todo en mayúsculas)
+            boolean nombreDesactivado = esTodoMayusculas(cliente.getNombres());
+            boolean apellidoDesactivado = esTodoMayusculas(cliente.getApellidos());
+
+            if(nombreDesactivado && apellidoDesactivado){
+                mostrarAlerta(AlertType.ERROR , "Usuario Desactivado", "Este Cliente no es valido.");
+                return;
+            }
+            
+            // Mostrar los valores tal cual vienen del objeto Cliente
             nomCliente.setText(cliente.getNombres());
             apeCliente.setText(cliente.getApellidos());
             
@@ -251,6 +282,11 @@ public class ControllerFacturas {
             apeCliente.setText("");
             mostrarAlerta(AlertType.WARNING, "No encontrado", "No se encontró un cliente con ese documento.");
         }
+    }
+
+    /** Verifica si un texto está completamente en mayúsculas */
+    private boolean esTodoMayusculas(String texto) {
+        return texto.equals(texto.toUpperCase());
     }
 
     // =============================================================

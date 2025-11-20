@@ -6,12 +6,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import service.ManejadorService;
 import javafx.scene.text.Font;
 
 import java.io.IOException;
-
-import DTO.Empresa;
 
 /**
  * JavaFX App
@@ -29,7 +26,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("ModProducto"), 900, 700);
+        scene = new Scene(loadFXML("GenProducts"), 900, 700);
         //Asignar titulo a la ventana
         stage.setResizable(false);
         stage.initStyle(StageStyle.UNDECORATED);

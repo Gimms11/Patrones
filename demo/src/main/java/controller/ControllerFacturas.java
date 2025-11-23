@@ -618,6 +618,9 @@ public class ControllerFacturas {
             comprobante.setIdTipoComprobante(tipocomprobanteActual.getIdTipoComprobante());
             comprobante.setIdMedioPago(medioPago.getIdMedioPago());
             comprobante.setIdCliente(cliente.getIdCliente());
+
+
+            
             comprobante.setIdUsuario(1L);
 
             try {

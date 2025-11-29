@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import service.AutenticacioService;
 import service.ManejadorService;
 import javafx.scene.Node;
 
@@ -17,6 +18,8 @@ public class ControllerTopMenu {
 
     @FXML private Label txtUserName;
     @FXML private Label txtRol;
+
+    private AutenticacioService servicioAut;
 
     @FXML
     private void btnMinimizar() {
@@ -36,15 +39,20 @@ public class ControllerTopMenu {
 
     @FXML
     public void initialize() {
+        servicioAut = AutenticacioService.getInstance();
         // Hacer que la barra de título permita arrastrar la ventana
         topMenu_total.setOnMousePressed(this::handleMousePressed);
         topMenu_total.setOnMouseDragged(this::handleMouseDragged);
 
-        ManejadorService lectorService = new ManejadorService();
-        Usuario usuarioActual = lectorService.leerUsuario();
+        cargarInfoUsuario();
+    }
 
-        txtUserName.setText(usuarioActual.getUsername());
-        txtRol.setText(usuarioActual.getRol());
+    private void cargarInfoUsuario() {
+        Usuario usuario = servicioAut.getUsuarioActual();
+        if (usuario != null) {
+            txtUserName.setText(usuario.getUsername());
+            txtRol.setText(usuario.getRol());
+        }
     }
 
     private void handleMousePressed(MouseEvent event) {

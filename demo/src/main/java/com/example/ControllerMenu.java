@@ -9,6 +9,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Tooltip;
+import service.AutenticacioService;
+import service.PermisosNavegacion;
 
 public class ControllerMenu {
     @FXML private FontIcon das;
@@ -17,44 +19,46 @@ public class ControllerMenu {
     @FXML private FontIcon agr3;
     @FXML private FontIcon historial;
 
+    private PermisosNavegacion permisosnav;
+    private AutenticacioService servicioAut;
 
     @FXML
     public void initialize() {
-        Tooltip tooltip = new Tooltip("Dashboard");
-        Tooltip.install(das, tooltip);
-        tooltip = new Tooltip("Generar Comprobantes");
-        Tooltip.install(agr1, tooltip);
-        tooltip = new Tooltip("Agregar Clientes");
-        Tooltip.install(agr2, tooltip);
-        tooltip = new Tooltip("Agregar Productos");
-        Tooltip.install(agr3, tooltip);
-        tooltip = new Tooltip("Historial de Comprobantes");
-        Tooltip.install(historial, tooltip);
+        permisosnav = PermisosNavegacion.getInstance();
+        servicioAut = AutenticacioService.getInstance();
+
+        if (servicioAut.getUsuarioActual() == null) {
+            redirigirALogin();
+            return;
+        }
+
+        configurarTooltip();
+        aplicarPermisos();
     }
 
     @FXML
     private void goToDashboard() throws IOException {
-        App.setRoot("Dashboard");
+        navegarConValidacion("Dashboard");
     }
     @FXML
     private void goToClients() throws IOException {
-        App.setRoot("GenClientes");
+        navegarConValidacion("GenClientes");
     }
     @FXML
     private void goToGenFactures() throws IOException {
-        App.setRoot("GenFactures");
+        navegarConValidacion("GenFactures");
     }
     @FXML
     private void gotoGenProducts() throws IOException {
-        App.setRoot("GenProducts");
+        navegarConValidacion("GenProducts");
     }
     @FXML
     private void goToHistory() throws IOException {
-        App.setRoot("History");
+        navegarConValidacion("History");
     }
     @FXML
     private void goToConfigurations() throws IOException {
-        App.setRoot("Configurations");
+        navegarConValidacion("Configurations");
     }
     @FXML
     private void goToSingOut() throws IOException {
@@ -65,10 +69,78 @@ public class ControllerMenu {
 
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent() && result.get() == ButtonType.OK) {
+            servicioAut.cerrarSesion();
             App.setRoot("Login");
         }
     }
 
+    private void configurarTooltip(){
+        Tooltip.install(das, new Tooltip("Dashboard"));
+        Tooltip.install(agr1, new Tooltip("Generar Comprobantes"));
+        Tooltip.install(agr2, new Tooltip("Agregar Clientes"));
+        Tooltip.install(agr3, new Tooltip("Agregar Productos"));
+        Tooltip.install(historial, new Tooltip("Historial de Comprobantes"));
+    }
+
+    private void aplicarPermisos(){
+        boolean esAdmin = servicioAut.esAdmin();
+        boolean esEmisor = servicioAut.esEmisor();
+
+        agr3.setVisible(esAdmin);
+        agr3.setManaged(esAdmin);
+
+        boolean puedeEmitir = esAdmin || esEmisor;
+        agr1.setVisible(puedeEmitir);
+        agr1.setManaged(puedeEmitir);
+        agr2.setVisible(puedeEmitir);
+        agr2.setManaged(puedeEmitir);
+        historial.setVisible(true);
+    }
+
+    private void navegarConValidacion (String pantalla) {
+        try {
+            permisosnav.navegarA(pantalla);;
+        } catch (SecurityException e) {
+            mostrarAlertaError("Acceso Denegado", 
+                "No tiene permisos para acceder a: " + pantalla + "\n\n" +
+                "Rol requerido: " + obtenerRolesRequeridos(pantalla));
+        } catch (IOException e) {
+            mostrarAlertaError("Error de Navegación", 
+                "No se pudo cargar la pantalla: " + pantalla);
+        }
+    }
+
+    private String obtenerRolesRequeridos(String pantalla) {
+        switch (pantalla) {
+            case "GenProducts":
+            case "Configurations":
+                return "ADMIN";
+            case "GenClientes":
+            case "GenFactures":
+                return "ADMIN, EMISOR";
+            case "History":
+            case "Dashboard":
+                return "ADMIN, EMISOR, LECTOR";
+            default:
+                return "No definido";
+        }
+    }
+
+    private void mostrarAlertaError(String titulo, String mensaje) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(titulo);
+        alert.setHeaderText(null);
+        alert.setContentText(mensaje);
+        alert.showAndWait();
+    }
+
+    private void redirigirALogin() {
+        try {
+            App.setRoot("Login");
+        } catch (IOException e) {
+            System.exit(1);
+        }
+    }
     /*
      * 
      * metodorealizarClculos(idProducto, cantidad){

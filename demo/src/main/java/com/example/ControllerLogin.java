@@ -5,10 +5,10 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import service.AutenticacioService;
 import service.ManejadorService;
 
 import java.io.IOException;
-
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import DAOImpl.DAOUsuarioImpl;
@@ -30,6 +30,7 @@ public class ControllerLogin {
     private Button btningresar;
     private TextField txtcontraseñavisible;
     private DAOUsuarioImpl usuarioDAO = new DAOUsuarioImpl();
+    private AutenticacioService autenticacioService = AutenticacioService.getInstance();
 
     @FXML
     private void initialize() {
@@ -102,8 +103,7 @@ public class ControllerLogin {
         Usuario usuario = usuarioDAO.autenticarUsuario(username, password);
         if (usuario != null) {
             mostrarAlerta("Exito", "Login exitoso!\nBienvenido: " + usuario.getUsername() + "\nRol: " + usuario.getRol());
-            ManejadorService manejadorService = new ManejadorService();
-            manejadorService.guardarUsuario(usuario);
+            autenticacioService.establecerUsuarioAutenticado(usuario);
             App.setRoot("Dashboard");
         } else {
             mostrarAlerta("Error", "Usuario o contraseña incorrectos.");

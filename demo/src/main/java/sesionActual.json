@@ -1,6 +1,6 @@
 {
-  "idUsuario": 1,
-  "username": "Usuario",
-  "password": "Contrasena123",
-  "rol": "Admin"
+  "idUsuario": 3,
+  "username": "emisor",
+  "password": "admin",
+  "rol": "EMISOR"
 }

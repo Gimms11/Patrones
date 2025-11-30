@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Comprobante>
+  <Tipo>Boleta</Tipo>
+  <Empresa>
+    <RUC>EMPRESA_RUC</RUC>
+    <Nombre>EMPRESA_NOMBRE</Nombre>
+  </Empresa>
+  <Cliente>
+    <Documento>72806338</Documento>
+    <Nombre>Albert Mijael</Nombre>
+  </Cliente>
+  <Informacion>
+    <Serie>FG-3</Serie>
+    <Fecha>2025-11-08</Fecha>
+  </Informacion>
+  <Items>
+    <!-- Los detalles se obtienen por separado en el servicio -->
+    <!-- ComprobantId: 3 -->
+  </Items>
+  <Totales>
+    <TotalFinal>72.20</TotalFinal>
+  </Totales>
+</Comprobante>

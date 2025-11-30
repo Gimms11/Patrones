@@ -1,6 +1,6 @@
 {
-  "idUsuario": 3,
-  "username": "emisor",
+  "idUsuario": 2,
+  "username": "admin",
   "password": "admin",
-  "rol": "EMISOR"
+  "rol": "ADMIN"
 }

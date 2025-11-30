@@ -1,0 +1,9 @@
+pe\utp\facturacion\persistence\dao\DAOUbigeo.class
+pe\utp\facturacion\model\Departamento.class
+pe\utp\facturacion\persistence\dao\DAODetalleComprobante.class
+pe\utp\facturacion\model\Provincia.class
+module-info.class
+pe\utp\facturacion\service\DetalleComprobanteService.class
+pe\utp\facturacion\model\DetalleComprobante.class
+pe\utp\facturacion\model\Distrito.class
+pe\utp\facturacion\service\UbigeoService.class

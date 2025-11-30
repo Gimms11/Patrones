@@ -1,6 +1,5 @@
 package pe.utp.facturacion.patterns.builder;
 
-
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 
@@ -17,7 +16,8 @@ public abstract class AbstractGeneradorPDF implements GeneradorPDFBuilder {
     protected Font fontTitle = new Font(Font.FontFamily.HELVETICA, 14, Font.BOLD);
     protected Font fontNormal = new Font(Font.FontFamily.HELVETICA, 10, Font.NORMAL);
     protected Font fontBold = new Font(Font.FontFamily.HELVETICA, 10, Font.BOLD);
-    protected NumberFormat currency = NumberFormat.getCurrencyInstance(new Locale("es","PE")); // ajusta locale si hace falta
+    protected NumberFormat currency = NumberFormat.getCurrencyInstance(new Locale("es", "PE")); // ajusta locale si hace
+                                                                                                // falta
     protected DateTimeFormatter dateFmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     protected void abrirDocumento(String rutaSalida) throws Exception {
@@ -59,4 +59,3 @@ public abstract class AbstractGeneradorPDF implements GeneradorPDFBuilder {
         return c;
     }
 }
-

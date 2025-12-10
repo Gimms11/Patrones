@@ -11,6 +11,9 @@ public class GeneradorBoletaPDF extends AbstractGeneradorPDF {
 
     @Override
     public void agregarEncabezado(Empresa empresa) throws Exception {
+        System.out.println("[PATRÓN BUILDER] GeneradorBoletaPDF - Construyendo encabezado de PDF");
+        System.out.println("[GRASP: Polymorphism] Implementación específica del builder para boletas");
+
         // === Encabezado moderno (similar al de la factura) ===
         PdfPTable tabla = crearTabla(new float[] { 3f, 1.2f });
         tabla.setWidthPercentage(100);

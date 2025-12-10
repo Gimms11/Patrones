@@ -11,6 +11,8 @@ public class NavHistorial implements NavegacionStrategy {
 
     @Override
     public void navegar() throws java.io.IOException {
+        System.out.println("[PATRÓN STRATEGY] Ejecutando estrategia de navegación: NavHistorial");
+        System.out.println("[GRASP: Polymorphism] Implementación polimórfica de NavegacionStrategy");
         fachada.navegarA("History");
     }
 

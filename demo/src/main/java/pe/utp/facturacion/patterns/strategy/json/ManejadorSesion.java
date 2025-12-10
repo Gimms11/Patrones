@@ -12,6 +12,10 @@ public class ManejadorSesion implements ManejadorJsonI<Usuario> {
 
     @Override
     public Usuario leerArchivoJson(String rutaArchivo) {
+        System.out.println("[PATRÓN STRATEGY] Ejecutando estrategia de lectura JSON: ManejadorSesion");
+        System.out.println("[GRASP: Polymorphism] Implementación polimórfica de ManejadorJsonI para Usuario");
+        System.out.println("[GRASP: Information Expert] ManejadorSesion conoce cómo leer datos de sesión desde JSON");
+
         try {
             // Si no se proporciona una ruta, usar la ruta por defecto
             if (rutaArchivo == null || rutaArchivo.trim().isEmpty()) {
@@ -31,20 +35,20 @@ public class ManejadorSesion implements ManejadorJsonI<Usuario> {
 
             // Convertir el contenido JSON en un objeto Empresa manualmente
             String json = jsonContent.toString();
-            
+
             // Eliminar las llaves del inicio y final
             json = json.substring(1, json.length() - 1);
-            
+
             // Crear una nueva empresa
             Usuario usuario = new Usuario();
-            
+
             // Separar los campos por comas y procesar cada uno
             for (String campo : json.split(",")) {
                 String[] partes = campo.split(":");
                 if (partes.length == 2) {
                     String clave = partes[0].trim().replace("\"", "");
                     String valor = partes[1].trim().replace("\"", "");
-                    
+
                     switch (clave) {
                         case "idUsuario":
                             usuario.setIdUsuario(Long.parseLong(valor));
@@ -61,12 +65,12 @@ public class ManejadorSesion implements ManejadorJsonI<Usuario> {
                     }
                 }
             }
-            
+
             // Validar campos obligatorios
             if (usuario.getUsername() == null || usuario.getUsername().trim().isEmpty()) {
                 throw new IllegalArgumentException("El nombre de la empresa es obligatorio");
             }
-            
+
             return usuario;
 
         } catch (IOException e) {
@@ -80,18 +84,19 @@ public class ManejadorSesion implements ManejadorJsonI<Usuario> {
         }
     }
 
-        @Override
+    @Override
     public void escribirArchivoJson(Usuario usuario, String rutaArchivo) {
-        String ruta = (rutaArchivo == null || rutaArchivo.trim().isEmpty()) 
-                      ? RUTA_DEFECTO : rutaArchivo;
+        String ruta = (rutaArchivo == null || rutaArchivo.trim().isEmpty())
+                ? RUTA_DEFECTO
+                : rutaArchivo;
 
         StringBuilder json = new StringBuilder();
         json.append("{\n")
-            .append("  \"idUsuario\": ").append(usuario.getIdUsuario()).append(",\n")
-            .append("  \"username\": \"").append(escapeJson(usuario.getUsername())).append("\",\n")
-            .append("  \"password\": \"").append(escapeJson(usuario.getPassword())).append("\",\n")
-            .append("  \"rol\": \"").append(escapeJson(usuario.getRol())).append("\"\n")
-            .append("}");
+                .append("  \"idUsuario\": ").append(usuario.getIdUsuario()).append(",\n")
+                .append("  \"username\": \"").append(escapeJson(usuario.getUsername())).append("\",\n")
+                .append("  \"password\": \"").append(escapeJson(usuario.getPassword())).append("\",\n")
+                .append("  \"rol\": \"").append(escapeJson(usuario.getRol())).append("\"\n")
+                .append("}");
 
         try (FileWriter writer = new FileWriter(ruta)) {
             writer.write(json.toString());
@@ -101,7 +106,8 @@ public class ManejadorSesion implements ManejadorJsonI<Usuario> {
     }
 
     private String escapeJson(String value) {
-        if (value == null) return "";
+        if (value == null)
+            return "";
         return value.replace("\"", "\\\"");
     }
 }

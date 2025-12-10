@@ -13,7 +13,7 @@ import java.util.Properties;
  * Adapta la interfaz JavaMail a nuestro contrato EmailSender
  */
 public class MailTrapEmailAdapter implements EmailSender {
-    
+
     // Credenciales MailTrap
     private static final String HOST = "sandbox.smtp.mailtrap.io";
     private static final int PORT = 2525;
@@ -23,6 +23,10 @@ public class MailTrapEmailAdapter implements EmailSender {
 
     @Override
     public void sendEmail(String to, String subject, String body, File xmlFile) throws Exception {
+        System.out.println("[PATRÓN ADAPTER] Adaptando interfaz JavaMail (MailTrap) a EmailSender");
+        System.out.println(
+                "[GRASP: Indirection] MailTrapEmailAdapter proporciona indirección hacia el sistema de correo");
+
         // Configurar propiedades de SMTP
         Properties props = new Properties();
         props.put("mail.smtp.host", HOST);
@@ -68,7 +72,7 @@ public class MailTrapEmailAdapter implements EmailSender {
 
             // Enviar correo
             Transport.send(message);
-            
+
             System.out.println("✓ Correo enviado exitosamente a: " + to);
 
         } catch (MessagingException e) {

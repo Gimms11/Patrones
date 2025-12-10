@@ -10,6 +10,11 @@ public class FacturaXMLGenerator implements XMLGenerator {
 
     @Override
     public String generar(Comprobante comprobante) {
+        System.out.println("[PATRÓN STRATEGY] Generando XML usando estrategia específica: FacturaXMLGenerator");
+        System.out.println("[GRASP: Polymorphism] Implementación polimórfica de XMLGenerator para Facturas");
+        System.out
+                .println("[GRASP: High Cohesion] FacturaXMLGenerator se enfoca únicamente en generar XML de facturas");
+
         StringBuilder xml = new StringBuilder();
 
         xml.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");

@@ -12,6 +12,10 @@ public class ManejadorEmpresa implements ManejadorJsonI<Empresa> {
 
     @Override
     public Empresa leerArchivoJson(String rutaArchivo) {
+        System.out.println("[PATRÓN STRATEGY] Ejecutando estrategia de lectura JSON: ManejadorEmpresa");
+        System.out.println("[GRASP: Polymorphism] Implementación polimórfica de ManejadorJsonI para Empresa");
+        System.out.println("[GRASP: Information Expert] ManejadorEmpresa conoce cómo leer datos de empresa desde JSON");
+
         try {
             // Si no se proporciona una ruta, usar la ruta por defecto
             if (rutaArchivo == null || rutaArchivo.trim().isEmpty()) {
@@ -31,20 +35,20 @@ public class ManejadorEmpresa implements ManejadorJsonI<Empresa> {
 
             // Convertir el contenido JSON en un objeto Empresa manualmente
             String json = jsonContent.toString();
-            
+
             // Eliminar las llaves del inicio y final
             json = json.substring(1, json.length() - 1);
-            
+
             // Crear una nueva empresa
             Empresa empresa = new Empresa();
-            
+
             // Separar los campos por comas y procesar cada uno
             for (String campo : json.split(",")) {
                 String[] partes = campo.split(":");
                 if (partes.length == 2) {
                     String clave = partes[0].trim().replace("\"", "");
                     String valor = partes[1].trim().replace("\"", "");
-                    
+
                     switch (clave) {
                         case "nombre":
                             empresa.setNombre(valor);
@@ -73,12 +77,12 @@ public class ManejadorEmpresa implements ManejadorJsonI<Empresa> {
                     }
                 }
             }
-            
+
             // Validar campos obligatorios
             if (empresa.getNombre() == null || empresa.getNombre().trim().isEmpty()) {
                 throw new IllegalArgumentException("El nombre de la empresa es obligatorio");
             }
-            
+
             // Si no hay RUC, asignar uno por defecto para testing
             if (empresa.getRuc() == null || empresa.getRuc().trim().isEmpty()) {
                 empresa.setRuc("20123456789");
@@ -99,21 +103,22 @@ public class ManejadorEmpresa implements ManejadorJsonI<Empresa> {
 
     @Override
     public void escribirArchivoJson(Empresa empresa, String rutaArchivo) {
-        String ruta = (rutaArchivo == null || rutaArchivo.trim().isEmpty()) 
-                      ? RUTA_DEFECTO : rutaArchivo;
+        String ruta = (rutaArchivo == null || rutaArchivo.trim().isEmpty())
+                ? RUTA_DEFECTO
+                : rutaArchivo;
 
         // Construir JSON manualmente (temporal, hasta usar Gson)
         StringBuilder json = new StringBuilder();
         json.append("{\n")
-            .append("  \"nombre\": \"").append(escapeJson(empresa.getNombre())).append("\",\n")
-            .append("  \"ruc\": \"").append(escapeJson(empresa.getRuc())).append("\",\n")
-            .append("  \"id\": ").append(empresa.getIdEmpresa()).append(",\n")
-            .append("  \"correo\": \"").append(escapeJson(empresa.getCorreo())).append("\",\n")
-            .append("  \"direccion\": \"").append(escapeJson(empresa.getDireccion())).append("\",\n")
-            .append("  \"telefono\": \"").append(escapeJson(empresa.getTelefono())).append("\",\n")
-            .append("  \"pais\": \"").append(escapeJson(empresa.getPais())).append("\",\n")
-            .append("  \"descripcion\": \"").append(escapeJson(empresa.getDescripcion())).append("\"\n")
-            .append("}");
+                .append("  \"nombre\": \"").append(escapeJson(empresa.getNombre())).append("\",\n")
+                .append("  \"ruc\": \"").append(escapeJson(empresa.getRuc())).append("\",\n")
+                .append("  \"id\": ").append(empresa.getIdEmpresa()).append(",\n")
+                .append("  \"correo\": \"").append(escapeJson(empresa.getCorreo())).append("\",\n")
+                .append("  \"direccion\": \"").append(escapeJson(empresa.getDireccion())).append("\",\n")
+                .append("  \"telefono\": \"").append(escapeJson(empresa.getTelefono())).append("\",\n")
+                .append("  \"pais\": \"").append(escapeJson(empresa.getPais())).append("\",\n")
+                .append("  \"descripcion\": \"").append(escapeJson(empresa.getDescripcion())).append("\"\n")
+                .append("}");
 
         try (FileWriter writer = new FileWriter(ruta)) {
             writer.write(json.toString());
@@ -124,7 +129,8 @@ public class ManejadorEmpresa implements ManejadorJsonI<Empresa> {
 
     // Método auxiliar para escapar comillas y caracteres especiales (básico)
     private String escapeJson(String value) {
-        if (value == null) return "";
+        if (value == null)
+            return "";
         return value.replace("\"", "\\\"");
     }
 }

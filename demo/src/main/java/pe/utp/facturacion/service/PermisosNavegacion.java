@@ -1,4 +1,5 @@
 package pe.utp.facturacion.service;
+
 import pe.utp.facturacion.core.App;
 
 import java.io.IOException;
@@ -10,19 +11,22 @@ public class PermisosNavegacion {
     private AutenticacioService autenticacioService;
     private Map<String, String> permisosPantallas;
 
-    private PermisosNavegacion(){
+    private PermisosNavegacion() {
         this.autenticacioService = AutenticacioService.getInstance();
         inicializarPermisos();
     }
 
-    public static PermisosNavegacion getInstance(){
-        if(instance == null){
+    public static PermisosNavegacion getInstance() {
+        if (instance == null) {
+            System.out.println("[PATRÓN SINGLETON] Creando instancia única de PermisosNavegacion");
             instance = new PermisosNavegacion();
+        } else {
+            System.out.println("[PATRÓN SINGLETON] Retornando instancia existente de PermisosNavegacion");
         }
         return instance;
     }
 
-    private void inicializarPermisos(){
+    private void inicializarPermisos() {
         permisosPantallas = new HashMap<>();
         permisosPantallas.put("GenClientes", "ADMIN,EMISOR");
         permisosPantallas.put("GenFactures", "ADMIN,EMISOR");
@@ -33,15 +37,18 @@ public class PermisosNavegacion {
     }
 
     public void navegarA(String pantalla) throws IOException {
-        if(!tienePermiso(pantalla)){
+        System.out.println("[PATRÓN FACADE] PermisosNavegacion coordinando navegación con validación de permisos");
+        System.out.println("[GRASP: Controller] PermisosNavegacion controla navegación y permisos como controlador");
+
+        if (!tienePermiso(pantalla)) {
             throw new SecurityException("Acceso denegado a la pantalla: " + pantalla);
         }
         App.setRoot(pantalla);
     }
 
-    public boolean tienePermiso(String pantalla){
+    public boolean tienePermiso(String pantalla) {
         String rolesPermitidos = permisosPantallas.get(pantalla);
-        if(rolesPermitidos == null){
+        if (rolesPermitidos == null) {
             return false; // Si no hay restricciones, permitir acceso
         }
         String[] roles = rolesPermitidos.split(",");

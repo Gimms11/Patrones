@@ -26,6 +26,9 @@ public class XMLService {
     private EmailSender emailSender;
 
     public XMLService() {
+        System.out.println("[PATRÓN FACADE] Inicializando XMLService - Facade para generación XML y envío de correo");
+        System.out.println("[GRASP: High Cohesion] XMLService se enfoca únicamente en coordinar XML y email");
+
         // Inyectar el adapter de email
         this.emailSender = new MailTrapEmailAdapter();
 
@@ -42,6 +45,10 @@ public class XMLService {
      * @throws Exception Si hay error en cualquier paso
      */
     public void generarYEnviarXML(Comprobante comprobante, String correoDestino) throws Exception {
+        System.out.println("[PATRÓN FACADE] XMLService orquestando proceso completo de XML y email");
+        System.out.println("[GRASP: Controller] XMLService coordina múltiples subsistemas (Factory, Adapter)");
+        System.out.println("[GRASP: Indirection] Facade proporciona indirección hacia subsistemas complejos");
+
         try {
             System.out.println("═══════════════════════════════════════════════════════");
             System.out.println("🔄 Iniciando generación de XML...");

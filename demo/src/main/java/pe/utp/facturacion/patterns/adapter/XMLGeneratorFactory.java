@@ -16,10 +16,18 @@ public class XMLGeneratorFactory {
      * @throws IllegalArgumentException si el tipo no es soportado
      */
     public static XMLGenerator get(long idTipoComprobante) {
+        System.out.println(
+                "[PATRÓN FACTORY METHOD] XMLGeneratorFactory - Creando generador XML según tipo de comprobante");
+        System.out.println("[GRASP: Creator] XMLGeneratorFactory tiene la responsabilidad de crear XMLGenerators");
+        System.out.println(
+                "[GRASP: Protected Variations] Factory protege contra cambios en las implementaciones de XMLGenerator");
+
         switch ((int) idTipoComprobante) {
             case 1:
+                System.out.println("[FACTORY METHOD] Creando FacturaXMLGenerator (tipo=1: Factura)");
                 return new FacturaXMLGenerator();
             case 2:
+                System.out.println("[FACTORY METHOD] Creando BoletaXMLGenerator (tipo=2: Boleta)");
                 return new BoletaXMLGenerator();
             default:
                 throw new IllegalArgumentException(

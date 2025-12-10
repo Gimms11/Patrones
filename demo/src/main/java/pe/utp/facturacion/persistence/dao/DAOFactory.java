@@ -31,8 +31,13 @@ public abstract class DAOFactory {
 
     // Método para obtener la instancia de Factory
     public static DAOFactory getDAOFactory(int whichFactory) {
+        System.out.println("[PATRÓN ABSTRACT FACTORY] Obteniendo instancia de DAOFactory");
+        System.out.println("[GRASP: Creator] DAOFactory decide qué familia de DAOs crear");
+        System.out.println("[GRASP: Protected Variations] Abstract Factory protege contra cambios de base de datos");
+
         switch (whichFactory) {
             case POSTGRES:
+                System.out.println("[ABSTRACT FACTORY] Creando PostgresDAOFactory (Base de datos: PostgreSQL)");
                 return new PostgresDAOFactory();
             default:
                 return null;
@@ -41,6 +46,7 @@ public abstract class DAOFactory {
 
     // Método por defecto que retorna PostgresDAOFactory
     public static DAOFactory getDAOFactory() {
+        System.out.println("[PATRÓN ABSTRACT FACTORY] Obteniendo DAOFactory por defecto (PostgreSQL)");
         return getDAOFactory(POSTGRES);
     }
 

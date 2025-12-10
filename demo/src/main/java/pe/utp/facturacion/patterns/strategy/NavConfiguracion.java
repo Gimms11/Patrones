@@ -11,6 +11,8 @@ public class NavConfiguracion implements NavegacionStrategy {
 
     @Override
     public void navegar() throws java.io.IOException {
+        System.out.println("[PATRÓN STRATEGY] Ejecutando estrategia de navegación: NavConfiguracion");
+        System.out.println("[GRASP: Polymorphism] Implementación polimórfica de NavegacionStrategy");
         fachada.navegarA("Configurations");
     }
 

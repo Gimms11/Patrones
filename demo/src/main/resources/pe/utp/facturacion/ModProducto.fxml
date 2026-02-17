@@ -125,7 +125,7 @@
          <children>
             <VBox>
                <children>
-                  <Label styleClass="txtSubTitle" text="Dirección:" />
+                  <Label styleClass="txtSubTitle" text="Descripción:" />
                   <TextArea fx:id="txtDesc" prefHeight="200.0" prefWidth="200.0" styleClass="text-area2" />
                </children>
             </VBox>
@@ -134,7 +134,7 @@
       <AnchorPane prefHeight="17.0" prefWidth="420.0">
          <children>
             <Button layoutY="-2.0" mnemonicParsing="false" onAction="#actualizarProducto" prefWidth="100.0" styleClass="buttonIn" text="Guardar" />
-            <Button layoutX="110.0" layoutY="-2.0" mnemonicParsing="false" onAction="#cancelar" prefWidth="100.0" styleClass="buttonOut" text="Cancelar" />
+            <Button layoutX="110.0" layoutY="-2.0" mnemonicParsing="false" onAction="#cerrarVentana" prefWidth="100.0" styleClass="buttonOut" text="Cancelar" />
             <Button fx:id="btnEliminActivar" layoutX="320.0" layoutY="-2.0" mnemonicParsing="false" onAction="#onClickEliminarActivar" prefHeight="32.0" prefWidth="100.0" styleClass="buttonIn" text="Eliminar" />
          </children>
          <VBox.margin>

@@ -21,17 +21,25 @@ import pe.utp.facturacion.service.ProductoService;
 public class ControllerModProductos {
 
     // --- Inputs ---
-    @FXML private TextField txtNombre;
-    @FXML private TextField txtPrecio;
-    @FXML private TextField txtStock;
-    @FXML private TextField txtUnidad;
-    @FXML private TextArea txtDesc;
+    @FXML
+    private TextField txtNombre;
+    @FXML
+    private TextField txtPrecio;
+    @FXML
+    private TextField txtStock;
+    @FXML
+    private TextField txtUnidad;
+    @FXML
+    private TextArea txtDesc;
 
     // --- ComboBox ---
-    @FXML private ComboBox<CategoriaProductos> listCategoria;
-    @FXML private ComboBox<AfectacionProductos> listAfectacion;
+    @FXML
+    private ComboBox<CategoriaProductos> listCategoria;
+    @FXML
+    private ComboBox<AfectacionProductos> listAfectacion;
 
-    @FXML private Button btnEliminActivar;
+    @FXML
+    private Button btnEliminActivar;
 
     // --- Servicios ---
     private AfectacionService afectacionService;
@@ -41,10 +49,11 @@ public class ControllerModProductos {
     // --- Producto actual ---
     private Producto productoActual;
 
-
-    /* ============================================================
-     *  Inicialización
-     * ============================================================ */
+    /*
+     * ============================================================
+     * Inicialización
+     * ============================================================
+     */
     @FXML
     public void initialize() {
         try {
@@ -65,10 +74,11 @@ public class ControllerModProductos {
         }
     }
 
-
-    /* ============================================================
-     *  SETTER dinámico
-     * ============================================================ */
+    /*
+     * ============================================================
+     * SETTER dinámico
+     * ============================================================
+     */
     public void setProducto(Producto producto) {
         this.productoActual = producto;
 
@@ -79,10 +89,11 @@ public class ControllerModProductos {
         bloquearCampos(!productoEstaActivo());
     }
 
-
-    /* ============================================================
-     *  Cargar datos del producto
-     * ============================================================ */
+    /*
+     * ============================================================
+     * Cargar datos del producto
+     * ============================================================
+     */
     private void cargarDatosProducto() {
         txtNombre.setText(productoActual.getNombre());
         txtDesc.setText(productoActual.getDescripcion());
@@ -91,10 +102,11 @@ public class ControllerModProductos {
         txtUnidad.setText(productoActual.getUnidadMedida());
     }
 
-
-    /* ============================================================
-     *  BLOQUEAR / DESBLOQUEAR CAMPOS
-     * ============================================================ */
+    /*
+     * ============================================================
+     * BLOQUEAR / DESBLOQUEAR CAMPOS
+     * ============================================================
+     */
     private void bloquearCampos(boolean bloquear) {
         txtNombre.setDisable(bloquear);
         txtPrecio.setDisable(bloquear);
@@ -105,19 +117,18 @@ public class ControllerModProductos {
         listAfectacion.setDisable(bloquear);
     }
 
-
-    /* ============================================================
-     *  Estado ACTIVO / DESACTIVADO
-     * ============================================================ */
+    /*
+     * ============================================================
+     * Estado ACTIVO / DESACTIVADO
+     * ============================================================
+     */
     private boolean estaDesactivado(String texto) {
         return texto.equals(texto.toUpperCase());
     }
 
     private boolean productoEstaActivo() {
-        return !(
-            estaDesactivado(txtNombre.getText()) &&
-            estaDesactivado(txtDesc.getText())
-        );
+        return !(estaDesactivado(txtNombre.getText()) &&
+                estaDesactivado(txtDesc.getText()));
     }
 
     private void configurarEstadoBoton() {
@@ -127,10 +138,11 @@ public class ControllerModProductos {
             btnEliminActivar.setText("Activar");
     }
 
-
-    /* ============================================================
-     *  Activar / Desactivar producto (LÓGICA MAYÚSCULAS)
-     * ============================================================ */
+    /*
+     * ============================================================
+     * Activar / Desactivar producto (LÓGICA MAYÚSCULAS)
+     * ============================================================
+     */
     @FXML
     private void onClickEliminarActivar() {
 
@@ -165,14 +177,16 @@ public class ControllerModProductos {
         cerrarVentana();
     }
 
-
-    /* ============================================================
-     *  Combos
-     * ============================================================ */
+    /*
+     * ============================================================
+     * Combos
+     * ============================================================
+     */
     private void configurarComboAfectacion() {
         try {
             var afectaciones = afectacionService.listarAfectaciones();
-            if (afectaciones == null) afectaciones = new ArrayList<>();
+            if (afectaciones == null)
+                afectaciones = new ArrayList<>();
 
             listAfectacion.setItems(FXCollections.observableArrayList(afectaciones));
             listAfectacion.setPromptText("Seleccione tipo de afectación");
@@ -204,11 +218,11 @@ public class ControllerModProductos {
         }
     }
 
-
     private void configurarComboCategoria() {
         try {
             var categorias = categoriaService.listarCategorias();
-            if (categorias == null) categorias = new ArrayList<>();
+            if (categorias == null)
+                categorias = new ArrayList<>();
 
             listCategoria.setItems(FXCollections.observableArrayList(categorias));
             listCategoria.setPromptText("Seleccione categoría");
@@ -240,17 +254,18 @@ public class ControllerModProductos {
         }
     }
 
-
-    /* ============================================================
-     *  Validaciones
-     * ============================================================ */
+    /*
+     * ============================================================
+     * Validaciones
+     * ============================================================
+     */
     private boolean validar() {
 
         if (txtNombre.getText().isBlank() ||
-            txtPrecio.getText().isBlank() ||
-            txtStock.getText().isBlank() ||
-            txtUnidad.getText().isBlank() ||
-            txtDesc.getText().isBlank()) {
+                txtPrecio.getText().isBlank() ||
+                txtStock.getText().isBlank() ||
+                txtUnidad.getText().isBlank() ||
+                txtDesc.getText().isBlank()) {
 
             mostrarAdvertencia("Campos vacíos", "Todos los campos son obligatorios.");
             return false;
@@ -279,14 +294,16 @@ public class ControllerModProductos {
         return true;
     }
 
-
-    /* ============================================================
-     *  Actualizar Producto
-     * ============================================================ */
+    /*
+     * ============================================================
+     * Actualizar Producto
+     * ============================================================
+     */
     @FXML
     private void actualizarProducto() {
 
-        if (!validar()) return;
+        if (!validar())
+            return;
 
         try {
             productoActual.setNombre(capitalizar(txtNombre.getText()));
@@ -311,10 +328,11 @@ public class ControllerModProductos {
         cerrarVentana();
     }
 
-
-    /* ============================================================
-     *  CANCELAR (restaurar datos sin guardar)
-     * ============================================================ */
+    /*
+     * ============================================================
+     * CANCELAR (restaurar datos sin guardar)
+     * ============================================================
+     */
     @FXML
     private void cancelar() {
         cargarDatosProducto();
@@ -326,39 +344,53 @@ public class ControllerModProductos {
         cerrarVentana();
     }
 
-
-    /* ============================================================
-     *  CERRAR VENTANA SIN HACER NADA
-     * ============================================================ */
+    /*
+     * ============================================================
+     * CERRAR VENTANA SIN HACER NADA
+     * ============================================================
+     */
     @FXML
     private void cerrarSinCambios() {
         cerrarVentana();
     }
 
-
-    /* ============================================================
-     *  Utilidades
-     * ============================================================ */
+    /*
+     * ============================================================
+     * Utilidades
+     * ============================================================
+     */
     private String capitalizar(String texto) {
-        if (texto == null || texto.isBlank()) return texto;
+        if (texto == null || texto.isBlank())
+            return texto;
         texto = texto.toLowerCase();
         return Character.toUpperCase(texto.charAt(0)) + texto.substring(1);
     }
 
     private void mostrarInfo(String t, String m) {
-        new Alert(Alert.AlertType.INFORMATION, m) {{ setHeaderText(t); }}.showAndWait();
+        new Alert(Alert.AlertType.INFORMATION, m) {
+            {
+                setHeaderText(t);
+            }
+        }.showAndWait();
     }
 
     private void mostrarAdvertencia(String t, String m) {
-        new Alert(Alert.AlertType.WARNING, m) {{ setHeaderText(t); }}.showAndWait();
+        new Alert(Alert.AlertType.WARNING, m) {
+            {
+                setHeaderText(t);
+            }
+        }.showAndWait();
     }
 
     private void mostrarError(String t, String m, String d) {
-        new Alert(Alert.AlertType.ERROR, m + "\n\nDETALLES:\n" + d) {{
-            setHeaderText(t);
-        }}.showAndWait();
+        new Alert(Alert.AlertType.ERROR, m + "\n\nDETALLES:\n" + d) {
+            {
+                setHeaderText(t);
+            }
+        }.showAndWait();
     }
 
+    @FXML
     private void cerrarVentana() {
         btnEliminActivar.getScene().getWindow().hide();
     }

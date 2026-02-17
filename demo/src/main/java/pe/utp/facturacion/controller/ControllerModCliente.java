@@ -20,20 +20,31 @@ import pe.utp.facturacion.service.UbigeoService;
 public class ControllerModCliente {
 
     // --- ComboBox ---
-    @FXML private ComboBox<TipoDocumento> comboTipoDocumento;
-    @FXML private ComboBox<Departamento> listDepartamento;
-    @FXML private ComboBox<Provincia> listProvincia;
-    @FXML private ComboBox<Distrito> listDistrito;
+    @FXML
+    private ComboBox<TipoDocumento> comboTipoDocumento;
+    @FXML
+    private ComboBox<Departamento> listDepartamento;
+    @FXML
+    private ComboBox<Provincia> listProvincia;
+    @FXML
+    private ComboBox<Distrito> listDistrito;
 
     // --- Inputs ---
-    @FXML private TextField txtNombres;
-    @FXML private TextField txtApellidos;
-    @FXML private TextField txtTelefono;
-    @FXML private TextField txtCorreo;
-    @FXML private TextField txtNumDoc;
-    @FXML private TextField txtDireccion;
+    @FXML
+    private TextField txtNombres;
+    @FXML
+    private TextField txtApellidos;
+    @FXML
+    private TextField txtTelefono;
+    @FXML
+    private TextField txtCorreo;
+    @FXML
+    private TextField txtNumDoc;
+    @FXML
+    private TextField txtDireccion;
 
-    @FXML private Button btnEliminActivar;
+    @FXML
+    private Button btnEliminActivar;
 
     // --- DTO ---
     private Cliente clienteSeleccionado;
@@ -43,10 +54,11 @@ public class ControllerModCliente {
     private TipoDocumentoService documentoService;
     private UbigeoService ubigeoService;
 
-
-    /* ============================================================
-     *  Inicialización
-     * ============================================================ */
+    /*
+     * ============================================================
+     * Inicialización
+     * ============================================================
+     */
     @FXML
     public void initialize() {
         clienteService = new ClienteService();
@@ -64,10 +76,11 @@ public class ControllerModCliente {
         bloquearCampos(!clienteEstaActivo()); // <-- BLOQUEA CAMPOS SI ESTÁ DESACTIVADO
     }
 
-
-    /* ============================================================
-     *  Bloquear / Desbloquear campos
-     * ============================================================ */
+    /*
+     * ============================================================
+     * Bloquear / Desbloquear campos
+     * ============================================================
+     */
     private void bloquearCampos(boolean bloquear) {
 
         txtNombres.setDisable(bloquear);
@@ -83,10 +96,11 @@ public class ControllerModCliente {
         listDistrito.setDisable(bloquear);
     }
 
-
-    /* ============================================================
-     *  Cargar datos
-     * ============================================================ */
+    /*
+     * ============================================================
+     * Cargar datos
+     * ============================================================
+     */
     private void cargarDatosCliente() {
         txtNombres.setText(clienteSeleccionado.getNombres());
         txtApellidos.setText(clienteSeleccionado.getApellidos());
@@ -96,10 +110,11 @@ public class ControllerModCliente {
         txtDireccion.setText(clienteSeleccionado.getDireccion());
     }
 
-
-    /* ============================================================
-     *  Tipo Documento
-     * ============================================================ */
+    /*
+     * ============================================================
+     * Tipo Documento
+     * ============================================================
+     */
     private void configurarComboTipoDocumento() {
         try {
             var documentos = documentoService.cargarTipoDocumentos();
@@ -118,10 +133,11 @@ public class ControllerModCliente {
         }
     }
 
-
-    /* ============================================================
-     *  UBIGEO
-     * ============================================================ */
+    /*
+     * ============================================================
+     * UBIGEO
+     * ============================================================
+     */
     private void configurarUbigeo() {
         try {
             Long idDistrito = clienteSeleccionado.getIdDistrito();
@@ -181,18 +197,19 @@ public class ControllerModCliente {
         }
     }
 
-
-    /* ============================================================
-     *  VALIDACIONES
-     * ============================================================ */
+    /*
+     * ============================================================
+     * VALIDACIONES
+     * ============================================================
+     */
     private boolean validarCampos() {
 
         if (txtNombres.getText().isBlank() ||
-            txtApellidos.getText().isBlank() ||
-            txtTelefono.getText().isBlank() ||
-            txtCorreo.getText().isBlank() ||
-            txtNumDoc.getText().isBlank() ||
-            txtDireccion.getText().isBlank()) {
+                txtApellidos.getText().isBlank() ||
+                txtTelefono.getText().isBlank() ||
+                txtCorreo.getText().isBlank() ||
+                txtNumDoc.getText().isBlank() ||
+                txtDireccion.getText().isBlank()) {
 
             mostrarAdvertencia("Campos vacíos", "Todos los campos son obligatorios.");
             return false;
@@ -227,8 +244,8 @@ public class ControllerModCliente {
         }
 
         if (listDepartamento.getValue() == null ||
-            listProvincia.getValue() == null ||
-            listDistrito.getValue() == null) {
+                listProvincia.getValue() == null ||
+                listDistrito.getValue() == null) {
 
             mostrarAdvertencia("Ubicación incompleta",
                     "Seleccione departamento, provincia y distrito.");
@@ -238,14 +255,16 @@ public class ControllerModCliente {
         return true;
     }
 
-
-    /* ============================================================
-     *  ACTUALIZAR CLIENTE
-     * ============================================================ */
+    /*
+     * ============================================================
+     * ACTUALIZAR CLIENTE
+     * ============================================================
+     */
     @FXML
     private void actualizarCliente() {
 
-        if (!validarCampos()) return;
+        if (!validarCampos())
+            return;
 
         try {
 
@@ -273,10 +292,11 @@ public class ControllerModCliente {
         cerrarVentana();
     }
 
-
-    /* ============================================================
-     *  CANCELAR
-     * ============================================================ */
+    /*
+     * ============================================================
+     * CANCELAR
+     * ============================================================
+     */
     @FXML
     private void cancelar() {
         cargarDatosCliente();
@@ -288,10 +308,11 @@ public class ControllerModCliente {
         cerrarVentana();
     }
 
-
-    /* ============================================================
-     *   ACTIVAR / DESACTIVAR
-     * ============================================================ */
+    /*
+     * ============================================================
+     * ACTIVAR / DESACTIVAR
+     * ============================================================
+     */
 
     private boolean estaDesactivado(String texto) {
         return texto.equals(texto.toUpperCase());
@@ -299,7 +320,7 @@ public class ControllerModCliente {
 
     private boolean clienteEstaActivo() {
         return !(estaDesactivado(txtNombres.getText())
-              && estaDesactivado(txtApellidos.getText()));
+                && estaDesactivado(txtApellidos.getText()));
     }
 
     private void configurarEstadoBoton() {
@@ -338,16 +359,17 @@ public class ControllerModCliente {
         cerrarVentana();
     }
 
-
-    /* ============================================================
-     *  UTILIDADES
-     * ============================================================ */
+    /*
+     * ============================================================
+     * UTILIDADES
+     * ============================================================
+     */
     private String capitalizar(String texto) {
-        if (texto == null || texto.isBlank()) return texto;
+        if (texto == null || texto.isBlank())
+            return texto;
         texto = texto.toLowerCase();
         return Character.toUpperCase(texto.charAt(0)) + texto.substring(1);
     }
-
 
     private void mostrarInfo(String titulo, String mensaje) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -370,10 +392,12 @@ public class ControllerModCliente {
         alert.showAndWait();
     }
 
-
-    /* ============================================================
-     *  Cerrar ventana
-     * ============================================================ */
+    /*
+     * ============================================================
+     * Cerrar ventana
+     * ============================================================
+     */
+    @FXML
     private void cerrarVentana() {
         btnEliminActivar.getScene().getWindow().hide();
     }
